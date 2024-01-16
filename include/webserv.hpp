@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/10 15:16:25 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/16 11:53:43 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,6 +14,7 @@
 #define WEBSERV_HPP_
 
 #include <iostream>
+#include <sys/socket.h>
 
 
 
