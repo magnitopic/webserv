@@ -1,23 +1,19 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   webserv.hpp                                        :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/17 15:01:11 by alaparic         ###   ########.fr       */
+/*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
+/*   Updated: 2024/01/17 15:01:07 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#ifndef WEBSERV_HPP_
-#define WEBSERV_HPP_
+#include "../include/webserv.hpp"
 
-#include <iostream>
-#include <cstring>
-#include <sys/socket.h>
-
-void raiseError(const char *msg);
-int parseConfigFile(std::string file_name);
-
-#endif
+void raiseError(const char *msg)
+{
+	perror(msg);
+	exit(1);
+}

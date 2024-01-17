@@ -1,7 +1,9 @@
 # Webserv
 NAME			=	webserv
 
-WEB_SRC			=	src/webserv.cpp
+WEB_SRC			=	src/webserv.cpp \
+					src/utils.cpp \
+					src/configFile/parse.cpp
 
 OBJS			=	$(WEB_SRC:.cpp=.o)
 
