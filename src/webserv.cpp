@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/18 16:26:54 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:04:33 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -29,6 +29,11 @@ void createConection()
 
 	if (socketVal == -1)
 		raiseError("error creating socket");
+	
+	// Reset socket to reuse address
+	int reuseAddr = 1;
+	if (setsockopt(socketVal, SOL_SOCKET, SO_REUSEADDR, &reuseAddr, sizeof(reuseAddr)) == -1)
+		raiseError("Error setting socket option");
 
 	//Bind socket
 	sockaddr_in serverScruct;
@@ -77,5 +82,7 @@ int main(int argc, char **argv)
 		parseConfigFile(argv[1]);
 	else
 		parseConfigFile("webserv.conf");
-	createConection();
+	while (42)
+		createConection();
+	return 0;
 }
