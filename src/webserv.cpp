@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/19 11:26:13 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/19 14:21:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -25,7 +25,7 @@
 void createConection()
 {
 	// Create socket
-	int socketVal = socket(AF_INET, SOCK_STREAM, 0);
+	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	if (socketVal == -1)
 		raiseError("error creating socket");
@@ -80,8 +80,8 @@ void createConection()
 	}
 
 	// Disconnect
-	close(clientSocket);
 	close(socketVal);
+	close(clientSocket);
 }
 
 int main(int argc, char **argv)
