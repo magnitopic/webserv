@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/18 18:47:44 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/19 14:18:45 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,40 @@ void createConection()
 	if (socketVal == -1)
 		raiseError("error creating socket");
 
-	//Bind socket
+	// Reset socket to reuse address
+	int reuseAddr = 1;
+	if (setsockopt(socketVal, SOL_SOCKET, SO_REUSEADDR, &reuseAddr, sizeof(reuseAddr)) == -1)
+	{
+		close(socketVal);
+		raiseError("Error setting socket option");
+	}
+
+	// Bind socket
 	sockaddr_in serverScruct;
 	serverScruct.sin_family = AF_INET;
 	serverScruct.sin_addr.s_addr = INADDR_ANY;
 	serverScruct.sin_port = htons(8080);
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
+	{
+		close(socketVal);
 		raiseError("error binding socket");
+	}
 
 	// Listen socket
 	if (listen(socketVal, 10) == -1)
+	{
+		close(socketVal);
 		raiseError("error socket listening");
+	}
 
-	//Accept and revice data
+	// Accept and revice data
 	sockaddr_in clientAddress;
 	socklen_t clientAddrSize = sizeof(clientAddress);
 	int clientSocket = accept(socketVal, (struct sockaddr *)&clientAddress, &clientAddrSize);
 	if (clientSocket == -1)
 	{
+		close(socketVal);
 		raiseError("error accepting connection");
 	}
 
@@ -76,6 +91,11 @@ int main(int argc, char **argv)
 	else if (argc == 2)
 		parseConfigFile(argv[1]);
 	else
-		raiseError("Too few arguments");
-	createConection();
+		parseConfigFile("webserv.conf");
+	while (42)
+	{
+		createConection();
+		sleep(1);
+	}
+	return 0;
 }
