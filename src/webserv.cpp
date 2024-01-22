@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 17:04:20 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:57:02 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,17 +105,20 @@ void createConection(std::string str)
 					{
 						std::cout << buffer << std::endl;
 						std::string response;
-						if (std::string(buffer).find("GET / HTTP/1.1") != std::string::npos)
-							response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-									   getFile("pages/geco.html");
-						else
-							response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-									   getFile("pages/error_404.html");
-						int writeVal = write(it->fd, response.c_str(), response.length());
-						if (writeVal == -1)
-							raiseError("error writing data");
-						close(it->fd);
-						it = clients.erase(it);
+						e_action	action = setAction(buffer);
+						if (action == GET){
+							if (std::string(buffer).find("GET / HTTP/1.1") != std::string::npos)
+								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										getFile("pages/geco.html");
+							else
+								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										getFile("pages/error_404.html");
+							int writeVal = write(it->fd, response.c_str(), response.length());
+							if (writeVal == -1)
+								raiseError("error writing data");
+							close(it->fd);
+							it = clients.erase(it);
+						}
 						// it++;
 					}
 				}

@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   getFile.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:57:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 16:57:45 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:53:36 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/webserv.hpp"
+
+enum e_action	setAction(std::string str)
+{
+	std::string	word = str.substr(0, str.find(" "));
+	if (word == "GET")
+		return GET;
+	else if (word == "POST")
+		return POST;
+	else if (word == "DELETE")
+		return DELETE;
+	return INVALID;
+}
 
 std::string getFile(std::string fileAdr)
 {
