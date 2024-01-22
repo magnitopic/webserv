@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 18:18:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:44:00 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ void createConection(std::string str)
 						std::cout << buffer << std::endl;
 						std::string response;
 						e_action	action = setAction(buffer);
+						std::string aux = buffer;
+						std::string directory = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ")); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿501?
 						if (action == GET){
 							if (std::string(buffer).find("GET / HTTP/1.1") != std::string::npos)
 								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
@@ -113,13 +115,13 @@ void createConection(std::string str)
 							else
 								response = "HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
 										getFile("pages/error_404.html");
-							int writeVal = write(it->fd, response.c_str(), response.length());
-							std::cout << response << std::endl;
-							if (writeVal == -1)
-								raiseError("error writing data");
-							close(it->fd);
-							it = clients.erase(it);
 						}
+						int writeVal = write(it->fd, response.c_str(), response.length());
+						std::cout << response << std::endl;
+						if (writeVal == -1)
+							raiseError("error writing data");
+						close(it->fd);
+						it = clients.erase(it);
 						// it++;
 					}
 				}
