@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 14:57:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:00:31 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <vector>
+#include <sstream>
 
 void		raiseError(const char *msg);
 int			parseConfigFile(std::string file_name);
 std::string	configToString(char *str);
 int			setPort(std::string str);
+std::string	getFile(std::string fileAdr);
 
 #endif

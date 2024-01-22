@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 16:39:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:04:20 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,13 @@ void createConection(std::string str)
 					else
 					{
 						std::cout << buffer << std::endl;
-						std::string response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n \
-						<html> \
-							<body> \
-								<h1>Hello there jsarabia</h1> \
-								<p>Esto ya empieza a funcionar!!</p> \
-								<img src='https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.geek-officiel.com%2Fwp-content%2Fuploads%2F2015%2F06%2Fgecko.jpg&f=1&nofb=1&ipt=023bd0e6eca896e1ca26e9ef3728562e266cae00740acbb20c90f04a3dcca9ba&ipo=images' width='530' height='400'> \
-							</body> \
-						</html>";
+						std::string response;
+						if (std::string(buffer).find("GET / HTTP/1.1") != std::string::npos)
+							response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+									   getFile("pages/geco.html");
+						else
+							response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+									   getFile("pages/error_404.html");
 						int writeVal = write(it->fd, response.c_str(), response.length());
 						if (writeVal == -1)
 							raiseError("error writing data");
@@ -131,11 +130,13 @@ int main(int argc, char **argv)
 
 	if (argc > 2)
 		raiseError("Too many arguments");
-	else if (argc == 2){
+	else if (argc == 2)
+	{
 		parseConfigFile(argv[1]);
 		file = configToString(argv[1]);
 	}
-	else{
+	else
+	{
 		char *temp = strdup("webserv.conf");
 		parseConfigFile(temp);
 		file = configToString(temp);
