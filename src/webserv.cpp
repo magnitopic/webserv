@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 18:44:00 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 19:06:30 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,14 @@ void createConection(std::string str)
 						std::string response;
 						e_action	action = setAction(buffer);
 						std::string aux = buffer;
-						std::string directory = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ")); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿501?
+						std::string directory = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿501?
 						if (action == GET){
-							if (std::string(buffer).find("GET / HTTP/1.1") != std::string::npos)
+							if (directory.compare("/") == 0)
 								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										getFile("pages/geco.html");
+										getFile("pages/index.html");
+							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
+								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										getFile("pages/info/geco.html");
 							else
 								response = "HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
 										getFile("pages/error_404.html");
