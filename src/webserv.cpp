@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/19 14:24:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:19:53 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,31 +57,53 @@ void createConection()
 		raiseError("error socket listening");
 	}
 
-	// Accept and revice data
-	sockaddr_in clientAddress;
-	socklen_t clientAddrSize = sizeof(clientAddress);
-	int clientSocket = accept(socketVal, (struct sockaddr *)&clientAddress, &clientAddrSize);
-	if (clientSocket == -1)
+	// Accept and recive data
+	std::vector<pollfd> clients;
+	while (true)
 	{
-		close(socketVal);
-		raiseError("error accepting connection");
-	}
+		// registering a new client
+		sockaddr_in clientAddress;
+		socklen_t clientAddrSize = sizeof(clientAddress);
+		int clientSocket = accept(socketVal, (struct sockaddr *)&clientAddress, &clientAddrSize);
+		if (clientSocket == -1)
+			raiseError("error accepting connection");
+		else
+		{
+			pollfd pollFd;
+			pollFd.fd = clientSocket;
+			pollFd.events = POLLIN;
+			clients.push_back(pollFd);
+		}
 
-	char buffer[1024];
-	int bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
-	if (bytesRead == -1)
-	{
-		perror("error receiving data");
-	}
-	else
-	{
-		buffer[bytesRead] = '\0';
-		std::cout << "Received data: " << buffer << std::endl;
+		// polling data from clients
+		int pollVal = poll(clients.data(), clients.size(), 0);
+		if (pollVal == -1)
+			raiseError("error polling data");
+		else if (pollVal > 0)
+		{
+			for (std::vector<pollfd>::iterator it = clients.begin(); it != clients.end(); it++)
+			{
+				if (it->revents == POLLIN)
+				{
+					char buffer[1024];
+					int readVal = read(it->fd, buffer, 1024);
+					if (readVal == -1)
+						raiseError("error reading data");
+					else if (readVal == 0)
+					{
+						close(it->fd);
+						clients.erase(it);
+					}
+					else
+						std::cout << buffer << std::endl;
+				}
+			}
+		}
+		std::cout << clients.size() << std::endl;
 	}
 
 	// Disconnect
 	close(socketVal);
-	close(clientSocket);
 }
 
 int main(int argc, char **argv)
