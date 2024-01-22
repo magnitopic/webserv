@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 11:19:53 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/22 11:23:09 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void createConection()
 		}
 
 		// polling data from clients
-		int pollVal = poll(clients.data(), clients.size(), 0);
+		int pollVal = poll(clients.data(), clients.size(), -1);
 		if (pollVal == -1)
 			raiseError("error polling data");
 		else if (pollVal > 0)
@@ -95,11 +95,16 @@ void createConection()
 						clients.erase(it);
 					}
 					else
+					{
 						std::cout << buffer << std::endl;
+						std::string response = "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<html><body><h1>Hello, World!</h1></body></html>";
+						int writeVal = write(it->fd, response.c_str(), response.length());
+						if (writeVal == -1)
+							raiseError("error writing data");
+					}
 				}
 			}
 		}
-		std::cout << clients.size() << std::endl;
 	}
 
 	// Disconnect
