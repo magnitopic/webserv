@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 14:57:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:39:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,13 +127,20 @@ void createConection(std::string str)
 
 int main(int argc, char **argv)
 {
+	std::string file;
+
 	if (argc > 2)
 		raiseError("Too many arguments");
-	else if (argc == 2)
+	else if (argc == 2){
 		parseConfigFile(argv[1]);
-	else
-		parseConfigFile("webserv.conf");
-	std::string file = configToString(argv[1]);
+		file = configToString(argv[1]);
+	}
+	else{
+		char *temp = strdup("webserv.conf");
+		parseConfigFile(temp);
+		file = configToString(temp);
+		free(temp);
+	}
 	while (42)
 	{
 		createConection(file);
