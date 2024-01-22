@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 17:57:02 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/22 18:18:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,10 @@ void createConection(std::string str)
 								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
 										getFile("pages/geco.html");
 							else
-								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+								response = "HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
 										getFile("pages/error_404.html");
 							int writeVal = write(it->fd, response.c_str(), response.length());
+							std::cout << response << std::endl;
 							if (writeVal == -1)
 								raiseError("error writing data");
 							close(it->fd);
