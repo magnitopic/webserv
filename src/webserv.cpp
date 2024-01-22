@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 12:24:38 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/22 14:57:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -22,7 +22,7 @@
 	-	Disconnect
  */
 
-void createConection()
+void createConection(std::string str)
 {
 	// Create socket
 	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -42,7 +42,7 @@ void createConection()
 	sockaddr_in serverScruct;
 	serverScruct.sin_family = AF_INET;
 	serverScruct.sin_addr.s_addr = INADDR_ANY;
-	serverScruct.sin_port = htons(8080);
+	serverScruct.sin_port = htons(setPort(str));
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
 	{
@@ -133,9 +133,10 @@ int main(int argc, char **argv)
 		parseConfigFile(argv[1]);
 	else
 		parseConfigFile("webserv.conf");
+	std::string file = configToString(argv[1]);
 	while (42)
 	{
-		createConection();
+		createConection(file);
 		sleep(1);
 	}
 	return 0;
