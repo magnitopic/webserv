@@ -3,6 +3,7 @@ NAME			=	webserv
 
 WEB_SRC			=	src/webserv.cpp \
 					src/utils.cpp \
+					src/Socket.cpp \
 					src/configFile/parse.cpp \
 					src/getFile.cpp
 

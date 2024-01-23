@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 17:36:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/23 16:44:07 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <vector>
 #include <sstream>
 #include "enums.hpp"
+#include "Socket.hpp"
 
 void			raiseError(const char *msg);
 int				parseConfigFile(std::string file_name);
