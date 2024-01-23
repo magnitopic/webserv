@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/23 12:56:12 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/23 17:31:25 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -25,6 +25,7 @@
 void createConection(std::string str)
 {
 	// Create socket
+	Socket			socketClass;
 	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	if (socketVal == -1)
@@ -106,12 +107,18 @@ void createConection(std::string str)
 						std::string response;
 						e_action action = setAction(buffer);
 						std::string aux = buffer;
-						std::string directory = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿501?
+						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
+						socketClass.setActions(socketClass.getDirectory(), str);
 						if (action == GET)
 						{
-							if (directory.compare("/") == 0)
+							if (socketClass.getDirectory().compare("/") == 0)
 								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
 										   getFile("pages/index.html");
+							else if (socketClass.getDirectory().compare("/favicon.ico") == 0){
+								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										   getFile("images/favicon.ico");
+								exit(0);
+							}
 							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
 								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
 										   getFile("pages/info/geco.html");
