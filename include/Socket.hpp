@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/23 17:51:04 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/23 18:03:00 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ class Socket
 		void		setForbidden(std::string directory, std::string text);
 };
 
-std::ostream &operator<<(std::ostream &os, std::list<std::string> &list);
+std::ostream &operator<<(std::ostream &os, std::list<std::string> &list);  //instead of creating a printList function y created this operator overload function that works the same way
 
 #endif
