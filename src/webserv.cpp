@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/23 17:31:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/23 18:40:14 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,30 +104,30 @@ void createConection(std::string str)
 					else
 					{
 						std::cout << buffer << std::endl;
-						std::string response;
 						e_action action = setAction(buffer);
 						std::string aux = buffer;
 						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
 						socketClass.setActions(socketClass.getDirectory(), str);
+						socketClass.setForbidden(socketClass.getDirectory(), str);
 						if (action == GET)
 						{
 							if (socketClass.getDirectory().compare("/") == 0)
-								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("pages/index.html");
+								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										   getFile("pages/index.html"));
 							else if (socketClass.getDirectory().compare("/favicon.ico") == 0){
-								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("images/favicon.ico");
+								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										   getFile("images/favicon.ico"));
 								exit(0);
 							}
 							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
-								response = "HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("pages/info/geco.html");
+								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+										   getFile("pages/info/geco.html"));
 							else
-								response = "HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("pages/error_404.html");
+								socketClass.setResponse("HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
+										   getFile("pages/error_404.html"));
 						}
-						int writeVal = write(it->fd, response.c_str(), response.length());
-						std::cout << response << std::endl;
+						int writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
+						std::cout << socketClass.getResponse() << std::endl;
 						if (writeVal == -1)
 							raiseError("error writing data");
 						close(it->fd);

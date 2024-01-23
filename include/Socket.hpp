@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/23 18:04:47 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/23 18:37:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ class Socket
 		Socket &operator=(const Socket &socket);
 		~Socket(void);
 		void		setDirectory(std::string directory);
+		void		setResponse(std::string response);
 		std::string	getDirectory(void);
+		std::string	getResponse(void);
 		void		setActions(std::string directory, std::string text);
 		void		setForbidden(std::string directory, std::string text);
 };
