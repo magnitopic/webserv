@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/23 18:37:18 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:14:42 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include "../include/webserv.hpp"
 
 Socket::Socket(void){
+	this->actionsArr.push_back("GET");
+	this->actionsArr.push_back("POST");
+	this->actionsArr.push_back("DELETE");
 	return;
 }
 
@@ -97,6 +100,17 @@ void	Socket::setForbidden(std::string directory, std::string text){
 		}
 		i++;
 	}
+}
+
+std::list<std::string>	Socket::getActions(void){
+	return this->actions;
+}
+
+std::string	Socket::getActionsArray(int i){
+	std::list<std::string>::iterator it = this->actionsArr.begin();
+	for (int n = 0; n < i; n++)
+		++it;
+	return *it;
 }
 
 std::ostream &operator<<(std::ostream &os, std::list<std::string> &list){

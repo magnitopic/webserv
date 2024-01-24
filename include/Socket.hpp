@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/23 18:37:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:16:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <map>
 #include <list>
 #include <string>
+#include <algorithm>
 
 /*
 
@@ -34,6 +35,7 @@ class Socket
 		std::list<std::string>	actions; 	//actions that can be performed inside the directory
 		std::list<std::string>	forbidden;	//actions denied in the directory
 		std::string				response;	//response given to the request
+		std::list<std::string>	actionsArr; //this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
 	public:
 		Socket(void);
 		Socket(std::string directory);
@@ -42,10 +44,12 @@ class Socket
 		~Socket(void);
 		void		setDirectory(std::string directory);
 		void		setResponse(std::string response);
-		std::string	getDirectory(void);
-		std::string	getResponse(void);
-		void		setActions(std::string directory, std::string text);
-		void		setForbidden(std::string directory, std::string text);
+		std::list<std::string>	getActions(void);
+		std::string				getDirectory(void);
+		std::string				getResponse(void);
+		std::string				getActionsArray(int i);
+		void					setActions(std::string directory, std::string text);
+		void					setForbidden(std::string directory, std::string text);
 };
 
 std::ostream &operator<<(std::ostream &os, std::list<std::string> &list);  //instead of creating a printList function y created this operator overload function that works the same way

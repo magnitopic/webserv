@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/23 18:40:14 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/24 15:23:08 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,16 @@ void createConection(std::string str)
 						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
 						socketClass.setActions(socketClass.getDirectory(), str);
 						socketClass.setForbidden(socketClass.getDirectory(), str);
+						std::cout << *(std::find(socketClass.getActions().begin(), socketClass.getActions().end(), socketClass.getActionsArray(action))) << std::endl;
+						exit (0);
 						if (action == GET)
 						{
 							if (socketClass.getDirectory().compare("/") == 0)
 								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
 										   getFile("pages/index.html"));
-							else if (socketClass.getDirectory().compare("/favicon.ico") == 0){
+							else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
 								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
 										   getFile("images/favicon.ico"));
-								exit(0);
-							}
 							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
 								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
 										   getFile("pages/info/geco.html"));
