@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/22 15:56:52 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:48:21 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,19 @@ int	setPort(std::string str)
 		found++;
 	}
 	return std::atoi(num.c_str());
+}
+
+
+int	isAllowed(const std::string str, std::list<std::string> actions)
+{
+	if (actions.size() > 1){
+		std::list<std::string>::iterator it = std::find(actions.begin(), (std::prev(actions.end())), str);
+		if (it != actions.end())
+			return 1;
+	}
+	else if (actions.size() == 1){
+		if (str == *actions.begin())
+			return 1;
+	}
+	return 0;
 }

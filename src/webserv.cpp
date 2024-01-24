@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/24 15:23:08 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:51:26 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,27 +104,27 @@ void createConection(std::string str)
 					else
 					{
 						std::cout << buffer << std::endl;
-						e_action action = setAction(buffer);
+						int action = static_cast<int>(setAction(buffer));
 						std::string aux = buffer;
 						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
 						socketClass.setActions(socketClass.getDirectory(), str);
 						socketClass.setForbidden(socketClass.getDirectory(), str);
-						std::cout << *(std::find(socketClass.getActions().begin(), socketClass.getActions().end(), socketClass.getActionsArray(action))) << std::endl;
-						exit (0);
-						if (action == GET)
-						{
+						const std::string str = const_cast<std::string&>(socketClass.getActionsArray(action));
+						if (!isAllowed(str, socketClass.getActions()))
+							socketClass.setResponse("HTTP/1.1 405 Method Not Allowed\nContent-Type: text/html; charset=utf-8\n\n");
+						else{
 							if (socketClass.getDirectory().compare("/") == 0)
 								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("pages/index.html"));
+											getFile("pages/index.html"));
 							else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
 								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("images/favicon.ico"));
+											getFile("images/favicon.ico"));
 							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
 								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("pages/info/geco.html"));
+											getFile("pages/info/geco.html"));
 							else
 								socketClass.setResponse("HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
-										   getFile("pages/error_404.html"));
+											getFile("pages/error_404.html"));
 						}
 						int writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
 						std::cout << socketClass.getResponse() << std::endl;
@@ -132,7 +132,6 @@ void createConection(std::string str)
 							raiseError("error writing data");
 						close(it->fd);
 						it = clients.erase(it);
-						// it++;
 					}
 				}
 			}

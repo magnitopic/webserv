@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/24 12:23:53 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:39:57 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -32,5 +32,6 @@ std::string		configToString(char *str);
 int				setPort(std::string str);
 std::string		getFile(std::string fileAdr);
 enum e_action	setAction(std::string);
+int				isAllowed(const std::string str, std::list<std::string> actions);
 
 #endif

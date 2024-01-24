@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/24 15:16:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/24 18:29:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Socket
 		std::list<std::string>	getActions(void);
 		std::string				getDirectory(void);
 		std::string				getResponse(void);
-		std::string				getActionsArray(int i);
+		std::string				&getActionsArray(int i);
 		void					setActions(std::string directory, std::string text);
 		void					setForbidden(std::string directory, std::string text);
 };
