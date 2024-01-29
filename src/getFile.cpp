@@ -6,22 +6,22 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:57:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/24 18:30:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:58:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
-enum e_action	setAction(std::string str)
+int	setAction(std::string str)
 {
 	std::string	word = str.substr(0, str.find(" "));
 	if (word == "GET")
-		return GET;
+		return 0;
 	else if (word == "POST")
-		return POST;
+		return 1;
 	else if (word == "DELETE")
-		return DELETE;
-	return INVALID;
+		return 2;
+	return 3;
 }
 
 std::string getFile(std::string fileAdr)
