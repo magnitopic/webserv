@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/29 17:13:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/29 17:43:12 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,8 @@ void createConection(std::string str)
 						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
 						socketClass.setActions(socketClass.getDirectory(), str);
 						socketClass.setForbidden(socketClass.getDirectory(), str);
-						std::cout << socketClass.getDirectory() << std::endl;
-						if (action < 3)
-							const std::string str = const_cast<std::string&>(socketClass.getActionsArray(action));
-						else
-							std::string str = "";
-						if (!isAllowed(str, socketClass.getActions()))
+						std::string act = socketClass.getActionsArray(action);
+						if (!isAllowed(act, socketClass.getActions()))
 							socketClass.setResponse("HTTP/1.1 405 Method Not Allowed\nContent-Type: text/html; charset=utf-8\n\n");
 						else{
 							if (socketClass.getDirectory().compare("/") == 0)
