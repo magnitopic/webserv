@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/30 15:30:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:57:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,16 @@ std::ostream &operator<<(std::ostream &os, std::list<std::string> &list){
 	for (std::list<std::string>::iterator it = list.begin(); it != list.end(); it++)
 		os << *it << " ";
 	return os;
+}
+
+void	Socket::setContentLength(std::string cont){
+	int size = static_cast<int>(cont.length());
+	std::string aux = std::to_string(size);
+	const char *str = aux.c_str();
+	this->contentLength = str;
+}
+
+std::string	Socket::getContentLength(void)
+{
+	return this->contentLength;
 }

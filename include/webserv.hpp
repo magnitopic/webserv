@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 12:17:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:49:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <vector>
+#include <string>
 #include <sstream>
 #include "enums.hpp"
 #include "Socket.hpp"
