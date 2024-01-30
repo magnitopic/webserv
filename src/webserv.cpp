@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 12:56:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 16:03:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,10 @@ void createConection(std::string str)
 							act = socketClass.getActionsArray(action);
 						else
 							act = "";
-						if (!isAllowed(act, socketClass.getActions()))
-							socketClass.setResponse("HTTP/1.1 405 Method Not Allowed\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n");
+						if (!isAllowed(act, socketClass.getActions())){
+							socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n");
+							socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>nginx/1.25.3</center>\n</body>\n</html>");
+						}
 						else{
 							if (socketClass.getDirectory().compare("/") == 0)
 								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
@@ -129,12 +131,15 @@ void createConection(std::string str)
 							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
 								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
 											getFile("pages/info/geco.html"));
+							else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos)
+								socketClass.setResponse("HTTP/1.1 418 I'm a teapot\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
+											getFile("pages/teapot.html"));
 							else
 								socketClass.setResponse("HTTP/1.1 404 Not Found\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
 											getFile("pages/error_404.html"));
 						}
 						int writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
-						std::cout << socketClass.getResponse() << std::endl;
+						//std::cout << socketClass.getResponse() << std::endl;
 						if (writeVal == -1)
 							raiseError("error writing data");
 						close(it->fd);

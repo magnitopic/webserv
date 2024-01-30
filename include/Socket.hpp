@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/29 17:03:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 15:27:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class Socket
 		std::string				directory;
 		std::list<std::string>	actions; 	//actions that can be performed inside the directory
 		std::list<std::string>	forbidden;	//actions denied in the directory
+		std::string				header;		//header given to the request
 		std::string				response;	//response given to the request
 		std::list<std::string>	actionsArr; //this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
 	public:
@@ -42,10 +43,12 @@ class Socket
 		Socket(const Socket &socket);
 		Socket &operator=(const Socket &socket);
 		~Socket(void);
-		void		setDirectory(std::string directory);
-		void		setResponse(std::string response);
+		void					setDirectory(std::string directory);
+		void					setResponse(std::string response);
+		void					setHeader(std::string header);
 		std::list<std::string>	getActions(void);
 		std::string				getDirectory(void);
+		std::string				getHeader(void);
 		std::string				getResponse(void);
 		std::string				&getActionsArray(int i);
 		void					setActions(std::string directory, std::string text);

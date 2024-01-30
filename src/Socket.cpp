@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/30 14:14:14 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 15:30:13 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ void	Socket::setDirectory(std::string directory){
 	return;
 }
 
+void	Socket::setHeader(std::string header){
+	this->header = header;
+	return;
+}
+
 void	Socket::setResponse(std::string response){
 	this->response = response;
 	return;
@@ -58,6 +63,10 @@ std::string	Socket::getDirectory(void){
 
 std::string	Socket::getResponse(void){
 	return this->response;
+}
+
+std::string	Socket::getHeader(void){
+	return this->header;
 }
 
 void	Socket::setActions(std::string directory, std::string text){
