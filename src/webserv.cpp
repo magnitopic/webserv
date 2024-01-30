@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 18:57:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 20:01:30 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -106,7 +106,7 @@ void createConection(std::string str)
 					}
 					else
 					{
-						std::cout << buffer << std::endl;
+						//std::cout << buffer << std::endl;
 						int action = setAction(buffer);
 						std::string aux = buffer;
 						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
@@ -124,32 +124,8 @@ void createConection(std::string str)
 								socketClass.setContentLength(socketClass.getResponse());
 								socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 							}
-							else{
-								if (socketClass.getDirectory().compare("/") == 0){
-									socketClass.setResponse(getFile("pages/index.html"));
-									socketClass.setContentLength(socketClass.getResponse());
-									socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
-								}
-								/*else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
-									socketClass.setResponse("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
-												getFile("images/favicon.ico"));*/
-								else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos){
-									socketClass.setResponse(getFile("pages/info/geco.html"));
-									socketClass.setContentLength(socketClass.getResponse());
-									socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
-								}
-								else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos){
-									socketClass.setResponse(getFile("pages/teapot.html"));
-									socketClass.setContentLength(socketClass.getResponse());
-									socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
-								}
-								else
-								{
-									socketClass.setResponse(getFile("pages/error_404.html"));
-									socketClass.setContentLength(socketClass.getResponse());
-									socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
-								}
-							}
+							else
+								handleRequests(socketClass, buffer, server);
 						}
 						else
 						{
@@ -169,6 +145,46 @@ void createConection(std::string str)
 					}
 				}
 			}
+		}
+	}
+}
+
+void handleRequests(Socket &socketClass, char *buffer, Server &server)
+{
+	socketClass.setAutoIndex(true);
+	if (socketClass.getAutoIndex())
+	{
+		//socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
+		socketClass.generateAutoIndex("pages");
+	}
+	//else		// ! this code should be changed but it will server as backup for now
+	{
+		if (socketClass.getDirectory().compare("/") == 0)
+		{
+			socketClass.setResponse(getFile("pages/index.html"));
+			socketClass.setContentLength(socketClass.getResponse());
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+		}
+		/*else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
+			socketClass.setResponse("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
+						getFile("images/favicon.ico"));*/
+		else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
+		{
+			socketClass.setResponse(getFile("pages/info/geco.html"));
+			socketClass.setContentLength(socketClass.getResponse());
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+		}
+		else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos)
+		{
+			socketClass.setResponse(getFile("pages/teapot.html"));
+			socketClass.setContentLength(socketClass.getResponse());
+			socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+		}
+		else
+		{
+			socketClass.setResponse(getFile("pages/error_404.html"));
+			socketClass.setContentLength(socketClass.getResponse());
+			socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
 		}
 	}
 }
