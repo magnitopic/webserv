@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/29 17:37:14 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:14:14 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	Socket::setActions(std::string directory, std::string text){
 	std::string methods = text.substr(text.find(aux), text.find("}") - text.find(aux));
 	std::string word;
 	int i = methods.find("limit_except") + 12;
-	while (i < static_cast<int>(methods.length())){
+	while (i < static_cast<int>(methods.length()) || i < 12){
 		if (isupper(methods[i]))
 			word.push_back(methods[i]);
 		else if (islower(methods[i]))

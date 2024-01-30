@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 12:47:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:12:26 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	Server::setName(std::string str)
 {
 	std::size_t	found = str.find("server_name") + 11;
 	std::string	aux;
-	if (found > str.length()){
+	if (found > str.length() || found < 11){
 		this->name = "jsaparic";
 		return;
 	}
