@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 16:03:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 18:17:24 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,28 +117,40 @@ void createConection(std::string str)
 							act = socketClass.getActionsArray(action);
 						else
 							act = "";
-						if (!isAllowed(act, socketClass.getActions())){
-							socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n");
-							socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>nginx/1.25.3</center>\n</body>\n</html>");
+						if (act.length() > 0)
+						{
+							if (!isAllowed(act, socketClass.getActions())){
+								socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n");
+								socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
+							}
+							else{
+								if (socketClass.getDirectory().compare("/") == 0){
+									socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n");
+									socketClass.setResponse(getFile("pages/index.html"));
+								}
+								/*else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
+									socketClass.setResponse("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
+												getFile("images/favicon.ico"));*/
+								else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
+									socketClass.setResponse("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
+												getFile("pages/info/geco.html"));
+								else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos)
+									socketClass.setResponse("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
+												getFile("pages/teapot.html"));
+								else
+									socketClass.setResponse("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
+												getFile("pages/error_404.html"));
+							}
 						}
-						else{
-							if (socketClass.getDirectory().compare("/") == 0)
-								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
-											getFile("pages/index.html"));
-							else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
-								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
-											getFile("images/favicon.ico"));
-							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
-								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
-											getFile("pages/info/geco.html"));
-							else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos)
-								socketClass.setResponse("HTTP/1.1 418 I'm a teapot\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
-											getFile("pages/teapot.html"));
-							else
-								socketClass.setResponse("HTTP/1.1 404 Not Found\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
-											getFile("pages/error_404.html"));
+						else
+						{
+							socketClass.setHeader("HTTP/1.1 501 Not Implemented\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n");
+								socketClass.setResponse("<html>\n<head><title>501 Not Implemented</title></head>\n<body>\n<center><h1>501 Not Implemented</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
 						}
-						int writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
+						int writeVal = write(it->fd, socketClass.getHeader().c_str(), socketClass.getHeader().length());
+						if (writeVal == -1)
+							raiseError("error writing data");
+						writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
 						//std::cout << socketClass.getResponse() << std::endl;
 						if (writeVal == -1)
 							raiseError("error writing data");
