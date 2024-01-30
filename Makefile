@@ -4,8 +4,9 @@ NAME			=	webserv
 WEB_SRC			=	src/webserv.cpp \
 					src/utils.cpp \
 					src/Socket.cpp \
+					src/getFile.cpp \
+					src/model/Server.cpp \
 					src/configFile/parse.cpp \
-					src/getFile.cpp
 
 OBJS			=	$(WEB_SRC:.cpp=.o)
 

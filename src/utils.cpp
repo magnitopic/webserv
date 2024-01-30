@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/29 17:43:38 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 12:17:44 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,27 +33,6 @@ std::string	configToString(char *str)
 	configFile.close();
 	return file;
 }
-
-int	setPort(std::string str)
-{
-	std::size_t	found = str.find("listen") + 6;
-	std::string	num;
-	if (found > str.length())
-		raiseError("no port appear in configuration file");
-	while (isspace(str[found]))
-		found++;
-	while (found < str.length()){
-		if (isdigit(str[found]))
-			num.push_back(str[found]);
-		else if (isspace(str[found]))
-			return std::atoi(num.c_str());
-		else
-			raiseError("error in configuration file");
-		found++;
-	}
-	return std::atoi(num.c_str());
-}
-
 
 int	isAllowed(std::string str, std::list<std::string> actions)
 {

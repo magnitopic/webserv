@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/29 17:43:12 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 12:38:42 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void createConection(std::string str)
 {
 	// Create socket
 	Socket			socketClass;
+	Server			server;
 	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	if (socketVal == -1)
@@ -43,7 +44,9 @@ void createConection(std::string str)
 	sockaddr_in serverScruct;
 	serverScruct.sin_family = AF_INET;
 	serverScruct.sin_addr.s_addr = INADDR_ANY;
-	serverScruct.sin_port = htons(setPort(str));
+	server.setPort(str);
+	server.setName(str);
+	serverScruct.sin_port = htons(server.getPort());
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
 	{
@@ -111,19 +114,19 @@ void createConection(std::string str)
 						socketClass.setForbidden(socketClass.getDirectory(), str);
 						std::string act = socketClass.getActionsArray(action);
 						if (!isAllowed(act, socketClass.getActions()))
-							socketClass.setResponse("HTTP/1.1 405 Method Not Allowed\nContent-Type: text/html; charset=utf-8\n\n");
+							socketClass.setResponse("HTTP/1.1 405 Method Not Allowed\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n");
 						else{
 							if (socketClass.getDirectory().compare("/") == 0)
-								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
 											getFile("pages/index.html"));
 							else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
-								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
 											getFile("images/favicon.ico"));
 							else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
-								socketClass.setResponse("HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\n\n" +
+								socketClass.setResponse("HTTP/1.1 200 OK\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
 											getFile("pages/info/geco.html"));
 							else
-								socketClass.setResponse("HTTP/1.1 404 Not Found\nContent-Type: text/html; charset=utf-8\n\n" +
+								socketClass.setResponse("HTTP/1.1 404 Not Found\nserver: " + server.getName() + "\ncontent-type: text/html; charset=utf-8\n\n" +
 											getFile("pages/error_404.html"));
 						}
 						int writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/29 16:55:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/30 12:17:50 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 #include <sstream>
 #include "enums.hpp"
 #include "Socket.hpp"
+#include "Server.hpp"
 
 void			raiseError(const char *msg);
 int				parseConfigFile(std::string file_name);
 std::string		configToString(char *str);
-int				setPort(std::string str);
 std::string		getFile(std::string fileAdr);
 int				setAction(std::string);
 int				isAllowed(const std::string str, std::list<std::string> actions);
