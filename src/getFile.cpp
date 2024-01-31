@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:57:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/29 16:58:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:55:00 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,20 @@ int	setAction(std::string str)
 
 std::string getFile(std::string fileAdr)
 {
-	std::ifstream file(fileAdr);
-	std::string content;
+	std::ifstream file(fileAdr, std::ios::in | std::ios::binary);
+	std::ostringstream content;
 
-	if (file.is_open()) {
+	content << file.rdbuf();
+	std::string data(content.str());
+
+	/*if (file.is_open()) {
 		std::stringstream buffer;
 		buffer << file.rdbuf();
 		content = buffer.str();
 		file.close();
 	}
 
-	return content;
+	return content;*/
+
+	return data;
 }
