@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 17:30:07 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 20:02:30 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -31,11 +31,11 @@
 #include "Socket.hpp"
 #include "Server.hpp"
 
-void		raiseError(const char *msg);
-int			parseConfigFile(std::string file_name);
-std::string	configToString(char *str);
-std::string	getFile(std::string fileAdr);
 int			setAction(std::string);
+std::string	configToString(char *str);
+void		raiseError(const char *msg);
+std::string getFile(const std::string &fileAdr);
+int			parseConfigFile(std::string file_name);
 int			isAllowed(const std::string str, std::list<std::string> actions);
 void 		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str);
 

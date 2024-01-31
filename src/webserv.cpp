@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 19:55:08 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 20:08:39 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -217,7 +217,7 @@ int main(int argc, char **argv)
 		file = configToString(temp);
 		free(temp);
 	}
-	while (42)
+	while (true)
 	{
 		createConection(file);
 		sleep(1);

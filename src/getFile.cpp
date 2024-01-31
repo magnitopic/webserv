@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:57:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 19:52:17 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 20:08:08 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -24,7 +24,7 @@ int	setAction(std::string str)
 	return 3;
 }
 
-std::string getFile(std::string fileAdr)
+std::string getFile(const std::string &fileAdr)
 {
 	std::ifstream file(fileAdr, std::ios::in | std::ios::binary);
 	std::string content;
@@ -35,6 +35,5 @@ std::string getFile(std::string fileAdr)
 		content = buffer.str();
 		file.close();
 	}
-
 	return content;
 }
