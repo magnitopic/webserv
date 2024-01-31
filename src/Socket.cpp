@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/31 17:25:23 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:52:39 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/Socket.hpp"
 #include "../include/webserv.hpp"
@@ -194,7 +194,7 @@ void servePages()
 
 void Socket::generateAutoIndex(std::string route, Socket& socketClass)
 {
-	std::string finalRoute = "pages" + route;
+	std::string finalRoute = "pages" + route;		// ! pages is temporary
 	if (access(finalRoute.c_str(), R_OK) != 0)
 		return;
 	DIR *dirContents;
@@ -203,15 +203,17 @@ void Socket::generateAutoIndex(std::string route, Socket& socketClass)
 		raiseError("openDir failled");
 	struct dirent *entry = readdir(dirContents);
 	std::string name = entry->d_name;
+
+	// TODO: this should be seperated into diferent functions
 	std::string page = "<head><title>Index of " + route + "</title></head>";
-	page = "<body><h1>Index of " + route + "</h1>";
+	page += "<body><h1>Index of " + route + "</h1>";
 	while (entry != NULL)
 	{
 		name = entry->d_name;
-		page += "<a href=" + finalRoute + ">" + entry->d_name + "</a><br>";
+		page += "<a href=" + route + "/" + entry->d_name + ">" + entry->d_name + "</a><br>";
 		std::cout << entry->d_name << std::endl;
 		entry = readdir(dirContents);
-	}
+}
 	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
 	socketClass.setResponse(page);
 	closedir(dirContents);

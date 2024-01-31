@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 17:22:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:08:11 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -152,6 +152,7 @@ void createConection(std::string str)
 void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str)
 {
 	socketClass.setAutoIndex(isAutoindex(str, socketClass));
+	std::string finalRoute = "pages" + socketClass.getDirectory();
 	if (socketClass.getAutoIndex() == true)
 	{
 		//socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
@@ -159,9 +160,15 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 		socketClass.setContentLength(socketClass.getResponse());
 		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 	}
-	else		// ! this code should be changed but it will server as backup for now
+	else		// ! this code should be changed but it will serve as backup for now
 	{
-		if (socketClass.getDirectory().compare("/") == 0)
+		struct stat s;
+		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG){
+			socketClass.setResponse(getFile(finalRoute));
+			socketClass.setContentLength(socketClass.getResponse());
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+		}
+		else if (socketClass.getDirectory().compare("/") == 0)
 		{
 			socketClass.setResponse(getFile("pages/index.html"));
 			socketClass.setContentLength(socketClass.getResponse());
