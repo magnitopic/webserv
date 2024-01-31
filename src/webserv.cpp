@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 18:39:21 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 19:55:08 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -167,7 +167,7 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG){
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: image/jpeg; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 		}
 		else if (socketClass.getDirectory().compare("/") == 0)
 		{

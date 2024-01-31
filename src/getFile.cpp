@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   getFile.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:57:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 18:55:00 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 19:52:17 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -27,19 +27,14 @@ int	setAction(std::string str)
 std::string getFile(std::string fileAdr)
 {
 	std::ifstream file(fileAdr, std::ios::in | std::ios::binary);
-	std::ostringstream content;
+	std::string content;
 
-	content << file.rdbuf();
-	std::string data(content.str());
-
-	/*if (file.is_open()) {
+	if (file.is_open()) {
 		std::stringstream buffer;
 		buffer << file.rdbuf();
 		content = buffer.str();
 		file.close();
 	}
 
-	return content;*/
-
-	return data;
+	return content;
 }
