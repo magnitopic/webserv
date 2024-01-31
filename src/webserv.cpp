@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 18:08:11 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:39:21 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -46,6 +46,7 @@ void createConection(std::string str)
 	serverScruct.sin_addr.s_addr = INADDR_ANY;
 	server.setPort(str);
 	server.setName(str);
+	server.setRoot(str);
 	serverScruct.sin_port = htons(server.getPort());
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
@@ -152,11 +153,11 @@ void createConection(std::string str)
 void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str)
 {
 	socketClass.setAutoIndex(isAutoindex(str, socketClass));
-	std::string finalRoute = "pages" + socketClass.getDirectory();
+	std::string finalRoute = server.getRoot() + socketClass.getDirectory();
 	if (socketClass.getAutoIndex() == true)
 	{
 		//socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
-		socketClass.generateAutoIndex(socketClass.getDirectory(), socketClass);
+		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass);
 		socketClass.setContentLength(socketClass.getResponse());
 		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 	}

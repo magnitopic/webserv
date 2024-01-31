@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 19:54:38 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:37:50 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/Server.hpp"
 
@@ -99,6 +99,35 @@ void	Server::setName(std::string str)
 		found++;
 	}
 	this->name = aux;
+}
+
+void	Server::setRoot(std::string str)
+{
+	std::size_t	found = str.find("root")  +4;
+	std::string	aux;
+	if (found > str.length() || found < 11){
+		this->root = "pages/";
+		return;
+	}
+	while (isspace(str[found]))
+		found++;
+	while (found < str.length()){
+		if (isalnum(str[found]))
+			aux.push_back(str[found]);
+		else if (str[found] == '/'){
+			aux.push_back(str[found]);
+			this->root = aux;
+			return;
+		}
+		else if (isspace(str[found]) || str[found] == ';'){
+			aux.push_back('/');
+			this->root = aux;
+			return;
+		}
+		found++;
+	}
+	aux.push_back('/');
+	this->root = aux;
 }
 
 std::string Server::getRoot(void)

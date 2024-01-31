@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/31 17:52:39 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:39:41 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/Socket.hpp"
 #include "../include/webserv.hpp"
@@ -192,9 +192,9 @@ void servePages()
 {
 }
 
-void Socket::generateAutoIndex(std::string route, Socket& socketClass)
+void Socket::generateAutoIndex(Server& server, std::string route, Socket& socketClass)
 {
-	std::string finalRoute = "pages" + route;		// ! pages is temporary
+	std::string finalRoute = server.getRoot() + route;		// ! pages is temporary
 	if (access(finalRoute.c_str(), R_OK) != 0)
 		return;
 	DIR *dirContents;

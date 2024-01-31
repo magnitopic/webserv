@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/30 19:54:53 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:34:55 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 
 #ifndef SERVER_HPP_
@@ -39,6 +39,7 @@ public:
 	~Server();
 	void		setPort(std::string str);
 	void		setName(std::string str);
+	void		setRoot(std::string str);
 	int			getPort(void);
 	std::string	getRoot(void);
 	std::string	getName(void);

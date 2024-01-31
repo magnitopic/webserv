@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/31 16:57:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 18:41:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ in the configuration file in order to check wether it is possible or not to
 fulfill the request.
 
 */
+
+class Server;
 
 class Socket
 {
@@ -65,11 +67,11 @@ class Socket
 		bool					getAutoIndex(void);
 
 		// methods
-		void	generateAutoIndex(std::string route, Socket &socketClass);
+		void	generateAutoIndex(Server& server, std::string route, Socket &socketClass);
 		void	servePages();
 };
 
-bool	isAutoindex(std::string str, Socket socketClass);
+bool		isAutoindex(std::string str, Socket socketClass);
 std::ostream &operator<<(std::ostream &os, std::list<std::string> &list);  //instead of creating a printList function y created this operator overload function that works the same way
 
 #endif
