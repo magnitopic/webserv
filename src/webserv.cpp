@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/30 20:01:30 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:16:41 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -155,9 +155,11 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server)
 	if (socketClass.getAutoIndex())
 	{
 		//socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
-		socketClass.generateAutoIndex("pages");
+		socketClass.generateAutoIndex("pages", socketClass);
+		socketClass.setContentLength(socketClass.getResponse());
+		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 	}
-	//else		// ! this code should be changed but it will server as backup for now
+	else		// ! this code should be changed but it will server as backup for now
 	{
 		if (socketClass.getDirectory().compare("/") == 0)
 		{

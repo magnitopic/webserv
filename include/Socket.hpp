@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/30 19:42:10 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:05:59 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef SOCKET_HPP_
 #define SOCKET_HPP_
@@ -65,7 +65,7 @@ class Socket
 		bool					getAutoIndex(void);
 
 		// methods
-		void generateAutoIndex(std::string route);
+		void generateAutoIndex(std::string route, Socket &socketClass);
 		void servePages();
 };
 

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/30 19:35:38 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:25:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/Socket.hpp"
 #include "../include/webserv.hpp"
@@ -174,7 +174,7 @@ void servePages()
 {
 }
 
-void Socket::generateAutoIndex(std::string route)
+void Socket::generateAutoIndex(std::string route, Socket& socketClass)
 {
 	if (access(route.c_str(), R_OK) != 0)
 		return;
@@ -183,11 +183,18 @@ void Socket::generateAutoIndex(std::string route)
 	if (!dirContents)
 		raiseError("openDir failled");
 	struct dirent *entry = readdir(dirContents);
+	std::string name = entry->d_name;
+	std::string page = "<head><title>Index of /" + route + "</title></head>";
+	page = "<body><h1>Index of /" + route + "</h1>";
 	while (entry != NULL)
 	{
+		name = entry->d_name;
+		page += "<a href=/" + name + ">" + entry->d_name + "</a><br>";
 		std::cout << entry->d_name << std::endl;
 		entry = readdir(dirContents);
 	}
+	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
+	socketClass.setResponse(page);
 	closedir(dirContents);
 }
 
