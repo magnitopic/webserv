@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 15:55:44 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 16:57:53 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ std::string	configToString(char *str);
 std::string	getFile(std::string fileAdr);
 int			setAction(std::string);
 int			isAllowed(const std::string str, std::list<std::string> actions);
-void 		handleRequests(Socket &socketClass, char *buffer, Server &server);
+void 		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str);
 
 #endif

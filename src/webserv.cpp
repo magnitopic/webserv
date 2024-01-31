@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 16:16:41 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:22:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void createConection(std::string str)
 								socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 							}
 							else
-								handleRequests(socketClass, buffer, server);
+								handleRequests(socketClass, buffer, server, str);
 						}
 						else
 						{
@@ -149,13 +149,13 @@ void createConection(std::string str)
 	}
 }
 
-void handleRequests(Socket &socketClass, char *buffer, Server &server)
+void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str)
 {
-	socketClass.setAutoIndex(true);
-	if (socketClass.getAutoIndex())
+	socketClass.setAutoIndex(isAutoindex(str, socketClass));
+	if (socketClass.getAutoIndex() == true)
 	{
 		//socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
-		socketClass.generateAutoIndex("pages", socketClass);
+		socketClass.generateAutoIndex(socketClass.getDirectory(), socketClass);
 		socketClass.setContentLength(socketClass.getResponse());
 		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 	}

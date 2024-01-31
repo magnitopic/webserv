@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/31 16:25:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/01/31 17:25:23 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,26 +170,45 @@ void Socket::setAutoIndex(bool autoIndex)
 
 // methods
 
+
+bool isAutoindex(std::string str, Socket socketClass)
+{
+	std::string aux = "location " + socketClass.getDirectory() + " ";
+	if (str.find(aux) >= str.length())
+		return false;
+	std::string methods = str.substr(str.find(aux), str.find("}") - str.find(aux));
+	std::string word;
+	unsigned int i = methods.find("autoindex") + 10;
+	if (i > methods.length())
+		return false;
+	word.push_back(methods[i]);
+	word.push_back(methods[i + 1]);
+	if (word == "on")
+		return true;
+	return false;
+}
+
 void servePages()
 {
 }
 
 void Socket::generateAutoIndex(std::string route, Socket& socketClass)
 {
-	if (access(route.c_str(), R_OK) != 0)
+	std::string finalRoute = "pages" + route;
+	if (access(finalRoute.c_str(), R_OK) != 0)
 		return;
 	DIR *dirContents;
-	dirContents = opendir(route.c_str());
+	dirContents = opendir(finalRoute.c_str());
 	if (!dirContents)
 		raiseError("openDir failled");
 	struct dirent *entry = readdir(dirContents);
 	std::string name = entry->d_name;
-	std::string page = "<head><title>Index of /" + route + "</title></head>";
-	page = "<body><h1>Index of /" + route + "</h1>";
+	std::string page = "<head><title>Index of " + route + "</title></head>";
+	page = "<body><h1>Index of " + route + "</h1>";
 	while (entry != NULL)
 	{
 		name = entry->d_name;
-		page += "<a href=/" + name + ">" + entry->d_name + "</a><br>";
+		page += "<a href=" + finalRoute + ">" + entry->d_name + "</a><br>";
 		std::cout << entry->d_name << std::endl;
 		entry = readdir(dirContents);
 	}
