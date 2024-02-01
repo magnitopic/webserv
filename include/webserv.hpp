@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 20:02:30 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:57:56 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -37,6 +37,7 @@ void		raiseError(const char *msg);
 std::string getFile(const std::string &fileAdr);
 int			parseConfigFile(std::string file_name);
 int			isAllowed(const std::string str, std::list<std::string> actions);
-void 		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str);
+void		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str);
+std::string	getContentType(const std::string &extension);
 
 #endif

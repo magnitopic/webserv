@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/31 18:39:41 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:56:53 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void servePages()
 
 void Socket::generateAutoIndex(Server& server, std::string route, Socket& socketClass)
 {
-	std::string finalRoute = server.getRoot() + route;		// ! pages is temporary
+	std::string finalRoute = server.getRoot() + route;
 	if (access(finalRoute.c_str(), R_OK) != 0)
 		return;
 	DIR *dirContents;

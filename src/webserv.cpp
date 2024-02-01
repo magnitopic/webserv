@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/01 07:55:23 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/01 17:55:37 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ void createConection(std::string str)
 						if (writeVal == -1)
 							raiseError("error writing data");
 						writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
-						//std::cout << socketClass.getResponse() << std::endl;
 						if (writeVal == -1)
 							raiseError("error writing data");
 						close(it->fd);
