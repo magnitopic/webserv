@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/01 17:55:37 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/01 20:19:42 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -25,8 +25,8 @@
 void createConection(std::string str)
 {
 	// Create socket
-	Socket			socketClass;
-	Server			server;
+	Socket socketClass;
+	Server server;
 	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	if (socketVal == -1)
@@ -82,7 +82,6 @@ void createConection(std::string str)
 
 		// polling data from clients
 		int pollVal = poll(clients.data(), clients.size(), -1);
-		std::cout << "poll value:" << pollVal << std::endl;
 		if (pollVal == -1)
 			raiseError("error polling data");
 		else if (pollVal > 0)
@@ -96,53 +95,47 @@ void createConection(std::string str)
 					char buffer[1024];
 					int readVal = read(it->fd, buffer, 1024);
 					if (readVal == -1)
-					{
 						raiseError("error reading data");
-						it++;
-					}
 					else if (readVal == 0)
 					{
 						close(it->fd);
 						it = clients.erase(it);
+						continue;
+					}
+					std::cout << buffer << std::endl;
+					int action = setAction(buffer);
+					std::string aux = buffer;
+					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
+					socketClass.setActions(socketClass.getDirectory(), str);
+					socketClass.setForbidden(socketClass.getDirectory(), str);
+					std::string act;
+					if (action < 3)
+						act = socketClass.getActionsArray(action);
+					else
+						act = "";
+					if (act.length() > 0)
+					{
+						if (!isAllowed(act, socketClass.getActions()))
+						{
+							socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
+							socketClass.setContentLength(socketClass.getResponse());
+							socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
+						}
+						else
+							handleRequests(socketClass, buffer, server, str);
 					}
 					else
 					{
-						//std::cout << buffer << std::endl;
-						int action = setAction(buffer);
-						std::string aux = buffer;
-						socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
-						socketClass.setActions(socketClass.getDirectory(), str);
-						socketClass.setForbidden(socketClass.getDirectory(), str);
-						std::string act;
-						if (action < 3)
-							act = socketClass.getActionsArray(action);
-						else
-							act = "";
-						if (act.length() > 0)
-						{
-							if (!isAllowed(act, socketClass.getActions())){
-								socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
-								socketClass.setContentLength(socketClass.getResponse());
-								socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
-							}
-							else
-								handleRequests(socketClass, buffer, server, str);
-						}
-						else
-						{
-							socketClass.setResponse("<html>\n<head><title>501 Not Implemented</title></head>\n<body>\n<center><h1>501 Not Implemented</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
-							socketClass.setContentLength(socketClass.getResponse());
-							socketClass.setHeader("HTTP/1.1 501 Not Implemented\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n");
-						}
-						int writeVal = write(it->fd, socketClass.getHeader().c_str(), socketClass.getHeader().length());
-						if (writeVal == -1)
-							raiseError("error writing data");
-						writeVal = write(it->fd, socketClass.getResponse().c_str(), socketClass.getResponse().length());
-						if (writeVal == -1)
-							raiseError("error writing data");
-						close(it->fd);
-						it = clients.erase(it);
+						socketClass.setResponse("<html>\n<head><title>501 Not Implemented</title></head>\n<body>\n<center><h1>501 Not Implemented</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
+						socketClass.setContentLength(socketClass.getResponse());
+						socketClass.setHeader("HTTP/1.1 501 Not Implemented\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n");
 					}
+					std::string resp = socketClass.generateHttpResponse();
+					int writeVal = write(it->fd, resp.c_str(), resp.length());
+					if (writeVal == -1)
+						raiseError("error writing data");
+					close(it->fd);
+					it = clients.erase(it);
 				}
 			}
 		}
@@ -155,24 +148,26 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 	std::string finalRoute = server.getRoot() + socketClass.getDirectory();
 	if (socketClass.getAutoIndex() == true)
 	{
-		//socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
+		// socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
 		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass);
 		socketClass.setContentLength(socketClass.getResponse());
-		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
 	}
-	else		// ! this code should be changed but it will serve as backup for now
+	else // ! this code should be changed but it will serve as backup for now
 	{
 		struct stat s;
-		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG){
+		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG)
+		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: image/jpeg; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+			socketClass.setContentType(getContentType("txt"));	// ! provisional
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: image/jpeg; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
 		}
 		else if (socketClass.getDirectory().compare("/") == 0)
 		{
 			socketClass.setResponse(getFile("pages/index.html"));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
 		}
 		else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
 		{
@@ -183,13 +178,13 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 		{
 			socketClass.setResponse(getFile("pages/info/geco.html"));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
 		}
 		else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos)
 		{
 			socketClass.setResponse(getFile("pages/teapot.html"));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
+			socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() + "\n\n");
 		}
 		else
 		{

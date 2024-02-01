@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/01 17:56:53 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/01 20:20:57 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/Socket.hpp"
 #include "../include/webserv.hpp"
@@ -55,12 +55,14 @@ void Socket::setDirectory(std::string directory)
 	return;
 }
 
-void	Socket::setHeader(std::string header){
+void Socket::setHeader(std::string header)
+{
 	this->header = header;
 	return;
 }
 
-void	Socket::setResponse(std::string response){
+void Socket::setResponse(std::string response)
+{
 	this->response = response;
 	return;
 }
@@ -75,11 +77,13 @@ std::string Socket::getResponse(void)
 	return this->response;
 }
 
-std::string	Socket::getHeader(void){
+std::string Socket::getHeader(void)
+{
 	return this->header;
 }
 
-void	Socket::setActions(std::string directory, std::string text){
+void Socket::setActions(std::string directory, std::string text)
+{
 	std::string aux = "location " + directory;
 	if (text.find(aux) >= text.length())
 		return;
@@ -140,7 +144,7 @@ std::string &Socket::getActionsArray(int i)
 	return aux;
 }
 
-void	Socket::setContentLength(std::string cont)
+void Socket::setContentLength(std::string cont)
 {
 	int size = static_cast<int>(cont.length());
 	std::string aux = std::to_string(size);
@@ -148,7 +152,7 @@ void	Socket::setContentLength(std::string cont)
 	this->contentLength = str;
 }
 
-std::string	Socket::getContentLength(void)
+std::string Socket::getContentLength(void)
 {
 	return this->contentLength;
 }
@@ -168,8 +172,17 @@ void Socket::setAutoIndex(bool autoIndex)
 	this->autoIndex = autoIndex;
 }
 
-// methods
+void Socket::setContentType(std::string type)
+{
+	this->contentType = type;
+}
 
+std::string Socket::getContentType()
+{
+	return this->contentType;
+}
+
+// methods
 
 bool isAutoindex(std::string str, Socket socketClass)
 {
@@ -192,7 +205,7 @@ void servePages()
 {
 }
 
-void Socket::generateAutoIndex(Server& server, std::string route, Socket& socketClass)
+void Socket::generateAutoIndex(Server &server, std::string route, Socket &socketClass)
 {
 	std::string finalRoute = server.getRoot() + route;
 	if (access(finalRoute.c_str(), R_OK) != 0)
@@ -213,10 +226,24 @@ void Socket::generateAutoIndex(Server& server, std::string route, Socket& socket
 		page += "<a href=" + route + "/" + entry->d_name + ">" + entry->d_name + "</a><br>";
 		std::cout << entry->d_name << std::endl;
 		entry = readdir(dirContents);
-}
+	}
 	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
 	socketClass.setResponse(page);
 	closedir(dirContents);
+}
+
+/* *
+ * Combines the values for the response to the client, joins them together and returns
+ * the string that will be sent to the clinet as a response
+ */
+std::string Socket::generateHttpResponse(void)
+{
+	std::string resp = "";
+	resp += this->header;
+	resp += this->contentType;
+	resp += this->contentLength;
+	resp += this->response;
+	return resp;
 }
 
 std::ostream &operator<<(std::ostream &os, std::list<std::string> &list)

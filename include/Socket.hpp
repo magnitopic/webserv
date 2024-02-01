@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/01/31 18:41:18 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/01 20:19:22 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef SOCKET_HPP_
 #define SOCKET_HPP_
@@ -34,12 +34,13 @@ class Socket
 {
 	private:
 		std::string				directory;
-		std::list<std::string>	actions; 	// actions that can be performed inside the directory
-		std::list<std::string>	forbidden;	// actions denied in the directory
-		std::string				header;		// header given to the request
-		std::string				response;	// response given to the request
-		std::list<std::string>	actionsArr;	// this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
-		std::string				root;		// indicates the root directory for the location
+		std::list<std::string>	actions; 		// actions that can be performed inside the directory
+		std::list<std::string>	forbidden;		// actions denied in the directory
+		std::string				header;			// header given to the request
+		std::string				response;		// response given to the request
+		std::string				contentType;	// type of content that will be given to the request
+		std::list<std::string>	actionsArr;		// this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
+		std::string				root;			// indicates the root directory for the location
 		std::string				contentLength;
 		bool					autoIndex;
 	public:
@@ -51,24 +52,28 @@ class Socket
 		// setters & getters
 
 		void					setDirectory(std::string directory);
+		std::string				getDirectory(void);
 		void					setResponse(std::string response);
+		std::string				getResponse(void);
 		void					setHeader(std::string header);
+		std::string				getHeader(void);
 		void					setContentLength(std::string cont);
-		void					setActions(std::string directory, std::string text);
+		std::string				getContentLength(void);
 		void					setForbidden(std::string directory, std::string text);
 		void					setAutoIndex(bool autoIndex);
+		bool					getAutoIndex(void);
+		void					setActions(std::string directory, std::string text);
 		std::list<std::string>	getActions(void);
-		std::string				getContentLength(void);
-		std::string				getDirectory(void);
-		std::string				getHeader(void);
-		std::string				getResponse(void);
 		std::string				&getActionsArray(int i);
 		std::string				getRoot(void);
-		bool					getAutoIndex(void);
+		void					setContentType(std::string type);
+		std::string				getContentType(void);
+		
 
 		// methods
-		void	generateAutoIndex(Server& server, std::string route, Socket &socketClass);
-		void	servePages();
+		std::string	generateHttpResponse(void);
+		void		generateAutoIndex(Server& server, std::string route, Socket &socketClass);
+		void		servePages();
 };
 
 bool		isAutoindex(std::string str, Socket socketClass);
