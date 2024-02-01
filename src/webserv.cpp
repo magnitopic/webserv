@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 20:08:39 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/01 07:55:23 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -175,9 +175,11 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\nContent-Length: " + socketClass.getContentLength().c_str() +"\n\n");
 		}
-		/*else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
-			socketClass.setResponse("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n" +
-						getFile("images/favicon.ico"));*/
+		else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
+		{
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: image/jpeg; charset=utf-8\n\n");
+			socketClass.setResponse(getFile("pages/images/favicon.ico"));
+		}
 		else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
 		{
 			socketClass.setResponse(getFile("pages/info/geco.html"));
