@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/01 20:20:57 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/02 08:12:08 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/Socket.hpp"
 #include "../include/webserv.hpp"
@@ -241,7 +241,9 @@ std::string Socket::generateHttpResponse(void)
 	std::string resp = "";
 	resp += this->header;
 	resp += this->contentType;
+	resp += "\n";
 	resp += this->contentLength;
+	resp += "\n\n";
 	resp += this->response;
 	return resp;
 }
