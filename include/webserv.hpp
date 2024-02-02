@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/01 17:57:56 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/02 18:31:38 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -27,11 +27,14 @@
 #include <vector>
 #include <string>
 #include <sstream>
+
 #include "enums.hpp"
 #include "Socket.hpp"
 #include "Server.hpp"
+#include "Request.hpp"
 
 int			setAction(std::string);
+void		parseReq(std::string req);
 std::string	configToString(char *str);
 void		raiseError(const char *msg);
 std::string getFile(const std::string &fileAdr);
