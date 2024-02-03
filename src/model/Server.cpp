@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/01/31 18:37:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/03 16:12:45 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,45 @@ std::string	Server::getName(void)
 	return this->name;
 }
 
+void	Server::setActions(std::string str)
+{
+	std::string aux = "server ";
+	if (str.find(aux) >= str.length())
+		return;
+	std::string methods = str.substr(str.find(aux), str.find("location") - str.find(aux));
+	std::string word;
+	int i = methods.find("limit_except") + 12;
+	while (i < static_cast<int>(methods.length()) || i < 12)
+	{
+		if (isupper(methods[i]))
+			word.push_back(methods[i]);
+		else if (islower(methods[i]))
+			break;
+		else
+		{
+			if (word.length() > 0)
+				this->actions.push_back(word);
+			word = "";
+		}
+		i++;
+	}
+	i = methods.find("allow") + 5;
+	while (i < static_cast<int>(methods.length()) || i < 5)
+	{
+		if (isupper(methods[i]))
+			word.push_back(methods[i]);
+		else if (islower(methods[i]))
+			break;
+		else
+		{
+			if (word.length() > 0)
+				this->actions.push_back(word);
+			word = "";
+		}
+		i++;
+	}
+}
+
 void	Server::setName(std::string str)
 {
 	std::size_t	found = str.find("server_name") + 11;
@@ -133,4 +172,14 @@ void	Server::setRoot(std::string str)
 std::string Server::getRoot(void)
 {
 	return this->root;
+}
+
+std::list<std::string> Server::getActions(void)
+{
+	return this->actions;
+}
+
+void	Server::emptyActions(void)
+{
+	this->actions.clear();
 }

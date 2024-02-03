@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/02 20:02:20 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/03 16:22:39 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -47,6 +47,7 @@ void createConection(std::string str)
 	server.setPort(str);
 	server.setName(str);
 	server.setRoot(str);
+	server.setActions(str);
 	serverScruct.sin_port = htons(server.getPort());
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
@@ -107,7 +108,7 @@ void createConection(std::string str)
 					int action = setAction(buffer);
 					std::string aux = buffer;
 					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
-					socketClass.setActions(socketClass.getDirectory(), str);
+					socketClass.setActions(server, socketClass.getDirectory(), str);
 					socketClass.setForbidden(socketClass.getDirectory(), str);
 					std::string act;
 					if (action < 3)
@@ -116,7 +117,7 @@ void createConection(std::string str)
 						act = "";
 					if (act.length() > 0)
 					{
-						if (!isAllowed(act, socketClass.getActions()))
+						if (!isAllowed(server, act, socketClass.getActions(), socketClass.getForbidden()))
 						{
 							socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
 							socketClass.setContentLength(socketClass.getResponse());
