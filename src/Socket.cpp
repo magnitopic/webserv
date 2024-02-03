@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/03 16:08:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/03 17:08:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,9 +269,14 @@ std::string Socket::generateHttpResponse(void)
 	return resp;
 }
 
-std::ostream &operator<<(std::ostream &os, std::list<std::string> &list)
+std::ostream &operator<<(std::ostream &os, std::list<std::string> list)
 {
 	for (std::list<std::string>::iterator it = list.begin(); it != list.end(); it++)
 		os << *it << " ";
 	return os;
+}
+
+void	Socket::emptyActions(void)
+{
+	this->actions.clear();
 }

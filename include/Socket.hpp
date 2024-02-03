@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/03 16:05:02 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/03 17:08:16 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ class Socket
 		void					setContentType(std::string type);
 		std::string				getContentType(void);
 		std::list<std::string>	getForbidden(void);
+		void					emptyActions(void);
 
 
 		// methods
@@ -78,6 +79,6 @@ class Socket
 };
 
 bool		isAutoindex(std::string str, Socket socketClass);
-std::ostream &operator<<(std::ostream &os, std::list<std::string> &list);  //instead of creating a printList function y created this operator overload function that works the same way
+std::ostream &operator<<(std::ostream &os, std::list<std::string> list);  //instead of creating a printList function y created this operator overload function that works the same way
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/03 16:06:56 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/03 17:05:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ std::string	configToString(char *str)
 
 int	isAllowed(Server server, std::string str, std::list<std::string> actions, std::list<std::string> forbidden)
 {
+	std::cout << str << std::endl;
 	if (actions.size() > 1){
 		std::list<std::string>::iterator it = std::find(actions.begin(), (std::prev(actions.end())), str);
 		if (it != actions.end())
@@ -57,11 +58,11 @@ int	isAllowed(Server server, std::string str, std::list<std::string> actions, st
 	if (server.getActions().size() > 1){
 		std::list<std::string>::iterator it = std::find(server.getActions().begin(), (std::prev(server.getActions().end())), str);
 		if (it != server.getActions().end())
-			return 0;
+			return 1;
 	}
 	else if (server.getActions().size() == 1){
 		if (str == *server.getActions().begin())
-			return 0;
+			return 1;
 	}
 	return 0;
 }

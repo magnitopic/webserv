@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/03 16:22:59 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/03 17:08:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -104,12 +104,13 @@ void createConection(std::string str)
 						continue;
 					}
 					// std::cout <<"|"<< buffer<< "|" << std::endl;
-					parseReq(buffer);
+					//parseReq(buffer);
 					int action = setAction(buffer);
 					std::string aux = buffer;
 					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
 					socketClass.setActions(server, socketClass.getDirectory(), str);
 					socketClass.setForbidden(socketClass.getDirectory(), str);
+					std::cout << socketClass.getActions() << std::endl;
 					std::string act;
 					if (action < 3)
 						act = socketClass.getActionsArray(action);
@@ -138,6 +139,8 @@ void createConection(std::string str)
 						raiseError("error writing data");
 					close(it->fd);
 					it = clients.erase(it);
+					server.emptyActions();
+					socketClass.emptyActions();
 				}
 			}
 		}
