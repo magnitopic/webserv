@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/02 08:12:08 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/03 16:08:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ std::string Socket::getHeader(void)
 	return this->header;
 }
 
-void Socket::setActions(std::string directory, std::string text)
+void Socket::setActions(Server& server, std::string directory, std::string text)
 {
 	std::string aux = "location " + directory;
 	if (text.find(aux) >= text.length())
@@ -91,6 +91,22 @@ void Socket::setActions(std::string directory, std::string text)
 	std::string word;
 	int i = methods.find("limit_except") + 12;
 	while (i < static_cast<int>(methods.length()) || i < 12)
+	{
+		server.emptyActions();
+		if (isupper(methods[i]))
+			word.push_back(methods[i]);
+		else if (islower(methods[i]))
+			break;
+		else
+		{
+			if (word.length() > 0)
+				this->actions.push_back(word);
+			word = "";
+		}
+		i++;
+	}
+	i = methods.find("allow") + 5;
+	while (i < static_cast<int>(methods.length()) || i < 5)
 	{
 		if (isupper(methods[i]))
 			word.push_back(methods[i]);
@@ -180,6 +196,11 @@ void Socket::setContentType(std::string type)
 std::string Socket::getContentType()
 {
 	return this->contentType;
+}
+
+std::list<std::string>	Socket::getForbidden(void)
+{
+	return this->forbidden;
 }
 
 // methods

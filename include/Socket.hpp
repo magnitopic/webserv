@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/01 20:19:22 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/03 16:05:02 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef SOCKET_HPP_
 #define SOCKET_HPP_
@@ -62,13 +62,14 @@ class Socket
 		void					setForbidden(std::string directory, std::string text);
 		void					setAutoIndex(bool autoIndex);
 		bool					getAutoIndex(void);
-		void					setActions(std::string directory, std::string text);
+		void					setActions(Server& server, std::string directory, std::string text);
 		std::list<std::string>	getActions(void);
 		std::string				&getActionsArray(int i);
 		std::string				getRoot(void);
 		void					setContentType(std::string type);
 		std::string				getContentType(void);
-		
+		std::list<std::string>	getForbidden(void);
+
 
 		// methods
 		std::string	generateHttpResponse(void);
