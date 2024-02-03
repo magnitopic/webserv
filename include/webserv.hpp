@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/03 16:07:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/03 16:53:39 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -42,5 +42,6 @@ int			parseConfigFile(std::string file_name);
 int			isAllowed(Server server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
 void		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str);
 std::string	getContentType(const std::string &extension);
+void		createConection(std::string str);
 
 #endif
