@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/02 17:29:24 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/02 20:02:20 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -102,7 +102,7 @@ void createConection(std::string str)
 						it = clients.erase(it);
 						continue;
 					}
-					//std::cout <<"|"<< buffer<< "|" << std::endl;
+					// std::cout <<"|"<< buffer<< "|" << std::endl;
 					parseReq(buffer);
 					int action = setAction(buffer);
 					std::string aux = buffer;

@@ -8,6 +8,7 @@ WEB_SRC			=	src/webserv.cpp \
 					src/getFile.cpp \
 					src/parsing/parseReq.cpp \
 					src/model/Server.cpp \
+					src/model/Request.cpp \
 					src/configFile/parse.cpp \
 
 OBJS			=	$(WEB_SRC:.cpp=.o)
