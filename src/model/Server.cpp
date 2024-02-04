@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/03 16:12:45 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/04 19:28:00 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,20 @@ std::string	Server::getName(void)
 
 void	Server::setActions(std::string str)
 {
+	int flag = 0;
 	std::string aux = "server ";
 	if (str.find(aux) >= str.length())
-		return;
-	std::string methods = str.substr(str.find(aux), str.find("location") - str.find(aux));
+		raiseError("No server block in configuration file");
+	std::string methods;
+	if (str.find("location") < str.length())
+		methods = str.substr(str.find(aux), str.find("location") - str.find(aux));
+	else
+		methods = str;
 	std::string word;
 	int i = methods.find("limit_except") + 12;
-	while (i < static_cast<int>(methods.length()) || i < 12)
+	while (i < static_cast<int>(methods.length()) && i > 12)
 	{
+		flag++;
 		if (isupper(methods[i]))
 			word.push_back(methods[i]);
 		else if (islower(methods[i]))
@@ -102,8 +108,9 @@ void	Server::setActions(std::string str)
 		i++;
 	}
 	i = methods.find("allow") + 5;
-	while (i < static_cast<int>(methods.length()) || i < 5)
+	while (i < static_cast<int>(methods.length()) && i > 5)
 	{
+		flag++;
 		if (isupper(methods[i]))
 			word.push_back(methods[i]);
 		else if (islower(methods[i]))
@@ -115,6 +122,11 @@ void	Server::setActions(std::string str)
 			word = "";
 		}
 		i++;
+	}
+	if (flag == 0){
+		this->actions.push_back("GET");
+		this->actions.push_back("POST");
+		this->actions.push_back("DELETE");
 	}
 }
 

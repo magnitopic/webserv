@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/03 16:53:39 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/04 19:29:03 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -39,7 +39,7 @@ std::string	configToString(char *str);
 void		raiseError(const char *msg);
 std::string getFile(const std::string &fileAdr);
 int			parseConfigFile(std::string file_name);
-int			isAllowed(Server server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
+int			isAllowed(Server &server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
 void		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str);
 std::string	getContentType(const std::string &extension);
 void		createConection(std::string str);
