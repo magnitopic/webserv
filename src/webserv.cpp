@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/03 17:08:43 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/04 20:06:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 	-	Create socket
 	-	Bind socket
 	-	Listen socket
-	-	Accept and recive data
+	-	Accept and receive data
 	-	Disconnect
  */
 
@@ -47,7 +47,6 @@ void createConection(std::string str)
 	server.setPort(str);
 	server.setName(str);
 	server.setRoot(str);
-	server.setActions(str);
 	serverScruct.sin_port = htons(server.getPort());
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
@@ -67,6 +66,7 @@ void createConection(std::string str)
 	std::vector<pollfd> clients;
 	while (true)
 	{
+		server.setActions(str);
 		// registering a new client
 		sockaddr_in clientAddress;
 		socklen_t clientAddrSize = sizeof(clientAddress);
@@ -149,6 +149,7 @@ void createConection(std::string str)
 
 void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str)
 {
+	(void)buffer;
 	socketClass.setAutoIndex(isAutoindex(str, socketClass));
 	std::string finalRoute = server.getRoot() + socketClass.getDirectory();
 	if (socketClass.getAutoIndex() == true)
@@ -165,17 +166,18 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(getContentType("html"));
+			std::string extension = finalRoute.substr(finalRoute.rfind(".") + 1, finalRoute.length() - finalRoute.rfind("."));
+			socketClass.setContentType(getContentType(extension));
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
 		}
-		else if (socketClass.getDirectory().compare("/") == 0)
+		else if (!access(finalRoute.c_str(), F_OK))
 		{
-			socketClass.setResponse(getFile("pages/index.html"));
+			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(getContentType("html"));
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
 		}
-		else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
+		/*else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
 		{
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n\n");
 			socketClass.setContentType(getContentType("jpeg"));
@@ -194,7 +196,7 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(getContentType("html"));
 			socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\ncharset=utf-8\n");
-		}
+		}*/
 		else
 		{
 			socketClass.setResponse(getFile("pages/error_404.html"));
