@@ -6,16 +6,14 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/02 20:12:20 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/06 07:58:34 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include "../../include/Request.hpp"
 
-Request::Request()
-{
-}
+Request::Request() {}
 
 Request::Request(const Request &copy)
 {

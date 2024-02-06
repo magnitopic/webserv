@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:21:43 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/02 20:08:21 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/06 08:09:46 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ Request parseReq(std::string passedReq, Socket &socket)
 				break;
 			case 2:
 				req.version = word;
-				break;
-			default:
 				break;
 			}
 			count++;

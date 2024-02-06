@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/04 20:06:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/06 15:12:45 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void createConection(std::string str)
 						continue;
 					}
 					// std::cout <<"|"<< buffer<< "|" << std::endl;
-					//parseReq(buffer);
+					Request req = parseReq(buffer, socketClass);
 					int action = setAction(buffer);
 					std::string aux = buffer;
 					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
@@ -125,7 +125,7 @@ void createConection(std::string str)
 							socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n");
 						}
 						else
-							handleRequests(socketClass, buffer, server, str);
+							handleRequests(socketClass, buffer, server, str, req);
 					}
 					else
 					{
@@ -147,9 +147,10 @@ void createConection(std::string str)
 	}
 }
 
-void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str)
+void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str, Request req)
 {
 	(void)buffer;
+	(void)req;
 	socketClass.setAutoIndex(isAutoindex(str, socketClass));
 	std::string finalRoute = server.getRoot() + socketClass.getDirectory();
 	if (socketClass.getAutoIndex() == true)
@@ -169,15 +170,23 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			std::string extension = finalRoute.substr(finalRoute.rfind(".") + 1, finalRoute.length() - finalRoute.rfind("."));
 			socketClass.setContentType(getContentType(extension));
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
+			
 		}
 		else if (!access(finalRoute.c_str(), F_OK))
+		{
+			socketClass.setResponse(getFile(finalRoute));
+			socketClass.setContentLength(socketClass.getResponse());
+			socketClass.setContentType(getContentType(req.uri));
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
+		}
+		/* else if (!access(finalRoute.c_str(), F_OK))
 		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(getContentType("html"));
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
 		}
-		/*else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
+		else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
 		{
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n\n");
 			socketClass.setContentType(getContentType("jpeg"));
@@ -196,7 +205,7 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(getContentType("html"));
 			socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\ncharset=utf-8\n");
-		}*/
+		} */
 		else
 		{
 			socketClass.setResponse(getFile("pages/error_404.html"));
