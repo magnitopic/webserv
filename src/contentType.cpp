@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   contentType.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:03:09 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 14:31:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 16:10:14 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 std::string parseContentType(std::string extension)
 {
+	/* std::string::size_type pos = extension.find('.');
+
+	if (pos == std::string::npos)
+		return "text/plain";
+	extension = extension.substr(pos + 1); */
 	std::map<std::string, std::string> contentTypes;
 	contentTypes.insert(std::pair<std::string, std::string> ("txt", "text/plain"));
 	contentTypes.insert(std::pair<std::string, std::string> ("html", "text/html"));
