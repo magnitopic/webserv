@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 15:37:56 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 19:57:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ Socket::Socket(const Socket &socket)
 {
 	this->directory = socket.directory;
 	this->actions = socket.actions;
-	this->response = socket.response;
 	return;
 }
 
@@ -37,7 +36,6 @@ Socket &Socket::operator=(const Socket &socket)
 {
 	this->directory = socket.directory;
 	this->actions = socket.actions;
-	this->response = socket.response;
 	return *this;
 }
 
@@ -54,32 +52,12 @@ void Socket::setDirectory(std::string directory)
 	return;
 }
 
-void Socket::setHeader(std::string header)
-{
-	this->header = header;
-	return;
-}
-
-void Socket::setResponse(std::string response)
-{
-	this->response = response;
-	return;
-}
 
 std::string Socket::getDirectory(void)
 {
 	return this->directory;
 }
 
-std::string Socket::getResponse(void)
-{
-	return this->response;
-}
-
-std::string Socket::getHeader(void)
-{
-	return this->header;
-}
 
 void Socket::setActions(Server& server, std::string directory, std::string text)
 {
@@ -150,28 +128,6 @@ std::list<std::string> Socket::getActions(void)
 	return this->actions;
 }
 
-std::string &Socket::getActionsArray(int i)
-{
-	std::list<std::string>::iterator it = this->actionsArr.begin();
-	for (int n = 0; n < i; n++)
-		it++;
-	std::string &aux = *it;
-	return aux;
-}
-
-void Socket::setContentLength(std::string cont)
-{
-	int size = static_cast<int>(cont.length());
-	std::string aux = std::to_string(size);
-	const char *str = aux.c_str();
-	this->contentLength = str;
-}
-
-std::string Socket::getContentLength(void)
-{
-	return this->contentLength;
-}
-
 std::string Socket::getRoot(void)
 {
 	return this->root;
@@ -185,16 +141,6 @@ bool Socket::getAutoIndex(void)
 void Socket::setAutoIndex(bool autoIndex)
 {
 	this->autoIndex = autoIndex;
-}
-
-void Socket::setContentType(std::string type)
-{
-	this->contentType = type;
-}
-
-std::string Socket::getContentType()
-{
-	return this->contentType;
 }
 
 std::list<std::string>	Socket::getForbidden(void)
@@ -221,7 +167,7 @@ bool isAutoindex(std::string str, Socket socketClass)
 	return false;
 }
 
-static void servePages(std::string route, dirent *entry, Socket& socketClass, DIR* dirContents)
+static void servePages(std::string route, dirent *entry, DIR* dirContents, Response& response)
 {
 	std::string page = "<head><title>Index of " + route + "</title></head>";
 	page += "<body><h1>Index of " + route + "</h1>";
@@ -231,11 +177,11 @@ static void servePages(std::string route, dirent *entry, Socket& socketClass, DI
 		entry = readdir(dirContents);
 	}
 	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
-	socketClass.setResponse(page);
+	response.setResponse(page);
 	closedir(dirContents);
 }
 
-void Socket::generateAutoIndex(Server &server, std::string route, Socket &socketClass)
+void Socket::generateAutoIndex(Server &server, std::string route, Socket &socketClass, Response &response)
 {
 	std::string finalRoute;
 	if (socketClass.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
@@ -255,24 +201,13 @@ void Socket::generateAutoIndex(Server &server, std::string route, Socket &socket
 		route.pop_back();
 
 	// TODO: this should be seperated into diferent functions
-	servePages(route, entry, socketClass, dirContents);
+	servePages(route, entry, dirContents, response);
 }
 
 /* *
  * Combines the values for the response to the client, joins them together and returns
  * the string that will be sent to the clinet as a response
  */
-std::string Socket::generateHttpResponse(void)
-{
-	std::string resp = "";
-	resp += this->header;
-	resp += this->contentType;
-	resp += "Content-Length: ";
-	resp += this->contentLength;
-	resp += "\n\n";
-	resp += this->response;
-	return resp;
-}
 
 std::ostream &operator<<(std::ostream &os, std::list<std::string> list)
 {

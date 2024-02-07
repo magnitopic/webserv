@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 16:10:24 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/07 20:18:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,34 +104,29 @@ void createConection(std::string str)
 					}
 					Socket socketClass;
 					Request req = parseReq(buffer);
-					int action = setAction(buffer);
+					Response	response;
 					std::string aux = buffer;
-					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
+					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 					socketClass.setActions(server, socketClass.getDirectory(), str);
 					socketClass.setForbidden(socketClass.getDirectory(), str);
-					std::string act;
-					if (action < 3)
-						act = socketClass.getActionsArray(action);
-					else
-						act = "";
-					if (act.length() > 0)
+					if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
 					{
-						if (!isAllowed(server, act, socketClass.getActions(), socketClass.getForbidden()))
+						if (!isAllowed(server, req.getMethod(), socketClass.getActions(), socketClass.getForbidden()))
 						{
-							socketClass.setResponse("<html>\n<head><title>405 Not Allowed</title></head>\n<body>\n<center><h1>405 Not Allowed</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
-							socketClass.setContentLength(socketClass.getResponse());
-							socketClass.setHeader("HTTP/1.1 405 Method Not Allowed\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n");
+							response.generateResponse(405, response.getErrorMsg(405), server);
+							response.setContentLength(response.getResponse());
+							response.generateHeader(405, response.getErrorMsg(405), server);
 						}
 						else
-							handleRequests(socketClass, buffer, server, str, req);
+							handleRequests(socketClass, buffer, server, str, req, response);
 					}
 					else
 					{
-						socketClass.setResponse("<html>\n<head><title>501 Not Implemented</title></head>\n<body>\n<center><h1>501 Not Implemented</h1></center>\n<hr><center>" + server.getName() + "</center>\n</body>\n</html>");
-						socketClass.setContentLength(socketClass.getResponse());
-						socketClass.setHeader("HTTP/1.1 501 Not Implemented\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n\n");
+						response.generateResponse(501, response.getErrorMsg(501), server);
+						response.setContentLength(response.getResponse());
+						response.generateHeader(501, response.getErrorMsg(501), server);
 					}
-					std::string resp = socketClass.generateHttpResponse();
+					std::string resp = response.generateHttpResponse(req.uri);
 					int writeVal = write(it->fd, resp.c_str(), resp.length());
 					if (writeVal == -1)
 						raiseError("error writing data");
@@ -145,77 +140,41 @@ void createConection(std::string str)
 	}
 }
 
-void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str, Request req)
+void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str, Request &req, Response &response)
 {
 	(void)buffer;
-	(void)req;
 	socketClass.setAutoIndex(isAutoindex(str, socketClass));
-	std::string finalRoute;
-	if (socketClass.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
-		finalRoute = server.getRoot() + socketClass.getDirectory();
-	else
-		finalRoute = server.getRoot() + socketClass.getDirectory().substr(1, socketClass.getDirectory().length() - 1);
-	if (finalRoute[finalRoute.length() - 1] == '/')
-		finalRoute.pop_back();
 	if (socketClass.getAutoIndex() == true)
 	{
-		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass);
-		socketClass.setContentLength(socketClass.getResponse());
-		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n");
+		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass, response);
+		response.setContentLength(response.getResponse());
+		response.generateHeader(200, response.getErrorMsg(200), server);
 	}
 	else // ! this code should be changed but it will serve as backup for now
 	{
 		struct stat s;
-		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG)
+		string aux = server.getRoot() + req.uri; // TODO: This could go inside the request class
+		if (stat(aux.c_str(), &s) == 0 && s.st_mode & S_IFREG)
 		{
-			//exit(0);
-			socketClass.setResponse(getFile(finalRoute));
-			socketClass.setContentLength(socketClass.getResponse());
-			std::string extension = finalRoute.substr(finalRoute.rfind(".") + 1, finalRoute.length() - finalRoute.rfind("."));
-			socketClass.setContentType(parseContentType(extension));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + "; charset=utf-8\n");
-
+			response.setResponse(getFile(aux));
+			response.setContentLength(response.getResponse());
+			response.generateHeader(200, response.getErrorMsg(200), server);
+			req.setContentType(parseContentType(req.extension));
+			response.generateHeaderContent(200, req.getContentType(), server);
 		}
-		else if (!access(finalRoute.c_str(), F_OK))
+		else if (!access(aux.c_str(), F_OK))
 		{
-			socketClass.setResponse(getFile(finalRoute));
-			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(parseContentType(req.uri));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + "; charset=utf-8\n");
+			response.setResponse(getFile(aux));
+			response.setContentLength(response.getResponse());
+			req.setContentType(parseContentType(aux));
+			response.generateHeaderContent(200, req.getContentType(), server);
 		}
-		/* else if (!access(finalRoute.c_str(), F_OK))
-		{
-			socketClass.setResponse(getFile(finalRoute));
-			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(getContentType("html"));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
-		}
-		else if (socketClass.getDirectory().compare("/favicon.ico") == 0)
-		{
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n\n");
-			socketClass.setContentType(getContentType("jpeg"));
-			socketClass.setResponse(getFile("pages/images/favicon.ico"));
-		}
-		else if (std::string(buffer).find("GET /info HTTP/1.1") != std::string::npos)
-		{
-			socketClass.setResponse(getFile("pages/info/geco.html"));
-			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(getContentType("html"));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
-		}
-		else if (std::string(buffer).find("GET /teapot HTTP/1.1") != std::string::npos)
-		{
-			socketClass.setResponse(getFile("pages/teapot.html"));
-			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(getContentType("html"));
-			socketClass.setHeader("HTTP/1.1 418 I'm a teapot\nServer: " + server.getName() + "\ncharset=utf-8\n");
-		} */
 		else
 		{
-			socketClass.setResponse(getFile("pages/error_404.html"));
-			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(parseContentType("html"));
-			socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + "; charset=utf-8\n");
+			response.setResponseNotFound();
+			response.setContentLength(response.getResponse());
+			req.setContentType(parseContentType("html"));
+			response.generateHeader(404, response.getErrorMsg(404), server);
 		}
 	}
 }

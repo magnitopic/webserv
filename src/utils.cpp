@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 15:30:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 20:09:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,13 @@ int	isAllowed(Server &server, std::string str, std::list<std::string> actions, s
 	return 0;
 }
 
+
+std::string deleteFirstElement(std::string str)
+{
+	reverse(str.begin(), str.end());
+	str.pop_back();
+	reverse(str.begin(), str.end());
+	return str;
+}
 
 //void	setIndex(finalRoute, socketClass.getDirectory())
