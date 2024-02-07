@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/04 19:28:00 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 12:35:08 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	Server::setName(std::string str)
 
 void	Server::setRoot(std::string str)
 {
-	std::size_t	found = str.find("root")  +4;
+	std::size_t	found = str.find("root") + 4;
 	std::string	aux;
 	if (found > str.length() || found < 11){
 		this->root = "pages/";

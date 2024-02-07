@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/06 15:12:45 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:02:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,32 +152,45 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 	(void)buffer;
 	(void)req;
 	socketClass.setAutoIndex(isAutoindex(str, socketClass));
-	std::string finalRoute = server.getRoot() + socketClass.getDirectory();
+	std::string finalRoute;
+	if (socketClass.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
+		finalRoute = server.getRoot() + socketClass.getDirectory();
+	else
+		finalRoute = server.getRoot() + socketClass.getDirectory().substr(1, socketClass.getDirectory().length() - 1);
+	if (finalRoute[finalRoute.length() - 1] == '/')
+		finalRoute.pop_back();
+	std::cout << finalRoute << std::endl;
 	if (socketClass.getAutoIndex() == true)
 	{
 		// socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
+		// std::cout << "Yes" << std::endl;
+		// exit(0);
 		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass);
 		socketClass.setContentLength(socketClass.getResponse());
 		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n");
+		//exit(0);
 	}
 	else // ! this code should be changed but it will serve as backup for now
 	{
+		//exit(0);
 		struct stat s;
 		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG)
 		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
 			std::string extension = finalRoute.substr(finalRoute.rfind(".") + 1, finalRoute.length() - finalRoute.rfind("."));
-			socketClass.setContentType(getContentType(extension));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
-			
+			socketClass.setContentType(parseContentType(extension));
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
+
 		}
 		else if (!access(finalRoute.c_str(), F_OK))
 		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(getContentType(req.uri));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\ncharset=utf-8\n");
+			socketClass.setContentType(parseContentType(req.uri));
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
+			// std::cout << "Yes" << std::endl;
+			// exit(0);
 		}
 		/* else if (!access(finalRoute.c_str(), F_OK))
 		{
@@ -210,8 +223,8 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 		{
 			socketClass.setResponse(getFile("pages/error_404.html"));
 			socketClass.setContentLength(socketClass.getResponse());
-			socketClass.setContentType(getContentType("html"));
-			socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nscharset=utf-8\n");
+			socketClass.setContentType(parseContentType("html"));
+			socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
 		}
 	}
 }

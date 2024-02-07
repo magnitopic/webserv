@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   contentType.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:03:09 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/06 15:08:59 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/07 12:45:07 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
-std::string getContentType(std::string extension)
+std::string parseContentType(std::string extension)
 {
 	std::string::size_type pos = extension.find('.');
-	
+
 	if (pos == std::string::npos)
 		return "text/plain";
 	extension = extension.substr(pos + 1);

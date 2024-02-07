@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/03 17:08:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 13:01:25 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,13 @@ void servePages()
 
 void Socket::generateAutoIndex(Server &server, std::string route, Socket &socketClass)
 {
-	std::string finalRoute = server.getRoot() + route;
+	std::string finalRoute;
+	if (socketClass.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
+		finalRoute = server.getRoot() + socketClass.getDirectory();
+	else
+		finalRoute = server.getRoot() + socketClass.getDirectory().substr(1, socketClass.getDirectory().length() - 1);
+	if (finalRoute[finalRoute.length() - 1] == '/')
+		finalRoute.pop_back();
 	if (access(finalRoute.c_str(), R_OK) != 0)
 		return;
 	DIR *dirContents;

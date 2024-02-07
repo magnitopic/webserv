@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/06 15:09:03 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/07 12:45:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ std::string getFile(const std::string &fileAdr);
 int			parseConfigFile(std::string file_name);
 int			isAllowed(Server &server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
 void		handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str, Request req);
-std::string getContentType(std::string extension);
+std::string parseContentType(std::string extension);
 void		createConection(std::string str);
 
 #endif
