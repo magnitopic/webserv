@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 13:02:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:28:55 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void createConection(std::string str)
 					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
 					socketClass.setActions(server, socketClass.getDirectory(), str);
 					socketClass.setForbidden(socketClass.getDirectory(), str);
-					std::cout << socketClass.getActions() << std::endl;
 					std::string act;
 					if (action < 3)
 						act = socketClass.getActionsArray(action);
@@ -159,23 +158,18 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 		finalRoute = server.getRoot() + socketClass.getDirectory().substr(1, socketClass.getDirectory().length() - 1);
 	if (finalRoute[finalRoute.length() - 1] == '/')
 		finalRoute.pop_back();
-	std::cout << finalRoute << std::endl;
 	if (socketClass.getAutoIndex() == true)
 	{
-		// socketClass.generateAutoIndex(server.getRoot() + socketClass.getRoot());
-		// std::cout << "Yes" << std::endl;
-		// exit(0);
 		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass);
 		socketClass.setContentLength(socketClass.getResponse());
 		socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: text/html; charset=utf-8\n");
-		//exit(0);
 	}
 	else // ! this code should be changed but it will serve as backup for now
 	{
-		//exit(0);
 		struct stat s;
 		if (stat(finalRoute.c_str(), &s) == 0 && s.st_mode & S_IFREG)
 		{
+			//exit(0);
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
 			std::string extension = finalRoute.substr(finalRoute.rfind(".") + 1, finalRoute.length() - finalRoute.rfind("."));
@@ -183,15 +177,13 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
 
 		}
-		else if (!access(finalRoute.c_str(), F_OK))
+		/*else if (!access(finalRoute.c_str(), F_OK))
 		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(parseContentType(req.uri));
 			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
-			// std::cout << "Yes" << std::endl;
-			// exit(0);
-		}
+		}*/
 		/* else if (!access(finalRoute.c_str(), F_OK))
 		{
 			socketClass.setResponse(getFile(finalRoute));

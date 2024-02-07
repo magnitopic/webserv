@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 13:01:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 14:27:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,16 +242,15 @@ void Socket::generateAutoIndex(Server &server, std::string route, Socket &socket
 	if (!dirContents)
 		raiseError("openDir failled");
 	struct dirent *entry = readdir(dirContents);
-	std::string name = entry->d_name;
+	if (route[route.length() - 1] == '/')
+		route.pop_back();
 
 	// TODO: this should be seperated into diferent functions
 	std::string page = "<head><title>Index of " + route + "</title></head>";
 	page += "<body><h1>Index of " + route + "</h1>";
 	while (entry != NULL)
 	{
-		name = entry->d_name;
 		page += "<a href=" + route + "/" + entry->d_name + ">" + entry->d_name + "</a><br>";
-		std::cout << entry->d_name << std::endl;
 		entry = readdir(dirContents);
 	}
 	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
