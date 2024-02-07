@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 14:28:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:39:57 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ void createConection(std::string str)
 						it = clients.erase(it);
 						continue;
 					}
-					// std::cout <<"|"<< buffer<< "|" << std::endl;
 					Request req = parseReq(buffer, socketClass);
 					int action = setAction(buffer);
 					std::string aux = buffer;
@@ -174,16 +173,16 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			socketClass.setContentLength(socketClass.getResponse());
 			std::string extension = finalRoute.substr(finalRoute.rfind(".") + 1, finalRoute.length() - finalRoute.rfind("."));
 			socketClass.setContentType(parseContentType(extension));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + "; charset=utf-8\n");
 
 		}
-		/*else if (!access(finalRoute.c_str(), F_OK))
+		else if (!access(finalRoute.c_str(), F_OK))
 		{
 			socketClass.setResponse(getFile(finalRoute));
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(parseContentType(req.uri));
-			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
-		}*/
+			socketClass.setHeader("HTTP/1.1 200 OK\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + "; charset=utf-8\n");
+		}
 		/* else if (!access(finalRoute.c_str(), F_OK))
 		{
 			socketClass.setResponse(getFile(finalRoute));
@@ -216,7 +215,7 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 			socketClass.setResponse(getFile("pages/error_404.html"));
 			socketClass.setContentLength(socketClass.getResponse());
 			socketClass.setContentType(parseContentType("html"));
-			socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + ";\ncharset=utf-8\n");
+			socketClass.setHeader("HTTP/1.1 404 Not Found\nServer: " + server.getName() + "\nContent-Type: " + socketClass.getContentType() + "; charset=utf-8\n");
 		}
 	}
 }

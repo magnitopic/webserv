@@ -6,11 +6,10 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 14:27:48 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:37:56 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Socket.hpp"
 #include "../include/webserv.hpp"
 
 Socket::Socket(void)
@@ -222,8 +221,18 @@ bool isAutoindex(std::string str, Socket socketClass)
 	return false;
 }
 
-void servePages()
+static void servePages(std::string route, dirent *entry, Socket& socketClass, DIR* dirContents)
 {
+	std::string page = "<head><title>Index of " + route + "</title></head>";
+	page += "<body><h1>Index of " + route + "</h1>";
+	while (entry != NULL)
+	{
+		page += "<a href=" + route + "/" + entry->d_name + ">" + entry->d_name + "</a><br>";
+		entry = readdir(dirContents);
+	}
+	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
+	socketClass.setResponse(page);
+	closedir(dirContents);
 }
 
 void Socket::generateAutoIndex(Server &server, std::string route, Socket &socketClass)
@@ -246,16 +255,7 @@ void Socket::generateAutoIndex(Server &server, std::string route, Socket &socket
 		route.pop_back();
 
 	// TODO: this should be seperated into diferent functions
-	std::string page = "<head><title>Index of " + route + "</title></head>";
-	page += "<body><h1>Index of " + route + "</h1>";
-	while (entry != NULL)
-	{
-		page += "<a href=" + route + "/" + entry->d_name + ">" + entry->d_name + "</a><br>";
-		entry = readdir(dirContents);
-	}
-	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
-	socketClass.setResponse(page);
-	closedir(dirContents);
+	servePages(route, entry, socketClass, dirContents);
 }
 
 /* *
@@ -267,7 +267,7 @@ std::string Socket::generateHttpResponse(void)
 	std::string resp = "";
 	resp += this->header;
 	resp += this->contentType;
-	resp += "\n";
+	resp += "Content-Length: ";
 	resp += this->contentLength;
 	resp += "\n\n";
 	resp += this->response;

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/03 17:08:16 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:18:38 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ class Socket
 		// methods
 		std::string	generateHttpResponse(void);
 		void		generateAutoIndex(Server& server, std::string route, Socket &socketClass);
-		void		servePages();
 };
 
 bool		isAutoindex(std::string str, Socket socketClass);
