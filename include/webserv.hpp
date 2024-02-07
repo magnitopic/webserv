@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 14:12:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:53:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <algorithm> 
+#include <algorithm>
 
 #include "enums.hpp"
 #include "Socket.hpp"
@@ -35,7 +35,7 @@
 #include "Request.hpp"
 
 int			setAction(std::string);
-Request		parseReq(std::string passedReq, Socket &socket);
+Request		parseReq(std::string passedReq);
 std::string	configToString(char *str);
 void		raiseError(const char *msg);
 std::string getFile(const std::string &fileAdr);

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parseReq.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:21:43 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/06 08:09:46 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:52:49 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
-Request parseReq(std::string passedReq, Socket &socket)
+Request parseReq(std::string passedReq)
 {
-	(void)socket;
 	std::istringstream iss(passedReq);
 	std::string line;
 	int count = 0;

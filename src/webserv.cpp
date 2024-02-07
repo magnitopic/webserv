@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 15:39:57 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/07 15:52:38 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 void createConection(std::string str)
 {
 	// Create socket
-	Socket socketClass;
 	Server server;
 	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
@@ -103,7 +102,8 @@ void createConection(std::string str)
 						it = clients.erase(it);
 						continue;
 					}
-					Request req = parseReq(buffer, socketClass);
+					Socket socketClass;
+					Request req = parseReq(buffer);
 					int action = setAction(buffer);
 					std::string aux = buffer;
 					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1)); // Now we should check if the action can be performed in the chosen directory, if not thwrow error ¿405?
