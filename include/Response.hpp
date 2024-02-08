@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 07:52:49 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 11:04:17 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@ class Response;
 #include "webserv.hpp"
 #include <string>
 
+/**
+ * The aim of this class is to store the information that will eventually make
+ * up the response given to the client.
+*/
 class Response
 {
 private:

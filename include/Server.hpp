@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 07:53:01 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 11:03:33 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,12 @@
 class Server;
 
 #include "webserv.hpp"
-//#include "Location.hpp"
 
+/**
+ * The aim of this class is to store the information that the server directive
+ * of the configuration file provides. This information will be used to create
+ * the server and the socket, and to check what type of responses will be given.
+*/
 class Server
 {
 private:

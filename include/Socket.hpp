@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 07:52:32 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 11:02:09 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,15 @@
 #include <algorithm>
 
 class Response;
-
-/*
-
-The aim of this class is to store the type of action requested by the socket
-(GET, POST, DELETE), the name of the directory in which to perform that action
-(e.g.: GET /), and the actions that are allowed and denied inside this directory
-in the configuration file in order to check wether it is possible or not to
-fulfill the request.
-
-*/
-
 class Server;
 
+/**
+ * The aim of this class is to store the type of action requested by the socket
+ * (GET, POST, DELETE), the name of the directory in which to perform that action
+ * (e.g.: GET /), and the actions that are allowed and denied inside this directory
+ * in the configuration file in order to check wether it is possible or not to
+ * fulfill the request.
+*/
 class Socket
 {
 private:
@@ -74,7 +70,7 @@ public:
 	void		generateAutoIndex(Server& server, std::string route, Socket &socketClass, Response &response);
 };
 
-bool		isAutoindex(std::string str, Socket socketClass);
-std::ostream &operator<<(std::ostream &os, std::list<std::string> list);  //instead of creating a printList function y created this operator overload function that works the same way
+bool			isAutoindex(std::string str, Socket socketClass);
+std::ostream	&operator<<(std::ostream &os, std::list<std::string> list);  //instead of creating a printList function I created this operator overload function that works the same way
 
 #endif
