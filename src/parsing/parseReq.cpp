@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseReq.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:21:43 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 18:01:17 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 08:00:07 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ Request parseReq(std::string passedReq)
 			switch (count)
 			{
 			case 0:
-				req.method = word;
+				req.setMethod(word);
 				break;
 			case 1:
-				req.uri = word;
+				req.setUri(word);
 				break;
 			case 2:
-				req.version = word;
+				req.setVersion(word);
 				break;
 			}
 			count++;

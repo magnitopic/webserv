@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/03 16:09:42 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 07:53:01 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,14 @@ private:
 
 
 public:
+	// orthodox canonical form
+
 	Server();
 	Server(const Server &copy);
 	Server &operator=(const Server &assign);
 	~Server();
+	// setters and getters
+
 	void						setPort(std::string str);
 	void						setName(std::string str);
 	void						setActions(std::string str);
@@ -46,6 +50,8 @@ public:
 	std::string					getRoot(void);
 	std::string					getName(void);
 	std::list<std::string> 		getActions(void);
+	// methods
+
 	void						emptyActions(void);
 };
 

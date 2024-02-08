@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 20:18:43 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 07:59:17 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void createConection(std::string str)
 						response.setContentLength(response.getResponse());
 						response.generateHeader(501, response.getErrorMsg(501), server);
 					}
-					std::string resp = response.generateHttpResponse(req.uri);
+					std::string resp = response.generateHttpResponse(req.getUri());
 					int writeVal = write(it->fd, resp.c_str(), resp.length());
 					if (writeVal == -1)
 						raiseError("error writing data");
@@ -153,13 +153,13 @@ void handleRequests(Socket &socketClass, char *buffer, Server &server, std::stri
 	else // ! this code should be changed but it will serve as backup for now
 	{
 		struct stat s;
-		string aux = server.getRoot() + req.uri; // TODO: This could go inside the request class
+		string aux = server.getRoot() + req.getUri(); // TODO: This could go inside the request class
 		if (stat(aux.c_str(), &s) == 0 && s.st_mode & S_IFREG)
 		{
 			response.setResponse(getFile(aux));
 			response.setContentLength(response.getResponse());
 			response.generateHeader(200, response.getErrorMsg(200), server);
-			req.setContentType(parseContentType(req.extension));
+			req.setContentType(parseContentType(req.getExtension()));
 			response.generateHeaderContent(200, req.getContentType(), server);
 		}
 		else if (!access(aux.c_str(), F_OK))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 19:41:12 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 07:52:32 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,43 +34,44 @@ class Server;
 
 class Socket
 {
-	private:
-		std::string				directory;
-		std::list<std::string>	actions; 		// actions that can be performed inside the directory
-		std::list<std::string>	forbidden;		// actions denied in the directory
-		std::string				header;			// header given to the request
-		std::string				contentType;	// type of content that will be given to the request
-		std::list<std::string>	actionsArr;		// this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
-		std::string				root;			// indicates the root directory for the location
-		std::string				contentLength;
-		bool					autoIndex;
-	public:
-		Socket(void);
-		Socket(std::string directory);
-		Socket(const Socket &socket);
-		Socket &operator=(const Socket &socket);
-		~Socket(void);
-		// setters & getters
+private:
+	std::string				directory;
+	std::list<std::string>	actions; 		// actions that can be performed inside the directory
+	std::list<std::string>	forbidden;		// actions denied in the directory
+	std::string				header;			// header given to the request
+	std::string				contentType;	// type of content that will be given to the request
+	std::list<std::string>	actionsArr;		// this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
+	std::string				root;			// indicates the root directory for the location
+	std::string				contentLength;
+	bool					autoIndex;
+public:
+	// orthodox canonical form
 
-		void					setDirectory(std::string directory);
-		std::string				getDirectory(void);
-		void					setResponse(std::string response);
-		std::string				getResponse(void);
-		void					setForbidden(std::string directory, std::string text);
-		void					setAutoIndex(bool autoIndex);
-		bool					getAutoIndex(void);
-		void					setActions(Server& server, std::string directory, std::string text);
-		std::list<std::string>	getActions(void);
-		std::string				getRoot(void);
-		void					setContentType(std::string type);
-		std::string				getContentType(void);
-		std::list<std::string>	getForbidden(void);
-		void					emptyActions(void);
+	Socket(void);
+	Socket(std::string directory);
+	Socket(const Socket &socket);
+	Socket &operator=(const Socket &socket);
+	~Socket(void);
+	// setters and getters
 
+	void					setDirectory(std::string directory);
+	std::string				getDirectory(void);
+	void					setResponse(std::string response);
+	std::string				getResponse(void);
+	void					setForbidden(std::string directory, std::string text);
+	void					setAutoIndex(bool autoIndex);
+	bool					getAutoIndex(void);
+	void					setActions(Server& server, std::string directory, std::string text);
+	std::list<std::string>	getActions(void);
+	std::string				getRoot(void);
+	void					setContentType(std::string type);
+	std::string				getContentType(void);
+	std::list<std::string>	getForbidden(void);
+	void					emptyActions(void);
+	// methods
 
-		// methods
-		std::string	generateHttpResponse(void);
-		void		generateAutoIndex(Server& server, std::string route, Socket &socketClass, Response &response);
+	std::string	generateHttpResponse(void);
+	void		generateAutoIndex(Server& server, std::string route, Socket &socketClass, Response &response);
 };
 
 bool		isAutoindex(std::string str, Socket socketClass);

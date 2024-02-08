@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 20:10:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 07:53:29 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 #include "Socket.hpp"
 #include "Server.hpp"
 #include "Request.hpp"
-#include "Location.hpp"
 #include "Response.hpp"
 using namespace std;
 

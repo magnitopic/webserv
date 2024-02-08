@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 19:48:41 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 07:52:49 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,21 @@ class Response
 {
 private:
 	// atributes
+
 	std::map<int, std::string>	errorCode;
 	std::string					response;
 	int							contentLength;
 	std::string					header;
 
 public:
-	// orthodox canon
+	// orthodox canonical form
+
 	Response();
 	Response(const Response &copy);
 	Response &operator=(const Response &assign);
 	~Response();
+	// setters and getters
+
 	std::string	getErrorMsg(int id);
 	void		generateResponse(int code, std::string def, Server& server);
 	std::string	getResponse(void);
@@ -43,9 +47,9 @@ public:
 	void		setResponse(std::string response);
 	void		generateHeaderContent(int code, std::string type, Server& server);
 	void		setResponseNotFound();
-	std::string generateHttpResponse(std::string contentType);
-
 	// methods
+
+	std::string generateHttpResponse(std::string contentType);
 };
 
 #endif
