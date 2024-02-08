@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 16:59:45 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:21:37 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void createConection(std::string str)
 				location.setActions(server, str);
 				location.setForbidden();
 				location.setIndex();
-				cout << location.getIndex() << endl; // TODO: SOLVE THIS!!!!
 				if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
 				{
 					if (!isAllowed(server, req.getMethod(), location.getActions(), location.getForbidden()))
@@ -144,42 +143,46 @@ void createConection(std::string str)
 void handleRequests(Location &location, Server &server, Request &req, Response &response)
 {
 	location.setAutoIndex(isAutoindex(location));
-	if (location.getAutoIndex() == true)
+	/*
+		The options for a response are:
+		- if the petition is a file and it exists, return the file
+		- if the petition is a directory and it exists, check if there is a default file (like index.html)
+		- if the petition is a directory and it exists, render the auto-index page
+		- if the petition does not exist, return a 404 error
+	 */
+	struct stat s;
+	req.setAbsPath(server);
+	req.setExtension();
+	std::cout << "Index-> " << location.getIndex() << std::endl;
+	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
+	{
+		response.setResponse(getFile(req.getAbsPath()));
+		response.setContentLength(response.getResponse());
+		response.generateHeader(200, response.getErrorMsg(200), server);
+		req.setContentType(parseContentType(req.getExtension()));
+		response.generateHeaderContent(200, req.getContentType(), server);
+	}
+	else if (access(req.getAbsPath().c_str(), F_OK) == 0 && 
+			 stat(location.getIndex().c_str(), &s) == 0 && S_ISREG(s.st_mode))
+	{
+		std::cout << "Index: " << location.getIndex() << std::endl;
+		response.setResponse(getFile(location.getIndex()));
+		response.setContentLength(response.getResponse());
+		req.setContentType(parseContentType("html"));
+		response.generateHeaderContent(200, req.getContentType(), server);
+	}
+	else if (location.getAutoIndex() == true)
 	{
 		location.generateAutoIndex(server, location.getDirectory(), location, response);
 		response.setContentLength(response.getResponse());
 		response.generateHeader(200, response.getErrorMsg(200), server);
 	}
-	else // ! this code should be changed but it will serve as backup for now
+	else
 	{
-		struct stat s;
-		req.setAbsPath(server);
-		req.setExtension();
-		if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
-		{
-			response.setResponse(getFile(req.getAbsPath()));
-			response.setContentLength(response.getResponse());
-			response.generateHeader(200, response.getErrorMsg(200), server);
-			req.setContentType(parseContentType(req.getExtension()));
-			response.generateHeaderContent(200, req.getContentType(), server);
-		}
-		else if (!access(req.getAbsPath().c_str(), F_OK))
-		{
-			if (!access(location.getIndex().c_str(), F_OK))
-				response.setResponse(getFile(location.getIndex()));
-			else
-				response.setResponseNotFound();
-			response.setContentLength(response.getResponse());
-			req.setContentType(parseContentType("html"));
-			response.generateHeaderContent(200, req.getContentType(), server);
-		}
-		else
-		{
-			response.setResponseNotFound();
-			response.setContentLength(response.getResponse());
-			req.setContentType(parseContentType("html"));
-			response.generateHeader(404, response.getErrorMsg(404), server);
-		}
+		response.setResponseNotFound();
+		response.setContentLength(response.getResponse());
+		req.setContentType(parseContentType("html"));
+		response.generateHeader(404, response.getErrorMsg(404), server);
 	}
 }
 

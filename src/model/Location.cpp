@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 16:44:40 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 17:29:30 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,16 +239,16 @@ std::string	Location::getBuffer(void)
 
 void	Location::setIndex()
 {
-	this->index = this->directory + "index.html";
+	this->index = this->directory + "/index.html";
 	if (buffer.length() < 1)
 		return;
 	std::string word;
 	unsigned int i = buffer.find("index ") + 6;
 	if (i > buffer.length() || (buffer[i - 7] && isalnum(buffer[i - 7])))
 		return;
-	std::string temp = buffer.substr(i + 6, buffer.length() - i + 6);
+	std::string temp = buffer.substr(i, buffer.length() - i);
 	word = temp.substr(0, temp.find(';'));
-	this->index = directory + word;
+	this->index = directory + "/" + word;
 }
 
 std::string	Location::getIndex()
