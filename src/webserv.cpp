@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 14:06:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:45:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,15 @@ void createConection(std::string str)
 					it = clients.erase(it);
 					continue;
 				}
-				Location location;
+				std::string aux = buffer;
+				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 				Request req = parseReq(buffer);
 				Response response;
-				std::string aux = buffer;
-				location.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				location.setActions(server, location.getDirectory(), str);
-				location.setForbidden(location.getDirectory(), str);
+				location.setBuffer(str);
+				location.setActions(server, str);
+				location.setForbidden();
+				location.setIndex();
+				cout << location.getIndex() << endl; // TODO: SOLVE THIS!!!!
 				if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
 				{
 					if (!isAllowed(server, req.getMethod(), location.getActions(), location.getForbidden()))
@@ -116,7 +118,7 @@ void createConection(std::string str)
 						response.generateHeader(405, response.getErrorMsg(405), server);
 					}
 					else
-						handleRequests(location, buffer, server, str, req, response);
+						handleRequests(location, server, req, response);
 				}
 				else
 				{
@@ -124,7 +126,7 @@ void createConection(std::string str)
 					response.setContentLength(response.getResponse());
 					response.generateHeader(501, response.getErrorMsg(501), server);
 				}
-				std::string resp = response.generateHttpResponse(req.getUri());
+				std::string resp = response.generateHttpResponse();
 				int writeVal = write(it->fd, resp.c_str(), resp.length());
 				if (writeVal == -1)
 					raiseError("error writing data");
@@ -137,10 +139,9 @@ void createConection(std::string str)
 	}
 }
 
-void handleRequests(Location &location, char *buffer, Server &server, std::string str, Request &req, Response &response)
+void handleRequests(Location &location, Server &server, Request &req, Response &response)
 {
-	(void)buffer;
-	location.setAutoIndex(isAutoindex(str, location));
+	location.setAutoIndex(isAutoindex(location));
 	if (location.getAutoIndex() == true)
 	{
 		location.generateAutoIndex(server, location.getDirectory(), location, response);
@@ -162,9 +163,12 @@ void handleRequests(Location &location, char *buffer, Server &server, std::strin
 		}
 		else if (!access(req.getAbsPath().c_str(), F_OK))
 		{
-			response.setResponse(getFile(req.getAbsPath()));
+			if (!access(location.getIndex().c_str(), F_OK))
+				response.setResponse(getFile(location.getIndex()));
+			else
+				response.setResponseNotFound();
 			response.setContentLength(response.getResponse());
-			req.setContentType(parseContentType(req.getAbsPath()));
+			req.setContentType(parseContentType("html"));
 			response.generateHeaderContent(200, req.getContentType(), server);
 		}
 		else

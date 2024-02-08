@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 21:06:43 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:46:02 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,10 @@ std::string Response::getHeader(void)
 	return this->header;
 }
 
-std::string Response::generateHttpResponse(string contentType)
+std::string Response::generateHttpResponse()
 {
 	std::string resp = "";
 	resp += this->header;
-	resp += contentType;
 	resp += "Content-Length: ";
 	resp += std::to_string(this->contentLength);
 	resp += "\n\n";

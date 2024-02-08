@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 12:02:15 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:41:51 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void		raiseError(const char *msg);
 std::string getFile(const std::string &fileAdr);
 int			parseConfigFile(std::string file_name);
 int			isAllowed(Server &server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
-void		handleRequests(Location &location, char *buffer, Server &server, std::string str, Request &req, Response &response);
+void		handleRequests(Location &location, Server &server, Request &req, Response &response);
 std::string parseContentType(std::string extension);
 void		createConection(std::string str);
 std::string deleteFirstElement(std::string str);

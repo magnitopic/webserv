@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 11:04:17 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:46:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ public:
 	void		setResponseNotFound();
 	// methods
 
-	std::string generateHttpResponse(std::string contentType);
+	std::string generateHttpResponse();
 };
 
 #endif

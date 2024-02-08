@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:03:09 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 19:28:00 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:41:15 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ std::string parseContentType(std::string extension)
 	contentTypes.insert(std::pair<std::string, std::string> ("zip", "application/zip"));
 	contentTypes.insert(std::pair<std::string, std::string> ("ico", "image/x-icon"));
 
+	std::map<std::string, std::string>::iterator it  = contentTypes.find(extension);
+	if (it == contentTypes.end())
+		return "text/plain";
 	std::string contentType = contentTypes.find(extension)->second;
 	return contentType;
 }

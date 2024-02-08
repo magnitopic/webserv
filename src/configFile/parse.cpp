@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:42:33 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 08:19:47 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 15:43:38 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ std::vector<std::string> splitServerDirectives(std::string configFiles)
 
 int parseConfigFile(std::string file_name)
 {
-	std::cout << file_name << std::endl;
 	std::string configFile = getFile(file_name);
 	std::vector<std::string> servers = splitServerDirectives(configFile);
 	for (std::vector<std::string>::iterator it = servers.begin(); it != servers.end(); it++)
 	{
-		std::cout << *it << std::endl;
-		std::cout << "_______________" << std::endl;
+		// std::cout << *it << std::endl;
+		// std::cout << "_______________" << std::endl;
 	}
 	return 0;
 }

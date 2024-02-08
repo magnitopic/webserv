@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 12:08:58 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:44:40 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Location::Location(void)
 
 Location::Location(std::string directory) : directory(directory)
 {
+	this->index = "index.html";
 	return;
 }
 
@@ -29,6 +30,7 @@ Location::Location(const Location &location)
 {
 	this->directory = location.directory;
 	this->actions = location.actions;
+	this->index = location.index;
 	return;
 }
 
@@ -36,6 +38,7 @@ Location &Location::operator=(const Location &location)
 {
 	this->directory = location.directory;
 	this->actions = location.actions;
+	this->index = location.index;
 	return *this;
 }
 
@@ -59,7 +62,7 @@ std::string Location::getDirectory(void)
 }
 
 
-void Location::setActions(Server& server, std::string directory, std::string text)
+void Location::setActions(Server& server, std::string text)
 {
 	std::string aux = "location " + directory;
 	if (text.find(aux) >= text.length())
@@ -99,19 +102,17 @@ void Location::setActions(Server& server, std::string directory, std::string tex
 	}
 }
 
-void Location::setForbidden(std::string directory, std::string text)
+void Location::setForbidden()
 {
-	std::string aux = "location " + directory;
-	if (text.find(aux) >= text.length())
+	if (buffer.length() < 1)
 		return;
-	std::string methods = text.substr(text.find(aux), text.find("}") - text.find(aux));
 	std::string word;
-	int i = methods.find("deny") + 4;
-	while (i < static_cast<int>(methods.length()))
+	int i = buffer.find("deny") + 4;
+	while (i < static_cast<int>(buffer.length()))
 	{
-		if (isupper(methods[i]))
-			word.push_back(methods[i]);
-		else if (islower(methods[i]))
+		if (isupper(buffer[i]))
+			word.push_back(buffer[i]);
+		else if (islower(buffer[i]))
 			break;
 		else
 		{
@@ -150,18 +151,16 @@ std::list<std::string>	Location::getForbidden(void)
 
 // methods
 
-bool isAutoindex(std::string str, Location location)
+bool isAutoindex(Location &location)
 {
-	std::string aux = "location " + location.getDirectory() + " ";
-	if (str.find(aux) >= str.length())
+	if (location.getBuffer().length() < 1)
 		return false;
-	std::string methods = str.substr(str.find(aux), str.find("}") - str.find(aux));
 	std::string word;
-	unsigned int i = methods.find("autoindex") + 10;
-	if (i > methods.length())
+	unsigned int i = location.getBuffer().find("autoindex") + 10;
+	if (i > location.getBuffer().length())
 		return false;
-	word.push_back(methods[i]);
-	word.push_back(methods[i + 1]);
+	word.push_back(location.getBuffer()[i]);
+	word.push_back(location.getBuffer()[i + 1]);
 	if (word == "on")
 		return true;
 	return false;
@@ -221,3 +220,38 @@ void	Location::emptyActions(void)
 	this->actions.clear();
 }
 
+void	Location::setBuffer(std::string configFile)
+{
+	std::string aux = "location " + directory + " ";
+	if (configFile.find(aux) >= configFile.length()){
+		this->buffer = "";
+		return;
+	}
+	int len = aux.size() + 1;
+	std::string temp = configFile.substr(configFile.find(aux) + len, configFile.length() - configFile.find(aux));
+	this->buffer = temp.substr(0, temp.find("}"));
+}
+
+std::string	Location::getBuffer(void)
+{
+	return this->buffer;
+}
+
+void	Location::setIndex()
+{
+	this->index = this->directory + "index.html";
+	if (buffer.length() < 1)
+		return;
+	std::string word;
+	unsigned int i = buffer.find("index ") + 6;
+	if (i > buffer.length() || (buffer[i - 7] && isalnum(buffer[i - 7])))
+		return;
+	std::string temp = buffer.substr(i + 6, buffer.length() - i + 6);
+	word = temp.substr(0, temp.find(';'));
+	this->index = directory + word;
+}
+
+std::string	Location::getIndex()
+{
+	return this->index;
+}
