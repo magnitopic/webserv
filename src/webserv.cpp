@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 16:45:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:59:45 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
+// TODO: check for conflicting ports when parsing the config file
+
 /*
-	steps for creating contections:
+	steps for creating connections:
 
 	-	Create socket
 	-	Bind socket

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 13:59:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/08 16:22:54 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ void	Request::setConnection(std::string connection)
 	this->connection = connection;
 }
 
-
 void	Request::setAbsPath(Server& server)
 {
 	this->absPath = server.getRoot();
@@ -144,4 +143,39 @@ void	Request::setAbsPath(Server& server)
 std::string	Request::getAbsPath()
 {
 	return this->absPath;
+}
+// methods
+
+/**
+ * Parses the request and stores the information in the Request object.
+*/
+Request Request::parseReq(std::string passedReq)
+{
+	std::istringstream iss(passedReq);
+	std::string line;
+	int count = 0;
+	Request req;
+
+	while (std::getline(iss, line, '\n'))
+	{
+		std::istringstream iss2(line);
+		std::string word;
+		while (std::getline(iss2, word, ' '))
+		{
+			switch (count)
+			{
+			case 0:
+				req.setMethod(word);
+				break;
+			case 1:
+				req.setUri(word);
+				break;
+			case 2:
+				req.setVersion(word);
+				break;
+			}
+			count++;
+		}
+	}
+	return req;
 }
