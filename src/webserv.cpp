@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 07:59:17 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 08:39:22 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,60 +81,57 @@ void createConection(std::string str)
 		}
 
 		// polling data from clients
-		int pollVal = poll(clients.data(), clients.size(), -1);
-		if (pollVal == -1)
+		if (poll(clients.data(), clients.size(), -1) == -1)
 			raiseError("error polling data");
-		else if (pollVal > 0)
+
+		// iterate through the clients and remove connection if no read value
+		std::vector<pollfd>::iterator it = clients.begin();
+		while (it != clients.end())
 		{
-			// iterate through the clients and remove connection if no read value
-			std::vector<pollfd>::iterator it = clients.begin();
-			while (it != clients.end())
+			if (it->revents == POLLIN)
 			{
-				if (it->revents == POLLIN)
+				char buffer[1024];
+				int readVal = read(it->fd, buffer, 1024);
+				if (readVal == -1)
+					raiseError("error reading data");
+				else if (readVal == 0)
 				{
-					char buffer[1024];
-					int readVal = read(it->fd, buffer, 1024);
-					if (readVal == -1)
-						raiseError("error reading data");
-					else if (readVal == 0)
-					{
-						close(it->fd);
-						it = clients.erase(it);
-						continue;
-					}
-					Socket socketClass;
-					Request req = parseReq(buffer);
-					Response	response;
-					std::string aux = buffer;
-					socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-					socketClass.setActions(server, socketClass.getDirectory(), str);
-					socketClass.setForbidden(socketClass.getDirectory(), str);
-					if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
-					{
-						if (!isAllowed(server, req.getMethod(), socketClass.getActions(), socketClass.getForbidden()))
-						{
-							response.generateResponse(405, response.getErrorMsg(405), server);
-							response.setContentLength(response.getResponse());
-							response.generateHeader(405, response.getErrorMsg(405), server);
-						}
-						else
-							handleRequests(socketClass, buffer, server, str, req, response);
-					}
-					else
-					{
-						response.generateResponse(501, response.getErrorMsg(501), server);
-						response.setContentLength(response.getResponse());
-						response.generateHeader(501, response.getErrorMsg(501), server);
-					}
-					std::string resp = response.generateHttpResponse(req.getUri());
-					int writeVal = write(it->fd, resp.c_str(), resp.length());
-					if (writeVal == -1)
-						raiseError("error writing data");
 					close(it->fd);
 					it = clients.erase(it);
-					server.emptyActions();
-					socketClass.emptyActions();
+					continue;
 				}
+				Socket socketClass;
+				Request req = parseReq(buffer);
+				Response response;
+				std::string aux = buffer;
+				socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
+				socketClass.setActions(server, socketClass.getDirectory(), str);
+				socketClass.setForbidden(socketClass.getDirectory(), str);
+				if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
+				{
+					if (!isAllowed(server, req.getMethod(), socketClass.getActions(), socketClass.getForbidden()))
+					{
+						response.generateResponse(405, response.getErrorMsg(405), server);
+						response.setContentLength(response.getResponse());
+						response.generateHeader(405, response.getErrorMsg(405), server);
+					}
+					else
+						handleRequests(socketClass, buffer, server, str, req, response);
+				}
+				else
+				{
+					response.generateResponse(501, response.getErrorMsg(501), server);
+					response.setContentLength(response.getResponse());
+					response.generateHeader(501, response.getErrorMsg(501), server);
+				}
+				std::string resp = response.generateHttpResponse(req.getUri());
+				int writeVal = write(it->fd, resp.c_str(), resp.length());
+				if (writeVal == -1)
+					raiseError("error writing data");
+				close(it->fd);
+				it = clients.erase(it);
+				server.emptyActions();
+				socketClass.emptyActions();
 			}
 		}
 	}
