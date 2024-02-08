@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 18:21:37 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:56:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	req.setAbsPath(server);
 	req.setExtension();
 	std::cout << "Index-> " << location.getIndex() << std::endl;
+	cout << "route: " << req.getAbsPath() << endl;
 	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 	{
 		response.setResponse(getFile(req.getAbsPath()));
@@ -162,11 +163,11 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 		req.setContentType(parseContentType(req.getExtension()));
 		response.generateHeaderContent(200, req.getContentType(), server);
 	}
-	else if (access(req.getAbsPath().c_str(), F_OK) == 0 && 
-			 stat(location.getIndex().c_str(), &s) == 0 && S_ISREG(s.st_mode))
+	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
+			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
 	{
 		std::cout << "Index: " << location.getIndex() << std::endl;
-		response.setResponse(getFile(location.getIndex()));
+		response.setResponse(getFile(server.getRoot() + location.getIndex()));
 		response.setContentLength(response.getResponse());
 		req.setContentType(parseContentType("html"));
 		response.generateHeaderContent(200, req.getContentType(), server);
