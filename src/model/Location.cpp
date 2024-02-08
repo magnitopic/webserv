@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Socket.cpp                                         :+:      :+:    :+:   */
+/*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/07 19:57:48 by jsarabia         ###   ########.fr       */
+/*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
+/*   Updated: 2024/02/08 12:08:58 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/webserv.hpp"
+#include "../../include/webserv.hpp"
 
-Socket::Socket(void)
+Location::Location(void)
 {
 	this->actionsArr.push_back("GET");
 	this->actionsArr.push_back("POST");
@@ -20,46 +20,46 @@ Socket::Socket(void)
 	return;
 }
 
-Socket::Socket(std::string directory) : directory(directory)
+Location::Location(std::string directory) : directory(directory)
 {
 	return;
 }
 
-Socket::Socket(const Socket &socket)
+Location::Location(const Location &location)
 {
-	this->directory = socket.directory;
-	this->actions = socket.actions;
+	this->directory = location.directory;
+	this->actions = location.actions;
 	return;
 }
 
-Socket &Socket::operator=(const Socket &socket)
+Location &Location::operator=(const Location &location)
 {
-	this->directory = socket.directory;
-	this->actions = socket.actions;
+	this->directory = location.directory;
+	this->actions = location.actions;
 	return *this;
 }
 
-Socket::~Socket(void)
+Location::~Location(void)
 {
 	return;
 }
 
 // setters & getters
 
-void Socket::setDirectory(std::string directory)
+void Location::setDirectory(std::string directory)
 {
 	this->directory = directory;
 	return;
 }
 
 
-std::string Socket::getDirectory(void)
+std::string Location::getDirectory(void)
 {
 	return this->directory;
 }
 
 
-void Socket::setActions(Server& server, std::string directory, std::string text)
+void Location::setActions(Server& server, std::string directory, std::string text)
 {
 	std::string aux = "location " + directory;
 	if (text.find(aux) >= text.length())
@@ -99,7 +99,7 @@ void Socket::setActions(Server& server, std::string directory, std::string text)
 	}
 }
 
-void Socket::setForbidden(std::string directory, std::string text)
+void Location::setForbidden(std::string directory, std::string text)
 {
 	std::string aux = "location " + directory;
 	if (text.find(aux) >= text.length())
@@ -123,36 +123,36 @@ void Socket::setForbidden(std::string directory, std::string text)
 	}
 }
 
-std::list<std::string> Socket::getActions(void)
+std::list<std::string> Location::getActions(void)
 {
 	return this->actions;
 }
 
-std::string Socket::getRoot(void)
+std::string Location::getRoot(void)
 {
 	return this->root;
 }
 
-bool Socket::getAutoIndex(void)
+bool Location::getAutoIndex(void)
 {
 	return this->autoIndex;
 }
 
-void Socket::setAutoIndex(bool autoIndex)
+void Location::setAutoIndex(bool autoIndex)
 {
 	this->autoIndex = autoIndex;
 }
 
-std::list<std::string>	Socket::getForbidden(void)
+std::list<std::string>	Location::getForbidden(void)
 {
 	return this->forbidden;
 }
 
 // methods
 
-bool isAutoindex(std::string str, Socket socketClass)
+bool isAutoindex(std::string str, Location location)
 {
-	std::string aux = "location " + socketClass.getDirectory() + " ";
+	std::string aux = "location " + location.getDirectory() + " ";
 	if (str.find(aux) >= str.length())
 		return false;
 	std::string methods = str.substr(str.find(aux), str.find("}") - str.find(aux));
@@ -181,13 +181,13 @@ static void servePages(std::string route, dirent *entry, DIR* dirContents, Respo
 	closedir(dirContents);
 }
 
-void Socket::generateAutoIndex(Server &server, std::string route, Socket &socketClass, Response &response)
+void Location::generateAutoIndex(Server &server, std::string route, Location &location, Response &response)
 {
 	std::string finalRoute;
-	if (socketClass.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
-		finalRoute = server.getRoot() + socketClass.getDirectory();
+	if (location.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
+		finalRoute = server.getRoot() + location.getDirectory();
 	else
-		finalRoute = server.getRoot() + socketClass.getDirectory().substr(1, socketClass.getDirectory().length() - 1);
+		finalRoute = server.getRoot() + location.getDirectory().substr(1, location.getDirectory().length() - 1);
 	if (finalRoute[finalRoute.length() - 1] == '/')
 		finalRoute.pop_back();
 	if (access(finalRoute.c_str(), R_OK) != 0)
@@ -195,18 +195,18 @@ void Socket::generateAutoIndex(Server &server, std::string route, Socket &socket
 	DIR *dirContents;
 	dirContents = opendir(finalRoute.c_str());
 	if (!dirContents)
-		raiseError("openDir failled");
+		raiseError("openDir failed");
 	struct dirent *entry = readdir(dirContents);
 	if (route[route.length() - 1] == '/')
 		route.pop_back();
 
-	// TODO: this should be seperated into diferent functions
+	// TODO: this should be separated into different functions
 	servePages(route, entry, dirContents, response);
 }
 
 /* *
  * Combines the values for the response to the client, joins them together and returns
- * the string that will be sent to the clinet as a response
+ * the string that will be sent to the client as a response
  */
 
 std::ostream &operator<<(std::ostream &os, std::list<std::string> list)
@@ -216,7 +216,8 @@ std::ostream &operator<<(std::ostream &os, std::list<std::string> list)
 	return os;
 }
 
-void	Socket::emptyActions(void)
+void	Location::emptyActions(void)
 {
 	this->actions.clear();
 }
+

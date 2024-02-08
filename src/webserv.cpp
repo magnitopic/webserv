@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 08:39:22 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 12:00:58 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,23 +100,23 @@ void createConection(std::string str)
 					it = clients.erase(it);
 					continue;
 				}
-				Socket socketClass;
+				Location location;
 				Request req = parseReq(buffer);
 				Response response;
 				std::string aux = buffer;
-				socketClass.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				socketClass.setActions(server, socketClass.getDirectory(), str);
-				socketClass.setForbidden(socketClass.getDirectory(), str);
+				location.setDirectory(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
+				location.setActions(server, location.getDirectory(), str);
+				location.setForbidden(location.getDirectory(), str);
 				if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
 				{
-					if (!isAllowed(server, req.getMethod(), socketClass.getActions(), socketClass.getForbidden()))
+					if (!isAllowed(server, req.getMethod(), location.getActions(), location.getForbidden()))
 					{
 						response.generateResponse(405, response.getErrorMsg(405), server);
 						response.setContentLength(response.getResponse());
 						response.generateHeader(405, response.getErrorMsg(405), server);
 					}
 					else
-						handleRequests(socketClass, buffer, server, str, req, response);
+						handleRequests(location, buffer, server, str, req, response);
 				}
 				else
 				{
@@ -131,19 +131,19 @@ void createConection(std::string str)
 				close(it->fd);
 				it = clients.erase(it);
 				server.emptyActions();
-				socketClass.emptyActions();
+				location.emptyActions();
 			}
 		}
 	}
 }
 
-void handleRequests(Socket &socketClass, char *buffer, Server &server, std::string str, Request &req, Response &response)
+void handleRequests(Location &location, char *buffer, Server &server, std::string str, Request &req, Response &response)
 {
 	(void)buffer;
-	socketClass.setAutoIndex(isAutoindex(str, socketClass));
-	if (socketClass.getAutoIndex() == true)
+	location.setAutoIndex(isAutoindex(str, location));
+	if (location.getAutoIndex() == true)
 	{
-		socketClass.generateAutoIndex(server, socketClass.getDirectory(), socketClass, response);
+		location.generateAutoIndex(server, location.getDirectory(), location, response);
 		response.setContentLength(response.getResponse());
 		response.generateHeader(200, response.getErrorMsg(200), server);
 	}

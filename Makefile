@@ -3,11 +3,12 @@ NAME			=	webserv
 
 WEB_SRC			=	src/webserv.cpp \
 					src/utils.cpp \
-					src/Socket.cpp \
 					src/contentType.cpp \
 					src/getFile.cpp \
 					src/model/Server.cpp \
+					src/model/Socket.cpp \
 					src/model/Request.cpp \
+					src/model/Location.cpp \
 					src/configFile/parse.cpp \
 					src/parsing/parseReq.cpp \
 					src/response/Error.cpp \
