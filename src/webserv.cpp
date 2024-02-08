@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 12:00:58 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 14:06:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,20 +150,21 @@ void handleRequests(Location &location, char *buffer, Server &server, std::strin
 	else // ! this code should be changed but it will serve as backup for now
 	{
 		struct stat s;
-		string aux = server.getRoot() + req.getUri(); // TODO: This could go inside the request class
-		if (stat(aux.c_str(), &s) == 0 && s.st_mode & S_IFREG)
+		req.setAbsPath(server);
+		req.setExtension();
+		if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 		{
-			response.setResponse(getFile(aux));
+			response.setResponse(getFile(req.getAbsPath()));
 			response.setContentLength(response.getResponse());
 			response.generateHeader(200, response.getErrorMsg(200), server);
 			req.setContentType(parseContentType(req.getExtension()));
 			response.generateHeaderContent(200, req.getContentType(), server);
 		}
-		else if (!access(aux.c_str(), F_OK))
+		else if (!access(req.getAbsPath().c_str(), F_OK))
 		{
-			response.setResponse(getFile(aux));
+			response.setResponse(getFile(req.getAbsPath()));
 			response.setContentLength(response.getResponse());
-			req.setContentType(parseContentType(aux));
+			req.setContentType(parseContentType(req.getAbsPath()));
 			response.generateHeaderContent(200, req.getContentType(), server);
 		}
 		else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 11:00:30 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 13:56:33 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ private:
 	// atributes
 	std::string	method;		// GET, POST
 	std::string	uri;		// route that is requested
+	std::string	absPath;	// root + uri
 	std::string	version;	// HTTP/1.1
 	std::string	host;		// localhost:8080
 	std::string	user_agent; // type of browser
@@ -64,6 +65,8 @@ public:
 	std::string	getExtension();
 	void		setContentType(std::string type);
 	std::string	getContentType(void);
+	void		setAbsPath(Server& server);
+	std::string	getAbsPath();
 	// methods
 };
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 07:58:32 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/08 13:59:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,4 +130,18 @@ std::string	Request::getConnection()
 void	Request::setConnection(std::string connection)
 {
 	this->connection = connection;
+}
+
+
+void	Request::setAbsPath(Server& server)
+{
+	this->absPath = server.getRoot();
+	if (this->uri[0] == '/' && absPath[absPath.length() - 1] == '/')
+		this->absPath.pop_back();
+	this->absPath += this->uri;
+}
+
+std::string	Request::getAbsPath()
+{
+	return this->absPath;
 }
