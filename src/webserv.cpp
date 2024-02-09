@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:25:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:44:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,6 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	{
 		response.setResponse(getFile(req.getAbsPath()));
 		response.setContentLength(response.getResponse());
-		response.generateHeader(200, response.getErrorMsg(200), server);
 		req.setContentType(parseContentType(req.getExtension()));
 		response.generateHeaderContent(200, req.getContentType(), server);
 	}

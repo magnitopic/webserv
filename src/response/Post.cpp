@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 18:38:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:11:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	(void)server;
 	(void)response;
 	int pos = req.getReqBuffer().find("Content-Type:") + 14;
-	if (pos >= static_cast<int>(req.getReqBuffer().length())){
+	if (pos >= static_cast<int>(req.getReqBuffer().length()) || pos < 14){
 		req.setPostType("");
+		response.setResponseHTML(200);
+		response.setContentLength(response.getResponse());
+		response.generateHeaderContent(200, "text/html", server);
 		return;
 	}
 	std::istringstream temp(req.getReqBuffer().substr(pos, req.getReqBuffer().length() - pos));

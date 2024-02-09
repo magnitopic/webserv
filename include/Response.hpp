@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 15:46:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:09:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ public:
 	void		setResponseNotFound();
 	// methods
 
+	void		setResponseHTML(int code);
 	std::string generateHttpResponse();
 };
 
