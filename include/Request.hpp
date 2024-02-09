@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 19:20:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 20:50:21 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ public:
 	std::string	getContentType(void);
 	void		setAbsPath(Server& server);
 	std::string	getAbsPath();
-	void		setPostType(std::string type);
-	std::string	getPostType();
 	// methods
 
 	Request		parseReq(std::string passedReq);

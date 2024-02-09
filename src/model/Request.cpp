@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:31:14 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 20:49:41 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ Request Request::parseReq(std::string passedReq)
 void	Request::setContentLength()
 {
 	int pos = this->reqBuffer.find("Content-Length:") + 15;
-	if (pos >= static_cast<int>(this->reqBuffer.length())){
+	if (pos >= static_cast<int>(this->reqBuffer.length()) || pos < 15){
 		this->contentLength  = 0;
 		return;
 	}
@@ -205,13 +205,4 @@ void	Request::setReqBuffer(char *buffer)
 std::string	Request::getReqBuffer()
 {
 	return this->reqBuffer;
-}
-
-void	Request::setPostType(std::string type){
-	this->postType = type;
-}
-
-std::string	Request::getPostType()
-{
-	return this->postType;
 }

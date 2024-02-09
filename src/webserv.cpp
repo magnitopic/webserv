@@ -1,18 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/02/09 20:31:42 by jsarabia         ###   ########.fr       */
-=======
-/*   Updated: 2024/02/09 19:55:39 by alaparic         ###   ########.fr       */
->>>>>>> 88e0baf92a0a4c704bffd1b687fe148c7a2a07af
+/*   Updated: 2024/02/09 20:34:52 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -115,7 +111,7 @@ void createConection(std::string str)
 				{
 					response.generateResponse(413, response.getErrorMsg(413), server);
 					response.setContentLength(response.getResponse());
-					response.generateHeader(413, response.getErrorMsg(413), server);
+					response.generateHeader(413, server);
 				}
 				else
 				{
