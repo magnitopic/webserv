@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 15:10:48 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 15:25:07 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void createConection(std::string str)
 			if (it->revents == POLLIN)
 			{
 				char buffer[1024];
-				int readVal = recv(it->fd, buffer, 1024, MSG_DONTWAIT);
+				int readVal = recv(it->fd, buffer, sizeof(buffer), 0);
 				if (readVal == -1)
 					raiseError("error reading data");
 				else if (readVal == 0)
@@ -102,10 +102,11 @@ void createConection(std::string str)
 					it = clients.erase(it);
 					continue;
 				}
-				std::string aux = buffer;
+				std::string aux(buffer, readVal);
+				//std::string aux = buffer;
 				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				/*cout << buffer << endl;
-				exit(0);*/
+				cout << aux << endl;
+				exit(0);
 				Request req = parseReq(buffer);
 				Response response;
 				location.setBuffer(str);
