@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 15:46:02 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:00:54 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -89,11 +89,11 @@ int Response::getContentLength(void)
 	return this->contentLength;
 }
 
-void Response::generateHeader(int code, std::string def, Server &server)
+void Response::generateHeader(int code, Server &server)
 {
 	this->header = "HTTP/1.1 ";
 	this->header += to_string(code);
-	this->header += " " + def;
+	this->header += " " + getErrorMsg(code);
 	this->header += "\nServer: " + server.getName();
 	this->header += "\nContent-Type: text/html; charset=utf-8\n";
 	return;

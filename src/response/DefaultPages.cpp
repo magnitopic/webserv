@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   DefaultPages.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 19:37:25 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 19:10:53 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:56:01 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -23,4 +23,9 @@ void	Response::setResponseHTML(int code)
 	this->response = "<html><head><title>" + to_string(code) + " " + this->getErrorMsg(code);
 	this->response += "</title>></head><body><h1>" + this->getErrorMsg(code) + "</h1>";
 	this->response += "</body></html>";
+}
+
+void	Response::setResponseForbidden()
+{
+	this->response = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\" />\n<title>403 Forbidden</title>\n</head>\n<body>\n<center>\n<h1>Error 403 - Forbidden</h1>\n<hr width=\"80%\" />\n</center>\n</body>\n</html>\n";
 }

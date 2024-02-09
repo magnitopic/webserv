@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:44:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:55:39 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -123,20 +123,22 @@ void createConection(std::string str)
 					{
 						response.generateResponse(405, response.getErrorMsg(405), server);
 						response.setContentLength(response.getResponse());
-						response.generateHeader(405, response.getErrorMsg(405), server);
+						response.generateHeader(405, server);
 					}
 					else{
 						if (req.getMethod() == "GET")
 							handleRequests(location, server, req, response);
 						else if (req.getMethod() == "POST")
 							handlePost(location, server, req, response);
+						else if (req.getMethod() == "DELETE")
+							deleteMethod(server, req, response);
 					}
 				}
 				else
 				{
 					response.generateResponse(501, response.getErrorMsg(501), server);
 					response.setContentLength(response.getResponse());
-					response.generateHeader(501, response.getErrorMsg(501), server);
+					response.generateHeader(501, server);
 				}
 				std::string resp = response.generateHttpResponse();
 				int writeVal = write(it->fd, resp.c_str(), resp.length());
@@ -151,7 +153,7 @@ void createConection(std::string str)
 	}
 }
 
-void handleRequests(Location &location, Server &server, Request &req, Response &response)
+void handleRequests(Location &location, Server &server, Request &req, Response &resp)
 {
 	location.setAutoIndex(isAutoindex(location));
 	/*
@@ -166,31 +168,32 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	req.setExtension();
 	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 	{
-		response.setResponse(getFile(req.getAbsPath()));
-		response.setContentLength(response.getResponse());
+		resp.setResponse(getFile(req.getAbsPath()));
+		resp.setContentLength(resp.getResponse());
+		resp.generateHeader(200, server);
 		req.setContentType(parseContentType(req.getExtension()));
-		response.generateHeaderContent(200, req.getContentType(), server);
+		resp.generateHeaderContent(200, req.getContentType(), server);
 	}
 	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
 			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
 	{
-		response.setResponse(getFile(server.getRoot() + location.getIndex()));
-		response.setContentLength(response.getResponse());
+		resp.setResponse(getFile(server.getRoot() + location.getIndex()));
+		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
-		response.generateHeaderContent(200, req.getContentType(), server);
+		resp.generateHeaderContent(200, req.getContentType(), server);
 	}
 	else if (location.getAutoIndex() == true)
 	{
-		location.generateAutoIndex(server, location.getDirectory(), location, response);
-		response.setContentLength(response.getResponse());
-		response.generateHeader(200, response.getErrorMsg(200), server);
+		location.generateAutoIndex(server, location.getDirectory(), location, resp);
+		resp.setContentLength(resp.getResponse());
+		resp.generateHeader(200, server);
 	}
 	else
 	{
-		response.setResponseNotFound();
-		response.setContentLength(response.getResponse());
+		resp.setResponseNotFound();
+		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
-		response.generateHeader(404, response.getErrorMsg(404), server);
+		resp.generateHeader(404, server);
 	}
 }
 
