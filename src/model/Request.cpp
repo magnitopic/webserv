@@ -6,12 +6,11 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 18:50:52 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:22:42 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include "../../include/Request.hpp"
+#include "../../include/webserv.hpp"
 
 // orthodox canonical form
 
@@ -178,4 +177,32 @@ Request Request::parseReq(std::string passedReq)
 		}
 	}
 	return req;
+}
+
+
+void	Request::setContentLength()
+{
+	int pos = this->reqBuffer.find("Content-Length:") + 15;
+	if (pos >= static_cast<int>(this->reqBuffer.length())){
+		this->contentLength  = 0;
+		return;
+	}
+	std::istringstream temp(this->reqBuffer.substr(pos, this->reqBuffer.length() - pos));
+	std::string num;
+	std::getline(temp, num, '\n');
+	this->contentLength = std::atoi(num.c_str());
+}
+int	Request::getContentLength()
+{
+	return this->contentLength;
+}
+
+void	Request::setReqBuffer(char *buffer)
+{
+	this->reqBuffer = buffer;
+}
+
+std::string	Request::getReqBuffer()
+{
+	return this->reqBuffer;
 }

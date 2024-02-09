@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 16:21:27 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/09 16:56:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Request
 {
 private:
 	// atributes
+	std::string	reqBuffer;	// request made by the client
 	std::string	method;		// GET, POST
 	std::string	uri;		// route that is requested
 	std::string	absPath;	// root + uri
@@ -37,6 +38,7 @@ private:
 	std::string	connection; // keep-alive or close
 	std::string	extension;
 	std::string	contentType;
+	int			contentLength;
 
 public:
 	// orthodox canonical form
@@ -47,6 +49,10 @@ public:
 	~Request();
 	// setters and getters
 
+	void		setReqBuffer(char *buffer);
+	std::string	getReqBuffer();
+	void		setContentLength();
+	int			getContentLength();
 	std::string	getMethod();
 	void		setMethod(std::string method);
 	std::string	getUri();

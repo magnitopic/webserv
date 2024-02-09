@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 15:25:07 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 17:25:15 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,16 @@ void createConection(std::string str)
 					it = clients.erase(it);
 					continue;
 				}
-				std::string aux(buffer, readVal);
-				//std::string aux = buffer;
-				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				cout << aux << endl;
-				exit(0);
 				Request req = parseReq(buffer);
+				req.setReqBuffer(buffer);
+				std::string aux(buffer, readVal);
+				req.setContentLength();
+				while (static_cast<int>(aux.length()) < req.getContentLength()){
+					readVal = recv(it->fd, buffer, sizeof(buffer), 0);
+					aux += buffer;
+				}
+				req.setReqBuffer(const_cast<char *>(aux.c_str()));
+				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 				Response response;
 				location.setBuffer(str);
 				location.setActions(server, str);
