@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:44:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:52:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void createConection(std::string str)
 		{
 			if (it->revents == POLLIN)
 			{
-				char buffer[1024];
+				char buffer[1024];		// This size of 1024 is temporary, we can set 1024 by default but it can also be specified in the config file
 				int readVal = recv(it->fd, buffer, sizeof(buffer), 0);
 				if (readVal == -1)
 					raiseError("error reading data");
@@ -106,13 +106,22 @@ void createConection(std::string str)
 				req.setReqBuffer(buffer);
 				std::string aux(buffer, readVal);
 				req.setContentLength();
-				while (static_cast<int>(aux.length()) < req.getContentLength()){
-					readVal = recv(it->fd, buffer, sizeof(buffer), 0);
-					aux += buffer;
+				Response response;
+				if (req.getContentLength() > 1023)  // This 1023 is temporary and only if it was not set in the config file with another value
+				{
+					response.generateResponse(413, response.getErrorMsg(413), server);
+					response.setContentLength(response.getResponse());
+					response.generateHeader(413, response.getErrorMsg(413), server);
+				}
+				else
+				{
+					while (static_cast<int>(aux.length()) < req.getContentLength()){
+						readVal = recv(it->fd, buffer, sizeof(buffer), 0);
+						aux += buffer;
+					}
 				}
 				req.setReqBuffer(const_cast<char *>(aux.c_str()));
 				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				Response response;
 				location.setBuffer(str);
 				location.setActions(server, str);
 				location.setForbidden();

@@ -6,14 +6,13 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 19:09:27 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:20:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP_
 #define RESPONSE_HPP_
 
-class Response;
 
 #include "webserv.hpp"
 #include <string>

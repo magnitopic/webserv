@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/08 15:46:02 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:48:22 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ Response::Response()
 	this->errorCode.insert(std::pair<int, std::string>(403, "Forbidden"));
 	this->errorCode.insert(std::pair<int, std::string>(404, "Not Found"));
 	this->errorCode.insert(std::pair<int, std::string>(405, "Method Not Allowed"));
+	this->errorCode.insert(std::pair<int, std::string>(413, "Request Entity Too Large"));
 	this->errorCode.insert(std::pair<int, std::string>(418, "I'm a teapot"));
 	this->errorCode.insert(std::pair<int, std::string>(500, "Internal Server Error"));
 	this->errorCode.insert(std::pair<int, std::string>(501, "No Implemented"));

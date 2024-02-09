@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 19:11:43 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:38:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	std::string num;
 	std::getline(temp, num, '\n');
 	req.setPostType(num);
-	std::cout << req.getPostType() << endl;
-	exit(0);
+	if (!strncmp("multipart/form-data;", req.getPostType().c_str(), 20)){
+		PostReq	post;
+		post.setFileName(req.getReqBuffer());
+		post.setFileContent(req.getReqBuffer());
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:26:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:33:59 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <algorithm>
 
@@ -35,6 +36,7 @@
 #include "Request.hpp"
 #include "Response.hpp"
 #include "Location.hpp"
+#include "PostReq.hpp"
 using namespace std;
 
 int			setAction(std::string);

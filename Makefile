@@ -8,6 +8,7 @@ WEB_SRC			=	src/webserv.cpp \
 					src/model/Server.cpp \
 					src/model/Socket.cpp \
 					src/model/Request.cpp \
+					src/model/PostReq.cpp \
 					src/model/Location.cpp \
 					src/configFile/parse.cpp \
 					src/parsing/parseReq.cpp \

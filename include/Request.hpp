@@ -6,14 +6,13 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:31:31 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:20:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HPP_
 #define REQUEST_HPP_
 
-class Request;
 
 #include "webserv.hpp"
 
