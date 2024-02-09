@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 18:56:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 14:34:30 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,6 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	struct stat s;
 	req.setAbsPath(server);
 	req.setExtension();
-	std::cout << "Index-> " << location.getIndex() << std::endl;
-	cout << "route: " << req.getAbsPath() << endl;
 	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 	{
 		response.setResponse(getFile(req.getAbsPath()));
@@ -166,7 +164,6 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
 			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
 	{
-		std::cout << "Index: " << location.getIndex() << std::endl;
 		response.setResponse(getFile(server.getRoot() + location.getIndex()));
 		response.setContentLength(response.getResponse());
 		req.setContentType(parseContentType("html"));
