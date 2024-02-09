@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 19:20:48 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 20:30:03 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,20 @@ public:
 	// setters and getters
 
 	std::string	getErrorMsg(int id);
-	void		generateResponse(int code, std::string def, Server& server);
 	std::string	getResponse(void);
 	void		setContentLength(std::string cont);
 	int			getContentLength(void);
-	void		generateHeader(int code, std::string def, Server& server);
 	std::string	getHeader(void);
 	void		setResponse(std::string response);
-	void		generateHeaderContent(int code, std::string type, Server& server);
 	void		setResponseNotFound();
 	// methods
 
 	void		setResponseHTML(int code);
+	void		setResponseForbidden();
 	std::string generateHttpResponse();
+	void		generateHeader(int code, Server& server);
+	void		generateHeaderContent(int code, std::string type, Server& server);
+	void		generateResponse(int code, std::string def, Server& server);
 };
 
 #endif

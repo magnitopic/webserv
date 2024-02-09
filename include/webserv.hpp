@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 19:33:59 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 20:30:36 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ int			setAction(std::string);
 Request		parseReq(std::string passedReq);
 std::string	configToString(char *str);
 void		raiseError(const char *msg);
-std::string getFile(const std::string &fileAdr);
+std::string	getFile(const std::string &fileAdr);
 int			parseConfigFile(std::string file_name);
 int			isAllowed(Server &server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
 void		handleRequests(Location &location, Server &server, Request &req, Response &response);
-std::string parseContentType(std::string extension);
+std::string	parseContentType(std::string extension);
 void		createConection(std::string str);
-std::string deleteFirstElement(std::string str);
 void		handlePost(Location &location, Server &server, Request &req, Response &response);
+std::string	deleteFirstElement(std::string str);
+void		deleteMethod(Server &server, Request &req, Response &resp);
 
 #endif
