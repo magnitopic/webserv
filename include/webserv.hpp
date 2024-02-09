@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 14:41:51 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:26:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ void		handleRequests(Location &location, Server &server, Request &req, Response 
 std::string parseContentType(std::string extension);
 void		createConection(std::string str);
 std::string deleteFirstElement(std::string str);
+void		handlePost(Location &location, Server &server, Request &req, Response &response);
 
 #endif

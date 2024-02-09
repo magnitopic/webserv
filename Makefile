@@ -11,6 +11,7 @@ WEB_SRC			=	src/webserv.cpp \
 					src/model/Location.cpp \
 					src/configFile/parse.cpp \
 					src/parsing/parseReq.cpp \
+					src/response/Post.cpp \
 					src/response/Error.cpp \
 					src/response/Response.cpp \
 

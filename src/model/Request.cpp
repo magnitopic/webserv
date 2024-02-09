@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 17:22:42 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:31:14 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,4 +205,13 @@ void	Request::setReqBuffer(char *buffer)
 std::string	Request::getReqBuffer()
 {
 	return this->reqBuffer;
+}
+
+void	Request::setPostType(std::string type){
+	this->postType = type;
+}
+
+std::string	Request::getPostType()
+{
+	return this->postType;
 }

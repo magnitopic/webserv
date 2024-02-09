@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 18:16:56 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:25:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,8 @@ void createConection(std::string str)
 					else{
 						if (req.getMethod() == "GET")
 							handleRequests(location, server, req, response);
+						else if (req.getMethod() == "POST")
+							handlePost(location, server, req, response);
 					}
 				}
 				else

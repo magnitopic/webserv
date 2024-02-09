@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 16:56:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/09 18:31:31 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ private:
 	std::string	connection; // keep-alive or close
 	std::string	extension;
 	std::string	contentType;
+	std::string	postType;
 	int			contentLength;
 
 public:
@@ -73,6 +74,8 @@ public:
 	std::string	getContentType(void);
 	void		setAbsPath(Server& server);
 	std::string	getAbsPath();
+	void		setPostType(std::string type);
+	std::string	getPostType();
 	// methods
 
 	Request		parseReq(std::string passedReq);
