@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Delete.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:22:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 19:51:16 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:47:49 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -38,6 +38,6 @@ void deleteMethod(Server &server, Request &req, Response &resp)
 		resp.setResponseForbidden();
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
-		resp.generateHeader(403, server);
+		resp.generateHeader(403, server);	// Sure? I am pretty sure the error code should be 405
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 20:34:52 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 12:41:17 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void createConection(std::string str)
 				location.setActions(server, str);
 				location.setForbidden();
 				location.setIndex();
+				req.setAbsPath(server);
 				if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
 				{
 					if (!isAllowed(server, req.getMethod(), location.getActions(), location.getForbidden()))
