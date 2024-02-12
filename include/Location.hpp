@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 16:04:36 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:15:54 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ public:
 	void					emptyActions(void);
 	std::string				getIndex();
 	void					setIndex();
+	void					setValues(std::string str, Server &server);
 	// methods
 
 	std::string	generateHttpResponse(void);

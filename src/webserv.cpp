@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 17:09:17 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:28:01 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void createConection(std::string str)
 		{
 			if (it->revents == POLLIN)
 			{
-				char buffer[1024];		// This size of 1024 is temporary, we can set 1024 by default but it can also be specified in the config file
+				char buffer[server.getMaxClientSize()];
 				int readVal = recv(it->fd, buffer, sizeof(buffer), 0);
 				if (readVal == -1)
 					raiseError("error reading data");
@@ -104,7 +104,7 @@ void createConection(std::string str)
 				std::string aux(buffer, readVal);
 				req.setContentLength();
 				Response response;
-				if (req.getContentLength() > 1023)  // TODO: This 1023 is temporary and only if it was not set in the config file with another value
+				if (req.getContentLength() > static_cast<int>(server.getMaxClientSize()))
 				{
 					response.setErrorCode(413);
 					response.generateResponse(413, response.getErrorMsg(413), server);
@@ -120,10 +120,7 @@ void createConection(std::string str)
 				}
 				req.setReqBuffer(const_cast<char *>(aux.c_str()));
 				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				location.setBuffer(str);
-				location.setActions(server, str);
-				location.setForbidden();
-				location.setIndex();
+				location.setValues(str, server);
 				req.setAbsPath(server);
 				if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() != 413)
 				{

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 16:02:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:25:15 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ public:
 	std::string					getRoot(void);
 	std::string					getName(void);
 	std::list<std::string> 		getActions(void);
+	void						setMaxClientSize(std::string str);
+	unsigned long				getMaxClientSize();
 	// methods
 
 	void						emptyActions(void);

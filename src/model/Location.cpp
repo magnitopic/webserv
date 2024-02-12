@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 18:54:02 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:16:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,4 +258,12 @@ void	Location::setIndex()
 std::string	Location::getIndex()
 {
 	return this->index;
+}
+
+void	Location::setValues(std::string str, Server &server)
+{
+	setBuffer(str);
+	setActions(server, str);
+	setForbidden();
+	setIndex();
 }

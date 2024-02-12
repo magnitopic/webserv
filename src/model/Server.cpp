@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 16:02:12 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:25:38 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Server::Server(std::string str)
 	setName(str);
 	setRoot(str);
 	setActions(str);
+	setMaxClientSize(str);
 }
 
 Server::Server(const Server &copy)
@@ -160,6 +161,28 @@ void	Server::setName(std::string str)
 	this->name = aux;
 }
 
+void	Server::setMaxClientSize(std::string str)
+{
+	std::size_t	found = str.find("client_body_buffer_size") + 25;
+	std::string	aux;
+	if (found > str.length() || found < 25){
+		this->maxClientBodySize = 8000;
+		return;
+	}
+	while (isspace(str[found]))
+		found++;
+	while (found < str.length()){
+		if (isdigit(str[found]))
+			aux.push_back(str[found]);
+		else if (isspace(str[found]) || str[found] == ';'){
+			this->maxClientBodySize = atoi(aux.c_str());
+			return;
+		}
+		found++;
+	}
+	this->maxClientBodySize = atoi(aux.c_str());
+}
+
 void	Server::setRoot(std::string str)
 {
 	std::size_t	found = str.find("root") + 4;
@@ -202,4 +225,9 @@ std::list<std::string> Server::getActions(void)
 void	Server::emptyActions(void)
 {
 	this->actions.clear();
+}
+
+unsigned long	Server::getMaxClientSize()
+{
+	return this->maxClientBodySize;
 }
