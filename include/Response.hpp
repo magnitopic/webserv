@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 20:34:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:36:36 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ private:
 	std::string					response;
 	int							contentLength;
 	std::string					header;
+	int							code;
 
 public:
 	// orthodox canonical form
@@ -47,6 +48,8 @@ public:
 	std::string	getHeader(void);
 	void		setResponse(std::string response);
 	void		setResponseNotFound();
+	void		setErrorCode(int code);
+	int			getErrorCode();
 	// methods
 
 	void		setResponseHTML(int code);

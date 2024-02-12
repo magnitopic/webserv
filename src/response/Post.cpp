@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 12:48:04 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:40:02 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,12 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 {
 	(void)location;
 	PostReq	post;
+	if (response.getResponse().length() < 1)
+		return;
 	int pos = req.getReqBuffer().find("Content-Type:") + 14;
 	if (pos >= static_cast<int>(req.getReqBuffer().length()) || pos < 14){
 		post.setPostType("");
+		response.setErrorCode(200);
 		response.setResponseHTML(200);
 		response.setContentLength(response.getResponse());
 		response.generateHeaderContent(200, "text/html", server);
@@ -35,6 +38,7 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 		ofstream newfile(req.getAbsPath() + "/" + post.getFileName());
 		newfile << post.getFileContent();
 		newfile.close();
+		response.setErrorCode(200);
 		response.generateResponse(200, response.getErrorMsg(200), server);
 		response.setContentLength(response.getResponse());
 		response.generateHeader(200, server);

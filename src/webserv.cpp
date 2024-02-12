@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 12:41:17 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:56:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,9 @@ void createConection(std::string str)
 				std::string aux(buffer, readVal);
 				req.setContentLength();
 				Response response;
-				if (req.getContentLength() > 1023)  // This 1023 is temporary and only if it was not set in the config file with another value
+				if (req.getContentLength() > 1023)  // TODO: This 1023 is temporary and only if it was not set in the config file with another value
 				{
+					response.setErrorCode(413);
 					response.generateResponse(413, response.getErrorMsg(413), server);
 					response.setContentLength(response.getResponse());
 					response.generateHeader(413, server);
@@ -127,10 +128,11 @@ void createConection(std::string str)
 				location.setForbidden();
 				location.setIndex();
 				req.setAbsPath(server);
-				if (req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE")
+				if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() != 413)
 				{
 					if (!isAllowed(server, req.getMethod(), location.getActions(), location.getForbidden()))
 					{
+						response.setErrorCode(405);
 						response.generateResponse(405, response.getErrorMsg(405), server);
 						response.setContentLength(response.getResponse());
 						response.generateHeader(405, server);
@@ -144,8 +146,9 @@ void createConection(std::string str)
 							deleteMethod(server, req, response);
 					}
 				}
-				else
+				else if (response.getErrorCode() != 413)
 				{
+					response.setErrorCode(501);
 					response.generateResponse(501, response.getErrorMsg(501), server);
 					response.setContentLength(response.getResponse());
 					response.generateHeader(501, server);
@@ -158,6 +161,7 @@ void createConection(std::string str)
 				it = clients.erase(it);
 				server.emptyActions();
 				location.emptyActions();
+				showData(req, response);
 			}
 		}
 	}
@@ -178,6 +182,7 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	req.setExtension();
 	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 	{
+		resp.setErrorCode(200);
 		resp.setResponse(getFile(req.getAbsPath()));
 		resp.setContentLength(resp.getResponse());
 		resp.generateHeader(200, server);
@@ -187,6 +192,7 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
 			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
 	{
+		resp.setErrorCode(200);
 		resp.setResponse(getFile(server.getRoot() + location.getIndex()));
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
@@ -194,12 +200,14 @@ void handleRequests(Location &location, Server &server, Request &req, Response &
 	}
 	else if (location.getAutoIndex() == true)
 	{
+		resp.setErrorCode(200);
 		location.generateAutoIndex(server, location.getDirectory(), location, resp);
 		resp.setContentLength(resp.getResponse());
 		resp.generateHeader(200, server);
 	}
 	else
 	{
+		resp.setErrorCode(404);
 		resp.setResponseNotFound();
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 20:35:06 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 14:56:49 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ Response::Response()
 	this->errorCode.insert(std::pair<int, std::string>(502, "Bad Gateway"));
 	this->errorCode.insert(std::pair<int, std::string>(503, "Service Unavailable"));
 	this->errorCode.insert(std::pair<int, std::string>(504, "Gateway Timeout"));
+	this->code = 0;
 }
 
 Response::Response(const Response &copy)
@@ -125,4 +126,35 @@ std::string Response::generateHttpResponse()
 	resp += "\n\n";
 	resp += this->response;
 	return resp;
+}
+
+void	Response::setErrorCode(int code)
+{
+	this->code = code;
+}
+
+int	Response::getErrorCode()
+{
+	return this->code;
+}
+
+void	showData(Request &req, Response &response)
+{
+	std::time_t currentTime = std::time(nullptr);
+
+	// Convert to local time structure
+	std::tm* localTime = std::localtime(&currentTime);
+
+	// Access components of the time structure
+	int year = localTime->tm_year + 1900;
+	int month = localTime->tm_mon + 1; // Note: Months are zero-based
+	int day = localTime->tm_mday;
+	int hour = localTime->tm_hour;
+	int minute = localTime->tm_min;
+	int second = localTime->tm_sec;
+
+	// Print the result
+	std::cout << "[" << day << "-" << month << "-" << year << " " << hour << ":" << minute << ":" << second  << "] \"" << req.getMethod() <<
+	" " << req.getUri() << " HTTP/1.1\" " << response.getErrorCode() << " " << response.getContentLength() << std::endl;
+
 }
