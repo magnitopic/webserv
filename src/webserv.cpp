@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 18:56:23 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 19:01:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void createConection(std::string str)
 		{
 			if (it->revents == POLLIN)
 			{
-				cout << server.getMaxClientSize() << endl;
 				char buffer[server.getMaxClientSize()];
 				int readVal = recv(it->fd, buffer, sizeof(buffer), 0);
 				if (readVal == -1)
