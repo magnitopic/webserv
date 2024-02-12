@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 17:25:15 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:52:33 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ public:
 	std::list<std::string> 		getActions(void);
 	void						setMaxClientSize(std::string str);
 	unsigned long				getMaxClientSize();
+	void						setErrorPages(std::string str);
+	std::map<int, std::string>	getErrorPages();
 	// methods
 
 	void						emptyActions(void);

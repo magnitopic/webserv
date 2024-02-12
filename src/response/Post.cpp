@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 17:37:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:44:24 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	if (response.getErrorCode() > 1)
 		return;
 	int pos = req.getReqBuffer().find("Content-Type:") + 14;
-	/*cout << req.getResponse() << endl;
-	exit(0);*/
 	if (pos >= static_cast<int>(req.getReqBuffer().length()) || pos < 14){
 		post.setPostType("");
 		response.setErrorCode(200);

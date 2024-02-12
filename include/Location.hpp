@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 17:15:54 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:09:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ public:
 
 bool			isAutoindex(Location &location);
 std::ostream	&operator<<(std::ostream &os, std::list<std::string> list);  //instead of creating a printList function I created this operator overload function that works the same way
+std::ostream	&operator<<(std::ostream &os, std::map<int, std::string> map);
 
 #endif

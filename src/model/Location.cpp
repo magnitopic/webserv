@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 17:16:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:13:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,3 +267,12 @@ void	Location::setValues(std::string str, Server &server)
 	setForbidden();
 	setIndex();
 }
+
+std::ostream	&operator<<(std::ostream &os, std::map<int, std::string> map)
+{
+	for (std::map<int, std::string>::iterator it = map.begin(); it != map.end(); it++){
+		os << "First: " << it->first << ", Second: " << it->second << endl;
+	}
+	return os;
+}
+

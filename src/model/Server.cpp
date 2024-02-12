@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 17:25:38 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:37:53 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ Server::Server(std::string str)
 	setRoot(str);
 	setActions(str);
 	setMaxClientSize(str);
+	setErrorPages(str);
+	cout << getErrorPages() << endl;
+	exit(0);
 }
 
 Server::Server(const Server &copy)
@@ -163,9 +166,9 @@ void	Server::setName(std::string str)
 
 void	Server::setMaxClientSize(std::string str)
 {
-	std::size_t	found = str.find("client_body_buffer_size") + 25;
+	std::size_t	found = str.find("client_body_buffer_size") + 24;
 	std::string	aux;
-	if (found > str.length() || found < 25){
+	if (found > str.length() || found < 24){
 		this->maxClientBodySize = 8000;
 		return;
 	}
@@ -230,4 +233,56 @@ void	Server::emptyActions(void)
 unsigned long	Server::getMaxClientSize()
 {
 	return this->maxClientBodySize;
+}
+
+void	Server::setErrorPages(std::string str)
+{
+	std::size_t	found = str.find("error_page ") + 11;
+	std::string	aux;
+	std::string num;
+	std::list<int>	lst;
+	if (found > str.length() || found < 11){
+		return;
+	}
+	std::string	strcpy = str;
+	while (found < strcpy.length() && found > 11)
+	{
+		std::size_t	found = strcpy.find("error_page ") + 11;
+		std::string	temp = strcpy.substr(found, strcpy.length() - found);
+		int i = 0;
+		while (temp[i] != ';' && temp[i] != '\n'){
+			if (isdigit(temp[i]))
+				num.push_back(temp[i]);
+			else if (isspace(temp[i]) && num.length() > 0){
+				lst.push_back(atoi(num.c_str()));
+				num.clear();
+			}
+			else{
+				while (temp[i] != ';'){
+					if (isspace(temp[i]) || temp[i] == '\n')
+						break;
+					aux.push_back(temp[i]);
+					i++;
+				}
+			}
+			if (temp[i] != ';')
+				i++;
+		}
+		if (temp[i] == ';' || temp[i] == '\n')
+		{
+			for (std::list<int>::iterator it = lst.begin(); it != lst.end(); it++){
+				this->errorPages.insert(std::pair<int, std::string> (*it, aux));
+			}
+		}
+		aux.clear();
+		strcpy = strcpy.substr(i, temp.length() - i);
+		/*cout << strcpy << endl;
+		exit(0);*/
+
+	}
+}
+
+std::map<int, std::string>	Server::getErrorPages()
+{
+	return this->errorPages;
 }
