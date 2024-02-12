@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 18:37:53 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:57:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ Server::Server(std::string str)
 	setActions(str);
 	setMaxClientSize(str);
 	setErrorPages(str);
-	cout << getErrorPages() << endl;
-	exit(0);
 }
 
 Server::Server(const Server &copy)
@@ -166,9 +164,9 @@ void	Server::setName(std::string str)
 
 void	Server::setMaxClientSize(std::string str)
 {
-	std::size_t	found = str.find("client_body_buffer_size") + 24;
+	std::size_t	found = str.find("client_max_body_size") + 21;
 	std::string	aux;
-	if (found > str.length() || found < 24){
+	if (found > str.length() || found < 21){
 		this->maxClientBodySize = 8000;
 		return;
 	}
@@ -276,8 +274,6 @@ void	Server::setErrorPages(std::string str)
 		}
 		aux.clear();
 		strcpy = strcpy.substr(i, temp.length() - i);
-		/*cout << strcpy << endl;
-		exit(0);*/
 
 	}
 }
