@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 14:56:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:09:17 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 void createConection(std::string str)
 {
 	// Create socket
-	Server server;
+	Server server(str);
+
 	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 	if (socketVal == -1)
@@ -45,9 +46,6 @@ void createConection(std::string str)
 	sockaddr_in serverScruct;
 	serverScruct.sin_family = AF_INET;
 	serverScruct.sin_addr.s_addr = INADDR_ANY;
-	server.setPort(str);
-	server.setName(str);
-	server.setRoot(str);
 	serverScruct.sin_port = htons(server.getPort());
 
 	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
@@ -67,7 +65,6 @@ void createConection(std::string str)
 	std::vector<pollfd> clients;
 	while (true)
 	{
-		server.setActions(str);
 		// registering a new client
 		sockaddr_in clientAddress;
 		socklen_t clientAddrSize = sizeof(clientAddress);
@@ -130,7 +127,7 @@ void createConection(std::string str)
 				req.setAbsPath(server);
 				if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() != 413)
 				{
-					if (!isAllowed(server, req.getMethod(), location.getActions(), location.getForbidden()))
+					if (!isAllowed(server, req, location))
 					{
 						response.setErrorCode(405);
 						response.generateResponse(405, response.getErrorMsg(405), server);

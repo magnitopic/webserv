@@ -6,16 +6,16 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 14:38:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 16:26:24 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
 
+#include <netdb.h>
 #include <iostream>
 #include <fstream>
-#include <cstring>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <poll.h>
@@ -45,7 +45,7 @@ std::string	configToString(char *str);
 void		raiseError(const char *msg);
 std::string	getFile(const std::string &fileAdr);
 int			parseConfigFile(std::string file_name);
-int			isAllowed(Server &server, const std::string str, std::list<std::string> actions, std::list<std::string> forbidden);
+int			isAllowed(Server &server, Request & req, Location &location);
 void		handleRequests(Location &location, Server &server, Request &req, Response &response);
 std::string	parseContentType(std::string extension);
 void		createConection(std::string str);

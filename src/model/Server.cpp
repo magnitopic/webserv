@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/07 12:35:08 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 16:02:12 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 
 Server::Server(){
 	return;
+}
+
+Server::Server(std::string str)
+{
+	setPort(str);
+	setName(str);
+	setRoot(str);
+	setActions(str);
 }
 
 Server::Server(const Server &copy)

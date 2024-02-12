@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 12:40:45 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 15:12:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,4 +205,14 @@ void	Request::setReqBuffer(char *buffer)
 std::string	Request::getReqBuffer()
 {
 	return this->reqBuffer;
+}
+
+int	Request::getClientBodySize()
+{
+	return this->clientBodySize;
+}
+
+void	Request::setClientBodySize(int maxSize)
+{
+	this->clientBodySize = maxSize;
 }

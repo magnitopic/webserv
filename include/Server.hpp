@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 19:20:57 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 16:02:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ public:
 	// orthodox canonical form
 
 	Server();
+	Server(std::string str);
 	Server(const Server &copy);
 	Server &operator=(const Server &assign);
 	~Server();

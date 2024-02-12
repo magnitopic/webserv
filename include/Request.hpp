@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/09 20:50:21 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/12 15:11:14 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ private:
 	std::string	contentType;
 	std::string	postType;
 	int			contentLength;
+	int			clientBodySize;	// the maximum size of the body send by the client
 
 public:
 	// orthodox canonical form
@@ -73,6 +74,8 @@ public:
 	std::string	getContentType(void);
 	void		setAbsPath(Server& server);
 	std::string	getAbsPath();
+	int			getClientBodySize();
+	void		setClientBodySize(int maxSize);
 	// methods
 
 	Request		parseReq(std::string passedReq);
