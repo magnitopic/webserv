@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 18:09:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:52:25 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ public:
 	void					setForbidden();
 	void					setAutoIndex(bool autoIndex);
 	bool					getAutoIndex(void);
-	void					setActions(Server& server, std::string text);
+	void					setActions(std::string text);
 	std::list<std::string>	getActions(void);
 	std::string				getRoot(void);
 	void					setContentType(std::string type);
@@ -65,7 +65,7 @@ public:
 	void					emptyActions(void);
 	std::string				getIndex();
 	void					setIndex();
-	void					setValues(std::string str, Server &server);
+	void					setValues(std::string str);
 	// methods
 
 	std::string	generateHttpResponse(void);

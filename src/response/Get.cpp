@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Get.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 18:36:09 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:25:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	req.setExtension();
 	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 	{
+		resp.setErrorCode(200);
 		resp.setResponse(getFile(req.getAbsPath()));
 		resp.setContentLength(resp.getResponse());
 		resp.generateHeader(200, server);
@@ -36,6 +37,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
 			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
 	{
+		resp.setErrorCode(200);
 		resp.setResponse(getFile(server.getRoot() + location.getIndex()));
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
@@ -43,12 +45,14 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	}
 	else if (location.getAutoIndex() == true)
 	{
+		resp.setErrorCode(200);
 		location.generateAutoIndex(server, location.getDirectory(), location, resp);
 		resp.setContentLength(resp.getResponse());
 		resp.generateHeader(200, server);
 	}
 	else
 	{
+		resp.setErrorCode(404);
 		resp.setResponseNotFound();
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));

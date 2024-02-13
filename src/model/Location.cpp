@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 10:29:00 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:52:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -62,7 +62,7 @@ std::string Location::getDirectory(void)
 }
 
 
-void Location::setActions(Server& server, std::string text)
+void Location::setActions(std::string text)
 {
 	std::string aux = "location " + directory;
 	if (text.find(aux) >= text.length())
@@ -72,7 +72,7 @@ void Location::setActions(Server& server, std::string text)
 	int i = methods.find("limit_except") + 12;
 	while (i < static_cast<int>(methods.length()) || i < 12)
 	{
-		server.emptyActions();
+		//server.emptyActions();
 		if (isupper(methods[i]))
 			word.push_back(methods[i]);
 		else if (islower(methods[i]))
@@ -260,10 +260,10 @@ std::string	Location::getIndex()
 	return this->index;
 }
 
-void	Location::setValues(std::string str, Server &server)
+void	Location::setValues(std::string str)
 {
 	setBuffer(str);
-	setActions(server, str);
+	setActions(str);
 	setForbidden();
 	setIndex();
 }

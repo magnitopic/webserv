@@ -3,7 +3,7 @@ FROM nginx:latest
 
 
 # Copy custom Nginx configuration file from the host to the container
-#COPY webserv.conf /etc/nginx/nginx.conf
+#COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 for Nginx
 EXPOSE 80

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 12:12:06 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:52:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -88,7 +88,7 @@ void createConection(std::string str)
 			int readVal = recv(*it, buffer, sizeof(buffer), 0);
 			if (readVal == -1)
 				raiseError("error reading data");
-			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive 
+			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive
 			{
 				close(*it);
 				it = clients.erase(it);
@@ -122,7 +122,7 @@ void handleRequests(int clientFd, Server &server, char *buffer, std::vector<int>
 	}
 	req.setReqBuffer(const_cast<char *>(aux.c_str()));
 	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-	location.setValues(str, server);
+	location.setValues(str);
 	req.setAbsPath(server);
 	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() != 413)
 	{
@@ -155,7 +155,7 @@ void handleRequests(int clientFd, Server &server, char *buffer, std::vector<int>
 		raiseError("error writing data");
 	close(clientFd);
 	clients.erase(std::remove(clients.begin(), clients.end(), clientFd), clients.end());
-	server.emptyActions();
+	//server.emptyActions();
 	location.emptyActions();
 	showData(req, response);
 }
