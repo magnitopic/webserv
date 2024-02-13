@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 12:58:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:19:44 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -39,7 +39,7 @@ void createConection(std::string str)
 	servers.push_back(Server(str));
 	servers[0].setActions(str);
 
-	std::cout << "\033[0;34m==> \033[0;36mWebserv running ✅\n\033[0;34m==>\033[0;36m And listening on these ports:\033[0;33m" << std::endl;
+	std::cout << "\033[0;34m==> \033[0;36mWebserv running ✅\n\033[0;34m==>\033[0;36m And listening on these addresses:\033[0;33m" << std::endl;
 	// Create a socket for every port. Each server can have multiple ports
 	std::vector<pollfd> fds;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
@@ -54,7 +54,7 @@ void createConection(std::string str)
 			fds.push_back(pfd);
 			// add socket to this servers socket list
 			it->addSocket(newSocket);
-			std::cout << "\t" << *it2 << std::endl;
+			std::cout << "\thttp://localhost:" << *it2 << std::endl;
 		}
 	}
 	std::cout << "\033[0m----------------------------------" << std::endl;
