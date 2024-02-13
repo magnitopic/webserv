@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 18:01:49 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:08:45 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 #include "../../include/Socket.hpp"
@@ -21,6 +21,11 @@ Socket::Socket(unsigned int port)
 	this->socketFD = socket(AF_INET, SOCK_STREAM, 0);
 	if (this->socketFD == -1)
 		raiseError("Error creating socket");
+
+	// Reset socket to reuse address
+	int reuseAddr = 1;
+	if (setsockopt(this->socketFD, SOL_SOCKET, SO_REUSEADDR, &reuseAddr, sizeof(reuseAddr)) == -1)
+		raiseError("Error setting socket option");
 
 	// Bind socket
 	sockaddr_in serverScruct;

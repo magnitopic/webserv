@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 11:50:37 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:12:06 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,9 +36,10 @@ void createConection(std::string str)
 	// servers = parseConfigFile(str);
 
 	// ! These two lines are temporary
-	servers.push_back(Server());
+	servers.push_back(Server(str));
 	servers[0].setActions(str);
 
+	std::cout << "\033[0;34m==> \033[0;32mWebserv running ✅\n\033[0;36mAnd listening on these ports:\033[0;33m" << std::endl;
 	// Create a socket for every port. Each server can have multiple ports
 	std::vector<pollfd> fds;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
@@ -52,9 +53,11 @@ void createConection(std::string str)
 			pfd.events = POLLIN;
 			fds.push_back(pfd);
 			// add socket to this servers socket list
-			(*it).addSocket(newSocket);
+			it->addSocket(newSocket);
+			std::cout << *it2 << std::endl;
 		}
 	}
+	std::cout << "\033[0m-------------------------" << std::endl;
 
 	// Main loop that handles connections
 	while (true)
