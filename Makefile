@@ -1,10 +1,10 @@
 # Webserv
 NAME			=	webserv
 
-WEB_SRC			=	src/webserv.cpp \
-					src/utils.cpp \
-					src/contentType.cpp \
+WEB_SRC			=	src/utils.cpp \
+					src/webserv.cpp \
 					src/getFile.cpp \
+					src/contentType.cpp \
 					src/model/Server.cpp \
 					src/model/Socket.cpp \
 					src/model/Request.cpp \
@@ -12,9 +12,9 @@ WEB_SRC			=	src/webserv.cpp \
 					src/model/Location.cpp \
 					src/configFile/parse.cpp \
 					src/parsing/parseReq.cpp \
+					src/response/Get.cpp \
 					src/response/Post.cpp \
 					src/response/Delete.cpp \
-					src/response/Get.cpp \
 					src/response/Response.cpp \
 					src/response/DefaultPages.cpp \
 
