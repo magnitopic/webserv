@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 15:12:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:21:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ int	Request::getContentLength()
 	return this->contentLength;
 }
 
-void	Request::setReqBuffer(char *buffer)
+void	Request::setReqBuffer(std::string buffer)
 {
 	this->reqBuffer = buffer;
 }

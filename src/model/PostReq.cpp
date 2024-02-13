@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 21:21:04 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 19:32:50 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,41 @@ void	PostReq::setFileContent(std::string request)
 		this->content = "";
 		return;
 	}
-	std::string aux2 = postType;
-	std::string	reqcpy = request;
-	while (aux2 == postType){
-		pos = reqcpy.find("Content-Type:") + 14;
-		std::istringstream aux(reqcpy.substr(pos, reqcpy.length() - pos));
-		std::getline(aux, aux2, '\n');
-		reqcpy = reqcpy.substr(pos, reqcpy.length() - pos);
+	std::string	reqcpy = request.substr(pos, request.length() - pos);
+	pos = reqcpy.find("Content-Type:") + 14;
+	if (pos >= static_cast<int>(reqcpy.length()) || pos < 14){
+		this->content = "";
+		return;
 	}
-	std::istringstream temp(reqcpy.substr(0, reqcpy.length()));
-	std::string cont;
-	std::getline(temp, cont, '\n');
-	while ((cont.find(boundary) > cont.length() || cont.find(boundary) < 0) && cont.length() > 0){
-		std::getline(temp, cont, '\n');
-		this->content += cont + "\n";
+	reqcpy = reqcpy.substr(pos, request.length() - pos);
+	reqcpy = reqcpy.substr(reqcpy.find("\n"), reqcpy.length() - reqcpy.find("\n"));
+	if (boundary[boundary.length() - 1] == '\n' || boundary[boundary.length() - 1] == '\r')
+		boundary = boundary.substr(0, boundary.length() - 1);
+	std::size_t	pos2 = 0;
+	std::size_t	check = reqcpy.rfind(boundary);
+	if (check < reqcpy.length() && check >= 0)
+	{
+		while (pos2 < reqcpy.length())
+		{
+			pos2 = reqcpy.find(boundary);
+			if (pos2 >= reqcpy.length() || pos2 < 0)
+				break;
+			reqcpy.erase(pos2, boundary.length());
+		}
 	}
+	pos2 = 0;
+	check = reqcpy.find(this->postType);
+	if (check < reqcpy.length() && check >= 0)
+	{
+		while (pos2 < reqcpy.length())
+		{
+			pos2 = reqcpy.find(this->postType);
+			if (pos2 >= reqcpy.length())
+				break;
+			reqcpy.erase(pos2, this->postType.length());
+		}
+	}
+	this->content = reqcpy;
 }
 
 std::string	PostReq::getFileContent()
@@ -96,10 +116,8 @@ void	PostReq::setBoundary(std::string request)
 		this->boundary = "";
 		return;
 	}
-	std::istringstream aux(request.substr(pos, request.length() - pos));
-	std::string aux2;
-	std::getline(aux, aux2, '\n');
-	this->boundary = aux2;
+	size_t d = request.find("\n");
+	this->boundary = request.substr(pos, d - pos);
 }
 
 std::string	PostReq::getBoundary()
