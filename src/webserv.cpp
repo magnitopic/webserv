@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 12:52:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 12:56:49 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void createConection(std::string str)
 	servers.push_back(Server(str));
 	servers[0].setActions(str);
 
-	std::cout << "\033[0;34m==> \033[0;32mWebserv running ✅\n\033[0;36mAnd listening on these ports:\033[0;33m" << std::endl;
+	std::cout << "\033[0;34m==> \033[0;36mWebserv running ✅\n\033[0;34m==>\033[0;36m And listening on these ports:\033[0;33m" << std::endl;
 	// Create a socket for every port. Each server can have multiple ports
 	std::vector<pollfd> fds;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
@@ -54,10 +54,10 @@ void createConection(std::string str)
 			fds.push_back(pfd);
 			// add socket to this servers socket list
 			it->addSocket(newSocket);
-			std::cout << *it2 << std::endl;
+			std::cout << "\t" << *it2 << std::endl;
 		}
 	}
-	std::cout << "\033[0m-------------------------" << std::endl;
+	std::cout << "\033[0m----------------------------------" << std::endl;
 
 	// Main loop that handles connections
 	while (true)
@@ -84,7 +84,7 @@ void createConection(std::string str)
 		// iterate through the clients and handle requests
 		for (std::vector<int>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
-			char buffer[8000]; // This size of 1024 is temporary, we can set 1024 by default but it can also be specified in the config file
+			char buffer[8000]; // This size of 8000 is temporary, we can set 8000 by default but it can also be specified in the config file
 			int readVal = recv(*it, buffer, sizeof(buffer), 0);
 			if (readVal == -1)
 				raiseError("error reading data");
