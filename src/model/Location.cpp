@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 18:13:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:29:00 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -175,7 +175,7 @@ static void servePages(std::string route, dirent *entry, DIR* dirContents, Respo
 		page += "<a href=" + route + "/" + entry->d_name + ">" + entry->d_name + "</a><br>";
 		entry = readdir(dirContents);
 	}
-	page += "<p>Proudly served by alaparic and jsarabia.</p></body></html>";
+	page += "<hr><p>Proudly served by alaparic and jsarabia.</p></body></html>";
 	response.setResponse(page);
 	closedir(dirContents);
 }

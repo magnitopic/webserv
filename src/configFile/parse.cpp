@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:42:33 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/08 16:59:52 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:49:15 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ std::vector<std::string> splitServerDirectives(std::string configFiles)
 	return serverDirectives;
 }
 
-int parseConfigFile(std::string file_name)
+std::vector<Server> parseConfigFile(std::string file_name)
 {
 	std::string configFile = getFile(file_name);
 	std::vector<std::string> servers = splitServerDirectives(configFile);
@@ -37,5 +37,5 @@ int parseConfigFile(std::string file_name)
 		// std::cout << *it << std::endl;
 		// std::cout << "_______________" << std::endl;
 	}
-	return 0;
+	return std::vector<Server>();
 }

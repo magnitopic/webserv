@@ -1,18 +1,19 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 18:57:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:25:02 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/Server.hpp"
 
-Server::Server(){
+Server::Server()
+{
 	return;
 }
 
@@ -28,27 +29,27 @@ Server::Server(std::string str)
 
 Server::Server(const Server &copy)
 {
-	this->port = copy.port;
+	this->ports = copy.ports;
 	this->name = copy.name;
 	this->root = copy.root;
 	this->index = copy.index;
 	this->host = copy.host;
 	this->errorPages = copy.errorPages;
 	this->maxClientBodySize = copy.maxClientBodySize;
-	//this->locations = copy.locations;
+	// this->locations = copy.locations;
 	return;
 }
 
-Server&	Server::operator=(const Server &assign)
+Server &Server::operator=(const Server &assign)
 {
-	this->port = assign.port;
+	this->ports = assign.ports;
 	this->name = assign.name;
 	this->root = assign.root;
 	this->index = assign.index;
 	this->host = assign.host;
 	this->errorPages = assign.errorPages;
 	this->maxClientBodySize = assign.maxClientBodySize;
-	//this->locations = assign.locations;
+	// this->locations = assign.locations;
 	return *this;
 }
 
@@ -57,39 +58,41 @@ Server::~Server(void)
 	return;
 }
 
-void	Server::setPort(std::string str)
+void Server::setPort(std::string str)
 {
-	std::size_t	found = str.find("listen") + 6;
-	std::string	num;
+	std::size_t found = str.find("listen") + 6;
+	std::string num;
 	if (found > str.length())
 		raiseError("no port appear in configuration file");
 	while (isspace(str[found]))
 		found++;
-	while (found < str.length()){
+	while (found < str.length())
+	{
 		if (isdigit(str[found]))
 			num.push_back(str[found]);
-		else if (isspace(str[found])){
-			this->port = std::atoi(num.c_str());
+		else if (isspace(str[found]))
+		{
+			this->ports.push_back(std::atoi(num.c_str()));
 			return;
 		}
 		else
 			raiseError("error in configuration file");
 		found++;
 	}
-	this->port = std::atoi(num.c_str());
+	this->ports.push_back(std::atoi(num.c_str()));
 }
 
-int	Server::getPort(void)
+std::vector<unsigned int> Server::getPorts(void)
 {
-	return this->port;
+	return this->ports;
 }
 
-std::string	Server::getName(void)
+std::string Server::getName(void)
 {
 	return this->name;
 }
 
-void	Server::setActions(std::string str)
+void Server::setActions(std::string str)
 {
 	int flag = 0;
 	std::string aux = "server ";
@@ -133,27 +136,31 @@ void	Server::setActions(std::string str)
 		}
 		i++;
 	}
-	if (flag == 0){
+	if (flag == 0)
+	{
 		this->actions.push_back("GET");
 		this->actions.push_back("POST");
 		this->actions.push_back("DELETE");
 	}
 }
 
-void	Server::setName(std::string str)
+void Server::setName(std::string str)
 {
-	std::size_t	found = str.find("server_name") + 11;
-	std::string	aux;
-	if (found > str.length() || found < 11){
+	std::size_t found = str.find("server_name") + 11;
+	std::string aux;
+	if (found > str.length() || found < 11)
+	{
 		this->name = "jsaparic";
 		return;
 	}
 	while (isspace(str[found]))
 		found++;
-	while (found < str.length()){
+	while (found < str.length())
+	{
 		if (isalpha(str[found]))
 			aux.push_back(str[found]);
-		else if (isspace(str[found]) || str[found] == ';'){
+		else if (isspace(str[found]) || str[found] == ';')
+		{
 			this->name = aux;
 			return;
 		}
@@ -162,20 +169,23 @@ void	Server::setName(std::string str)
 	this->name = aux;
 }
 
-void	Server::setMaxClientSize(std::string str)
+void Server::setMaxClientSize(std::string str)
 {
-	std::size_t	found = str.find("client_max_body_size") + 21;
-	std::string	aux;
-	if (found > str.length() || found < 21){
+	std::size_t found = str.find("client_max_body_size") + 21;
+	std::string aux;
+	if (found > str.length() || found < 21)
+	{
 		this->maxClientBodySize = 8000;
 		return;
 	}
 	while (isspace(str[found]))
 		found++;
-	while (found < str.length()){
+	while (found < str.length())
+	{
 		if (isdigit(str[found]))
 			aux.push_back(str[found]);
-		else if (isspace(str[found]) || str[found] == ';'){
+		else if (isspace(str[found]) || str[found] == ';')
+		{
 			this->maxClientBodySize = atoi(aux.c_str());
 			return;
 		}
@@ -184,25 +194,29 @@ void	Server::setMaxClientSize(std::string str)
 	this->maxClientBodySize = atoi(aux.c_str());
 }
 
-void	Server::setRoot(std::string str)
+void Server::setRoot(std::string str)
 {
-	std::size_t	found = str.find("root") + 4;
-	std::string	aux;
-	if (found > str.length() || found < 11){
+	std::size_t found = str.find("root") + 4;
+	std::string aux;
+	if (found > str.length() || found < 11)
+	{
 		this->root = "pages/";
 		return;
 	}
 	while (isspace(str[found]))
 		found++;
-	while (found < str.length()){
+	while (found < str.length())
+	{
 		if (isalnum(str[found]))
 			aux.push_back(str[found]);
-		else if (str[found] == '/'){
+		else if (str[found] == '/')
+		{
 			aux.push_back(str[found]);
 			this->root = aux;
 			return;
 		}
-		else if (isspace(str[found]) || str[found] == ';'){
+		else if (isspace(str[found]) || str[found] == ';')
+		{
 			aux.push_back('/');
 			this->root = aux;
 			return;
@@ -223,40 +237,45 @@ std::list<std::string> Server::getActions(void)
 	return this->actions;
 }
 
-void	Server::emptyActions(void)
+void Server::emptyActions(void)
 {
 	this->actions.clear();
 }
 
-unsigned long	Server::getMaxClientSize()
+unsigned long Server::getMaxClientSize()
 {
 	return this->maxClientBodySize;
 }
 
-void	Server::setErrorPages(std::string str)
+void Server::setErrorPages(std::string str)
 {
-	std::size_t	found = str.find("error_page ") + 11;
-	std::string	aux;
+	std::size_t found = str.find("error_page ") + 11;
+	std::string aux;
 	std::string num;
-	std::list<int>	lst;
-	if (found > str.length() || found < 11){
+	std::list<int> lst;
+	if (found > str.length() || found < 11)
+	{
 		return;
 	}
-	std::string	strcpy = str;
+	std::string strcpy = str;
 	while (found < strcpy.length() && found > 11)
 	{
-		std::size_t	found = strcpy.find("error_page ") + 11;
-		std::string	temp = strcpy.substr(found, strcpy.length() - found);
+		std::size_t found = strcpy.find("error_page ") + 11;
+		std::string temp = strcpy.substr(found, strcpy.length() - found);
 		int i = 0;
-		while (temp[i] != ';' && temp[i] != '\n'){
+		while (temp[i] != ';' && temp[i] != '\n')
+		{
 			if (isdigit(temp[i]))
 				num.push_back(temp[i]);
-			else if (isspace(temp[i]) && num.length() > 0){
+			else if (isspace(temp[i]) && num.length() > 0)
+			{
 				lst.push_back(atoi(num.c_str()));
 				num.clear();
 			}
-			else{
-				while (temp[i] != ';'){
+			else
+			{
+				while (temp[i] != ';')
+				{
 					if (isspace(temp[i]) || temp[i] == '\n')
 						break;
 					aux.push_back(temp[i]);
@@ -268,17 +287,22 @@ void	Server::setErrorPages(std::string str)
 		}
 		if (temp[i] == ';' || temp[i] == '\n')
 		{
-			for (std::list<int>::iterator it = lst.begin(); it != lst.end(); it++){
-				this->errorPages.insert(std::pair<int, std::string> (*it, aux));
+			for (std::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
+			{
+				this->errorPages.insert(std::pair<int, std::string>(*it, aux));
 			}
 		}
 		aux.clear();
 		strcpy = strcpy.substr(i, temp.length() - i);
-
 	}
 }
 
-std::map<int, std::string>	Server::getErrorPages()
+std::map<int, std::string> Server::getErrorPages()
 {
 	return this->errorPages;
+}
+
+void Server::addSocket(Socket socket)
+{
+	this->sockets.push_back(socket);
 }

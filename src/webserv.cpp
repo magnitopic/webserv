@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 19:01:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:37:24 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -26,187 +26,135 @@
 
 void createConection(std::string str)
 {
-	// Create socket
-	Server server(str);
+	std::vector<Server> servers;
 
-	int socketVal = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	/**
+	 * Parse the config file and store the servers in a vector
+	 * Server should contain a list of all the ports it listens to
+	 * and a list of all the directories it has configured
+	 */
+	// servers = parseConfigFile(str);
 
-	if (socketVal == -1)
-		raiseError("error creating socket");
+	// ! These two lines are temporary
+	servers.push_back(Server());
+	servers[0].setActions(str);
 
-	// Reset socket to reuse address
-	int reuseAddr = 1;
-	if (setsockopt(socketVal, SOL_SOCKET, SO_REUSEADDR, &reuseAddr, sizeof(reuseAddr)) == -1)
+	// Create a socket for every port. Each server can have multiple ports
+	std::vector<pollfd> fds;
+	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
 	{
-		close(socketVal);
-		raiseError("Error setting socket option");
+		std::vector<Server>::iterator aux = it;
+		for (std::vector<unsigned int>::iterator it2 = (*aux).getPorts().begin(); it2 != (*aux).getPorts().end(); it2++)
+		{
+			Socket newSocket(*it2);
+			struct pollfd pfd;
+			pfd.fd = newSocket.getSocketFD();
+			pfd.events = POLLIN;
+			fds.push_back(pfd);
+			// add socket to this servers socket list
+			(*it).addSocket(newSocket);
+		}
 	}
 
-	// Bind socket
-	sockaddr_in serverScruct;
-	serverScruct.sin_family = AF_INET;
-	serverScruct.sin_addr.s_addr = INADDR_ANY;
-	serverScruct.sin_port = htons(server.getPort());
-
-	if (bind(socketVal, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
-	{
-		close(socketVal);
-		raiseError("error binding socket");
-	}
-
-	// Listen socket
-	if (listen(socketVal, 10) == -1)
-	{
-		close(socketVal);
-		raiseError("error socket listening");
-	}
-
-	// Accept and recive data
-	std::vector<pollfd> clients;
+	// Main loop that handles connections
 	while (true)
 	{
-		// registering a new client
-		sockaddr_in clientAddress;
-		socklen_t clientAddrSize = sizeof(clientAddress);
-		int clientSocket = accept(socketVal, (struct sockaddr *)&clientAddress, &clientAddrSize);
-		if (clientSocket == -1)
-			raiseError("error accepting connection");
-		else
-		{
-			pollfd pollFd;
-			pollFd.fd = clientSocket;
-			pollFd.events = POLLIN;
-			clients.push_back(pollFd);
-		}
-
 		// polling data from clients
-		if (poll(clients.data(), clients.size(), -1) == -1)
+		int pollVal = poll(&fds[0], fds.size(), -1);
+		if (pollVal == -1)
 			raiseError("error polling data");
 
-		// iterate through the clients and remove connection if no read value
-		std::vector<pollfd>::iterator it = clients.begin();
-		while (it != clients.end())
+		// iterate through the servers and accept new connections
+		std::vector<int> clients;
+		for (std::vector<pollfd>::iterator it = fds.begin(); it != fds.end(); it++)
 		{
 			if (it->revents == POLLIN)
 			{
-				char buffer[server.getMaxClientSize()];
-				int readVal = recv(it->fd, buffer, sizeof(buffer), 0);
-				if (readVal == -1)
-					raiseError("error reading data");
-				else if (readVal == 0)
-				{
-					close(it->fd);
-					it = clients.erase(it);
-					continue;
-				}
-				Request req = parseReq(buffer);
-				req.setReqBuffer(buffer);
-				std::string aux(buffer, readVal);
-				req.setContentLength();
-				Response response;
-				if (req.getContentLength() > static_cast<int>(server.getMaxClientSize()))
-				{
-					response.setErrorCode(413);
-					response.generateResponse(413, response.getErrorMsg(413), server);
-					response.setContentLength(response.getResponse());
-					response.generateHeader(413, server);
-				}
-				else
-				{
-					while (static_cast<int>(aux.length()) < req.getContentLength()){
-						readVal = recv(it->fd, buffer, sizeof(buffer), 0);
-						aux += buffer;
-					}
-				}
-				req.setReqBuffer(const_cast<char *>(aux.c_str()));
-				Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
-				location.setValues(str, server);
-				req.setAbsPath(server);
-				if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() != 413)
-				{
-					if (!isAllowed(server, req, location))
-					{
-						response.setErrorCode(405);
-						response.generateResponse(405, response.getErrorMsg(405), server);
-						response.setContentLength(response.getResponse());
-						response.generateHeader(405, server);
-					}
-					else{
-						if (req.getMethod() == "GET")
-							handleRequests(location, server, req, response);
-						else if (req.getMethod() == "POST")
-							handlePost(location, server, req, response);
-						else if (req.getMethod() == "DELETE")
-							deleteMethod(server, req, response);
-					}
-				}
-				else if (response.getErrorCode() != 413)
-				{
-					response.setErrorCode(501);
-					response.generateResponse(501, response.getErrorMsg(501), server);
-					response.setContentLength(response.getResponse());
-					response.generateHeader(501, server);
-				}
-				std::string resp = response.generateHttpResponse();
-				int writeVal = write(it->fd, resp.c_str(), resp.length());
-				if (writeVal == -1)
-					raiseError("error writing data");
-				close(it->fd);
-				it = clients.erase(it);
-				server.emptyActions();
-				location.emptyActions();
-				showData(req, response);
+				int socket = accept(it->fd, NULL, NULL);
+				if (socket == -1)
+					raiseError("error accepting data");
+				// add new connection to the clients list
+				clients.push_back(socket);
 			}
+		}
+
+		// iterate through the clients and handle requests
+		for (std::vector<int>::iterator it = clients.begin(); it != clients.end(); it++)
+		{
+			char buffer[8000]; // This size of 1024 is temporary, we can set 1024 by default but it can also be specified in the config file
+			int readVal = recv(*it, buffer, sizeof(buffer), 0);
+			if (readVal == -1)
+				raiseError("error reading data");
+			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive 
+			{
+				close(*it);
+				it = clients.erase(it);
+				continue;
+			}
+			handleRequests(*it, servers[0], buffer, clients, readVal, str); // ! temporary, server should be the server that handles the request
 		}
 	}
 }
 
-void handleRequests(Location &location, Server &server, Request &req, Response &resp)
+void handleRequests(int clientFd, Server &server, char *buffer, std::vector<int> clients, int readVal, std::string str)
 {
-	location.setAutoIndex(isAutoindex(location));
-	/*
-		The options for a response are:
-		- if the petition is a file and it exists, return the file
-		- if the petition is a directory and it exists, check if there is a default file (like index.html)
-		- if the petition is a directory and it exists, render the auto-index page
-		- if the petition does not exist, return a 404 error
-	 */
-	struct stat s;
-	req.setAbsPath(server);
-	req.setExtension();
-	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
+	Request req = parseReq(buffer);
+	req.setReqBuffer(buffer);
+	std::string aux(buffer, readVal);
+	req.setContentLength();
+	Response response;
+	if (req.getContentLength() > static_cast<int>(server.getMaxClientSize()))
 	{
-		resp.setErrorCode(200);
-		resp.setResponse(getFile(req.getAbsPath()));
-		resp.setContentLength(resp.getResponse());
-		resp.generateHeader(200, server);
-		req.setContentType(parseContentType(req.getExtension()));
-		resp.generateHeaderContent(200, req.getContentType(), server);
-	}
-	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
-			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
-	{
-		resp.setErrorCode(200);
-		resp.setResponse(getFile(server.getRoot() + location.getIndex()));
-		resp.setContentLength(resp.getResponse());
-		req.setContentType(parseContentType("html"));
-		resp.generateHeaderContent(200, req.getContentType(), server);
-	}
-	else if (location.getAutoIndex() == true)
-	{
-		resp.setErrorCode(200);
-		location.generateAutoIndex(server, location.getDirectory(), location, resp);
-		resp.setContentLength(resp.getResponse());
-		resp.generateHeader(200, server);
+		response.setErrorCode(413);
+		response.generateResponse(413, response.getErrorMsg(413), server);
+		response.setContentLength(response.getResponse());
+		response.generateHeader(413, server);
 	}
 	else
 	{
-		resp.setErrorCode(404);
-		resp.setResponseNotFound();
-		resp.setContentLength(resp.getResponse());
-		req.setContentType(parseContentType("html"));
-		resp.generateHeader(404, server);
+		while (static_cast<int>(aux.length()) < req.getContentLength()){
+			readVal = recv(clientFd, buffer, sizeof(buffer), 0);
+			aux += buffer;
+		}
 	}
+	req.setReqBuffer(const_cast<char *>(aux.c_str()));
+	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
+	location.setValues(str, server);
+	req.setAbsPath(server);
+	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() != 413)
+	{
+		if (!isAllowed(server, req, location))
+		{
+			response.setErrorCode(405);
+			response.generateResponse(405, response.getErrorMsg(405), server);
+			response.setContentLength(response.getResponse());
+			response.generateHeader(405, server);
+		}
+		else{
+			if (req.getMethod() == "GET")
+				getMethod(location, server, req, response);
+			else if (req.getMethod() == "POST")
+				handlePost(location, server, req, response);
+			else if (req.getMethod() == "DELETE")
+				deleteMethod(server, req, response);
+		}
+	}
+	else if (response.getErrorCode() != 413)
+	{
+		response.setErrorCode(501);
+		response.generateResponse(501, response.getErrorMsg(501), server);
+		response.setContentLength(response.getResponse());
+		response.generateHeader(501, server);
+	}
+	std::string resp = response.generateHttpResponse();
+	int writeVal = write(clientFd, resp.c_str(), resp.length());
+	if (writeVal == -1)
+		raiseError("error writing data");
+	close(clientFd);
+	clients.erase(std::remove(clients.begin(), clients.end(), clientFd), clients.end());
+	server.emptyActions();
+	location.emptyActions();
+	showData(req, response);
 }
 
 int main(int argc, char **argv)

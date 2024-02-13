@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 17:52:33 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:26:23 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 
 #ifndef SERVER_HPP_
@@ -25,7 +25,8 @@
 class Server
 {
 private:
-	unsigned int				port; // listen
+	std::vector<Socket>			sockets;
+	std::vector<unsigned int>	ports; // listen
 	std::string					name; // server_name
 	std::string					root; // root
 	std::string					index; // index
@@ -50,7 +51,7 @@ public:
 	void						setName(std::string str);
 	void						setActions(std::string str);
 	void						setRoot(std::string str);
-	int							getPort(void);
+	std::vector<unsigned int>	getPorts(void);
 	std::string					getRoot(void);
 	std::string					getName(void);
 	std::list<std::string> 		getActions(void);
@@ -61,6 +62,7 @@ public:
 	// methods
 
 	void						emptyActions(void);
+	void						addSocket(Socket socket);
 };
 
 #endif

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 16:26:24 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:36:13 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -39,19 +39,22 @@
 #include "PostReq.hpp"
 using namespace std;
 
-int			setAction(std::string);
-Request		parseReq(std::string passedReq);
-std::string	configToString(char *str);
-void		raiseError(const char *msg);
-std::string	getFile(const std::string &fileAdr);
-int			parseConfigFile(std::string file_name);
-int			isAllowed(Server &server, Request & req, Location &location);
-void		handleRequests(Location &location, Server &server, Request &req, Response &response);
-std::string	parseContentType(std::string extension);
-void		createConection(std::string str);
-void		handlePost(Location &location, Server &server, Request &req, Response &response);
-std::string	deleteFirstElement(std::string str);
-void		deleteMethod(Server &server, Request &req, Response &resp);
-void		showData(Request &req, Response &response);
+#define MAX_SERVERS 1024
+
+int					setAction(std::string);
+Request				parseReq(std::string passedReq);
+std::string			configToString(char *str);
+void				raiseError(const char *msg);
+std::string			getFile(const std::string &fileAdr);
+std::vector<Server>	parseConfigFile(std::string file_name);
+int					isAllowed(Server &server, Request & req, Location &location);
+void				handleRequests(int clientFd, Server &server, char *buffer, std::vector<int> clients, int readVal, std::string str);
+std::string			parseContentType(std::string extension);
+void				createConection(std::string str);
+void				getMethod(Location &location, Server &server, Request &req, Response &resp);
+void				handlePost(Location &location, Server &server, Request &req, Response &response);
+std::string			deleteFirstElement(std::string str);
+void				deleteMethod(Server &server, Request &req, Response &resp);
+void				showData(Request &req, Response &response);
 
 #endif
