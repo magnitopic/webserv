@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/13 10:26:23 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:54:07 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -62,7 +62,7 @@ public:
 	// methods
 
 	void						emptyActions(void);
-	void						addSocket(Socket socket);
+	void						addSocket(const Socket &socket);
 };
 
 #endif

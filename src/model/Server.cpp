@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 10:25:02 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:54:13 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -302,7 +302,7 @@ std::map<int, std::string> Server::getErrorPages()
 	return this->errorPages;
 }
 
-void Server::addSocket(Socket socket)
+void Server::addSocket(const Socket &socket)
 {
 	this->sockets.push_back(socket);
 }

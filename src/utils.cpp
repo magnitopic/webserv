@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 17:11:30 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:49:28 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -20,7 +20,9 @@ void raiseError(const char *msg)
 
 int	myOwnFind(Location &location, Request &req)
 {
-	for (list<string>::iterator it = location.getActions().begin(); it != location.getActions().end(); it++){
+	std::list<std::string> aux = location.getActions();
+	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++)
+	{
 		if (*it == req.getMethod())
 			return 1;
 	}
@@ -29,7 +31,8 @@ int	myOwnFind(Location &location, Request &req)
 
 int	myOwnFindServ(Server &location, Request &req)
 {
-	for (list<string>::iterator it = location.getActions().begin(); it != location.getActions().end(); it++){
+	std::list<std::string> aux = location.getActions();
+	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++){
 		if (*it == req.getMethod())
 			return 1;
 	}

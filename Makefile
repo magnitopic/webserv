@@ -14,6 +14,7 @@ WEB_SRC			=	src/webserv.cpp \
 					src/parsing/parseReq.cpp \
 					src/response/Post.cpp \
 					src/response/Delete.cpp \
+					src/response/Get.cpp \
 					src/response/Response.cpp \
 					src/response/DefaultPages.cpp \
 

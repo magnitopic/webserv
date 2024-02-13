@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 10:37:24 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 11:50:37 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -43,8 +43,8 @@ void createConection(std::string str)
 	std::vector<pollfd> fds;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
 	{
-		std::vector<Server>::iterator aux = it;
-		for (std::vector<unsigned int>::iterator it2 = (*aux).getPorts().begin(); it2 != (*aux).getPorts().end(); it2++)
+		std::vector<unsigned int> ports = it->getPorts();
+		for (std::vector<unsigned int>::iterator it2 = ports.begin(); it2 != ports.end(); it2++)
 		{
 			Socket newSocket(*it2);
 			struct pollfd pfd;
