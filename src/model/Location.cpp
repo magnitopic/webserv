@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 17:26:28 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 19:11:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ std::string	Location::getBuffer(void)
 
 void	Location::setIndex()
 {
-	this->index = this->directory + "index.html";
+	this->index = "index.html";
 	if (buffer.length() < 1)
 		return;
 	std::string word;
@@ -250,9 +250,9 @@ void	Location::setIndex()
 	word = temp.substr(0, temp.find(';'));
 	this->index.clear();
 	if (directory != "/")
-		this->index = directory + "/" + word;
+		this->index = word;
 	else
-		this->index = directory  + word;
+		this->index = word;
 }
 
 std::string	Location::getIndex()
