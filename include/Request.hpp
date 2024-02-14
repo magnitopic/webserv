@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/12 15:11:14 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:21:54 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ public:
 	~Request();
 	// setters and getters
 
-	void		setReqBuffer(char *buffer);
+	void		setReqBuffer(std::string buffer);
 	std::string	getReqBuffer();
 	void		setContentLength();
 	int			getContentLength();

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 17:44:24 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 13:01:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	}
 	std::istringstream temp(req.getReqBuffer().substr(pos, req.getReqBuffer().length() - pos));
 	std::string num;
-	std::getline(temp, num, '\n');
+	std::getline(temp, num);
+	num += "\n";
 	post.setPostType(num);
 	post.setBoundary(num);
 	if (!strncmp("multipart/form-data;", post.getPostType().c_str(), 20)){
@@ -44,4 +45,5 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 		response.generateHeader(200, server);
 		return;
 	}
+	cout << req.getReqBuffer() << endl;
 }

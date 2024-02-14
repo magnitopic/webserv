@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 16:19:44 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:58:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -84,8 +84,15 @@ void createConection(std::string str)
 		// iterate through the clients and handle requests
 		for (std::vector<int>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
-			char buffer[8000]; // This size of 8000 is temporary, we can set 8000 by default but it can also be specified in the config file
-			int readVal = recv(*it, buffer, sizeof(buffer), 0);
+			char buffer[1024]; // This size of 8000 is temporary, we can set 8000 by default but it can also be specified in the config file
+			ssize_t readVal = read(*it, buffer, sizeof(buffer));
+			std::string buf = buffer;
+			while (readVal > 0 && !strchr(buffer, '\0')){
+				readVal = read(*it, buffer, sizeof(buffer));
+				buf += buffer;
+				if (readVal != 1024)
+					break;
+			}
 			if (readVal == -1)
 				raiseError("error reading data");
 			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive
@@ -94,17 +101,18 @@ void createConection(std::string str)
 				it = clients.erase(it);
 				continue;
 			}
-			handleRequests(*it, servers[0], buffer, clients, readVal, str); // ! temporary, server should be the server that handles the request
+			handleRequests(*it, servers[0], buf, clients, str); // ! temporary, server should be the server that handles the request
 		}
 	}
 }
 
-void handleRequests(int clientFd, Server &server, char *buffer, std::vector<int> clients, int readVal, std::string str)
+void handleRequests(int clientFd, Server &server, std::string buffer, std::vector<int> clients, std::string str)
 {
 	Request req = parseReq(buffer);
 	req.setReqBuffer(buffer);
-	std::string aux(buffer, readVal);
+	std::string aux = buffer;
 	req.setContentLength();
+	server.setMaxClientSize(str);
 	Response response;
 	if (req.getContentLength() > static_cast<int>(server.getMaxClientSize()))
 	{
@@ -113,14 +121,6 @@ void handleRequests(int clientFd, Server &server, char *buffer, std::vector<int>
 		response.setContentLength(response.getResponse());
 		response.generateHeader(413, server);
 	}
-	else
-	{
-		while (static_cast<int>(aux.length()) < req.getContentLength()){
-			readVal = recv(clientFd, buffer, sizeof(buffer), 0);
-			aux += buffer;
-		}
-	}
-	req.setReqBuffer(const_cast<char *>(aux.c_str()));
 	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 	location.setValues(str);
 	req.setAbsPath(server);
@@ -155,7 +155,6 @@ void handleRequests(int clientFd, Server &server, char *buffer, std::vector<int>
 		raiseError("error writing data");
 	close(clientFd);
 	clients.erase(std::remove(clients.begin(), clients.end(), clientFd), clients.end());
-	//server.emptyActions();
 	location.emptyActions();
 	showData(req, response);
 }

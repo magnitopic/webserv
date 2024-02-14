@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 10:36:13 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:22:40 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -48,7 +48,7 @@ void				raiseError(const char *msg);
 std::string			getFile(const std::string &fileAdr);
 std::vector<Server>	parseConfigFile(std::string file_name);
 int					isAllowed(Server &server, Request & req, Location &location);
-void				handleRequests(int clientFd, Server &server, char *buffer, std::vector<int> clients, int readVal, std::string str);
+void				handleRequests(int clientFd, Server &server, std::string buffer, std::vector<int> clients, std::string str);
 std::string			parseContentType(std::string extension);
 void				createConection(std::string str);
 void				getMethod(Location &location, Server &server, Request &req, Response &resp);
