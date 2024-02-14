@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 16:21:54 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:30:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ public:
 	std::string	getAbsPath();
 	int			getClientBodySize();
 	void		setClientBodySize(int maxSize);
+	void		handleSlash();
 	// methods
 
 	Request		parseReq(std::string passedReq);

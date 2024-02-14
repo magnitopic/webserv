@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 12:59:01 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:33:08 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	struct stat s;
 	req.setAbsPath(server);
 	req.setExtension();
+	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/')
+		req.handleSlash();
 	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
 	{
 		resp.setErrorCode(200);
@@ -35,7 +37,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 		resp.generateHeaderContent(200, req.getContentType(), server);
 	}
 	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
-			 stat((req.getAbsPath() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
+			 stat((server.getRoot() + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
 	{
 		resp.setErrorCode(200);
 		resp.setResponse(getFile(server.getRoot() + location.getIndex()));

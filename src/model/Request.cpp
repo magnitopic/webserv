@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 12:58:47 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:30:30 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,4 +215,9 @@ int	Request::getClientBodySize()
 void	Request::setClientBodySize(int maxSize)
 {
 	this->clientBodySize = maxSize;
+}
+
+void	Request::handleSlash()
+{
+	this->absPath.pop_back();
 }

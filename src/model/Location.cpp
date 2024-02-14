@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 16:28:51 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:26:28 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ bool isAutoindex(Location &location)
 
 static void servePages(std::string route, dirent *entry, DIR* dirContents, Response& response)
 {
-	std::string page = "<head><title>Index of " + route + "</title></head>";
+	std::string page = "<head><title>Index of " + route + "</title><link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\"></head>";
 	page += "<body><h1>Index of " + route + "</h1>";
 	while (entry != NULL)
 	{

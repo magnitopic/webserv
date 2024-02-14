@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/14 13:01:27 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:12:52 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,26 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	num += "\n";
 	post.setPostType(num);
 	post.setBoundary(num);
-	if (!strncmp("multipart/form-data;", post.getPostType().c_str(), 20)){
+	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
 		ofstream newfile(req.getAbsPath() + "/" + post.getFileName());
 		newfile << post.getFileContent();
 		newfile.close();
-		response.setErrorCode(200);
-		response.generateResponse(200, response.getErrorMsg(200), server);
+		response.setErrorCode(201);
+		response.generateResponse(201, response.getErrorMsg(201), server);
 		response.setContentLength(response.getResponse());
-		response.generateHeader(200, server);
+		response.generateHeader(201, server);
 		return;
+	}
+	else if (!strncmp("text/plain", post.getPostType().c_str(), 10)){
+		// TODO: Fill with code
+	}
+	else if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
+		// TODO: Fill with code
+	}
+	else{ // This should be treated by default as an application/octet-stream
+		// TODO: Fill with code
 	}
 	cout << req.getReqBuffer() << endl;
 }
