@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/13 19:32:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:40:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,17 @@ void	PostReq::setFileContent(std::string request)
 	reqcpy = reqcpy.substr(reqcpy.find("\n"), reqcpy.length() - reqcpy.find("\n"));
 	if (boundary[boundary.length() - 1] == '\n' || boundary[boundary.length() - 1] == '\r')
 		boundary = boundary.substr(0, boundary.length() - 1);
-	std::size_t	pos2 = 0;
+	std::size_t	pos2 = reqcpy.find(boundary);
 	std::size_t	check = reqcpy.rfind(boundary);
-	if (check < reqcpy.length() && check >= 0)
+	if (pos2 < reqcpy.length() && pos2 < check && check < reqcpy.length()){
+		this->content = reqcpy.substr(pos2 + boundary.length(), reqcpy.length() - pos2 - boundary.length() - check - 2);
+	}
+	else
+		this->content = reqcpy.substr(0, pos2 - 2);
+
+
+
+	/*if (check < reqcpy.length() && check >= 0)
 	{
 		while (pos2 < reqcpy.length())
 		{
@@ -91,8 +99,8 @@ void	PostReq::setFileContent(std::string request)
 				break;
 			reqcpy.erase(pos2, this->postType.length());
 		}
-	}
-	this->content = reqcpy;
+	}*/
+	//this->content = aux2;
 }
 
 std::string	PostReq::getFileContent()

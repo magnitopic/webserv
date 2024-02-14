@@ -21,7 +21,7 @@ then
 	then
 		sleep 0.5
 		echo -e "\033[31m\n           -- Couldn't update CCLEAN! :( --\033[0m"
-		echo -e "\033[33m\n   -- Maybe you need to change your bad habits XD --\n\033[0m„@Ð·£"
+		echo -e "\033[33m\n   -- Maybe you need to change your bad habits XD --\n\033[0m„XÀ”–"
 		exit 1
 	fi
 	sleep 1
@@ -56,7 +56,7 @@ echo -e "\033[31m\n -- Cleaning ...\n\033[0m "
 /bin/rm -rf "$HOME"/.Trash/* &>/dev/null
 
 #General Caches files
-#giving access righ„@Ð·£ts on Homebrew caches, so the script can delete them
+#giving access righ„XÀ”–ts on Homebrew caches, so the script can delete them
 /bin/chmod -R 777 "$HOME"/Library/Caches/Homebrew &>/dev/null
 /bin/rm -rf "$HOME"/Library/Caches/* &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Caches/* &>/dev/null
@@ -70,7 +70,7 @@ echo -e "\033[31m\n -- Cleaning ...\n\033[0m "
 /bin/rm -rf "$HOME"/Library/Application\ Support/Code/Cache/* &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Code/CachedData/* &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Code/Crashpad/completed/* &>/dev/null
-/bin/rm -rf "$HOME"/Library/Application\ Support/Code/User/workspaceStorage/* &>/„@Ð·£dev/null
+/bin/rm -rf "$HOME"/Library/Application\ Support/Code/User/workspaceStorage/* &>/„XÀ”–dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Google/Chrome/Profile\ [0-9]/Service\ Worker/CacheStorage/* &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Google/Chrome/Default/Service\ Worker/CacheStorage/* &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Google/Chrome/Profile\ [0-9]/Application\ Cache/* &>/dev/null
@@ -84,7 +84,7 @@ find "$HOME"/Desktop -name .DS_Store -depth -exec /bin/rm {} \; &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Chromium/Default/File\ System &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Chromium/Profile\ [0-9]/File\ System &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Google/Chrome/Default/File\ System &>/dev/null
-/bin/rm -rf "$HOME"/Library/Application\ Support/Goog„@Ð·£le/Chrome/Profile\ [0-9]/File\ System &>/dev/null
+/bin/rm -rf "$HOME"/Library/Application\ Support/Goog„XÀ”–le/Chrome/Profile\ [0-9]/File\ System &>/dev/null
 
 #things related to pool (piscine)
 /bin/rm -rf "$HOME"/Desktop/Piscine\ Rules\ *.mp4
@@ -110,4 +110,4 @@ es with browsers
 /bin/rm -rf "$HOME"/Library/Application\ Support/Chromium/Default/File\ System &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Chromium/Profile\ [0-9]/File\ System &>/dev/null
 /bin/rm -rf "$HOME"/Library/Application\ Support/Google/Chrome/Default/File\ System &>/dev/null
-/bin/rm -rf "$HOME"/Library/Application\ Support/Goog„@Ð·£
+/bin/rm -rf "$HOME"/Library/Application\ Support/Goog„XÀ”–

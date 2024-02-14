@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 19:38:28 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:58:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ void createConection(std::string str)
 		for (std::vector<int>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
 			char buffer[1024]; // This size of 8000 is temporary, we can set 8000 by default but it can also be specified in the config file
-			int readVal = read(*it, buffer, sizeof(buffer));
+			ssize_t readVal = read(*it, buffer, sizeof(buffer));
 			std::string buf = buffer;
-			while (readVal > 0){
-				readVal = recv(*it, buffer, sizeof(buffer), 0);
+			while (readVal > 0 && !strchr(buffer, '\0')){
+				readVal = read(*it, buffer, sizeof(buffer));
 				buf += buffer;
 				if (readVal != 1024)
 					break;
@@ -110,7 +110,7 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 {
 	Request req = parseReq(buffer);
 	req.setReqBuffer(buffer);
-	std::string aux = str;
+	std::string aux = buffer;
 	req.setContentLength();
 	server.setMaxClientSize(str);
 	Response response;
@@ -155,7 +155,6 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 		raiseError("error writing data");
 	close(clientFd);
 	clients.erase(std::remove(clients.begin(), clients.end(), clientFd), clients.end());
-	//server.emptyActions();
 	location.emptyActions();
 	showData(req, response);
 }

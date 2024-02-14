@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 16:21:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:58:47 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ Request Request::parseReq(std::string passedReq)
 	int count = 0;
 	Request req;
 
-	while (std::getline(iss, line, '\n'))
+	while (std::getline(iss, line))
 	{
 		std::istringstream iss2(line);
 		std::string word;
@@ -189,7 +189,7 @@ void	Request::setContentLength()
 	}
 	std::istringstream temp(this->reqBuffer.substr(pos, this->reqBuffer.length() - pos));
 	std::string num;
-	std::getline(temp, num, '\n');
+	std::getline(temp, num);
 	this->contentLength = std::atoi(num.c_str());
 }
 int	Request::getContentLength()
