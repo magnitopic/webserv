@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 15:41:49 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:42:44 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -32,10 +32,10 @@
 
 #include "enums.hpp"
 #include "Socket.hpp"
-#include "Server.hpp"
-#include "Request.hpp"
 #include "Response.hpp"
 #include "Location.hpp"
+#include "Server.hpp"
+#include "Request.hpp"
 #include "PostReq.hpp"
 using namespace std;
 

@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:42:33 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 15:39:39 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/14 17:40:59 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -16,14 +16,16 @@ std::vector<Server> parseConfigFile(std::string file_name)
 {
 	std::string configFile = getFile(file_name);
 	std::vector<std::string> directivesServers = splitServerDirectives(configFile);
+
+	std::vector<Server> serverList;
 	for (std::vector<std::string>::iterator it = directivesServers.begin(); it < directivesServers.end(); it++)
 	{
+		serverList.push_back(Server(*it));
 		std::vector<std::string> directivesLocations = splitLocationDirectives(*it);
-		std::cout << *it << std::endl;
-		std::cout << "___________________________________________\nLocations:" << std::endl;
+		std::vector<Location> locationsList;
 		for (std::vector<std::string>::iterator it2 = directivesLocations.begin(); it2 < directivesLocations.end(); it2++)
-			std::cout << *it2 << std::endl << "______________________________" << std::endl;
-		std::cout << "_______________" << std::endl;
+			locationsList.push_back(Location(*it2));
+		serverList[serverList.size() - 1].setLocations(locationsList);
 	}
-	return std::vector<Server>();
+	return serverList;
 }
