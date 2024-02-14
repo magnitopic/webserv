@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 19:11:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 19:48:47 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,6 +268,42 @@ void	Location::setValues(std::string str)
 	setForbidden();
 }
 
+int	Location::setRedirection()
+{
+	std::size_t found = buffer.find("return ") + 7;
+	std::string num;
+	std::string	str;
+	if (found > buffer.length() || found < 7)
+		return 0;
+	while (found < buffer.length() && buffer[found] != ';' && buffer[found] != '\n' && buffer[found] != '\r')
+	{
+		if (isdigit(buffer[found]))
+			num.push_back(buffer[found]);
+		else if (isspace(buffer[found]) && num.length() > 0)
+			continue;
+		else
+		{
+			while (buffer[found] != ';')
+			{
+				if (isspace(buffer[found]) || buffer[found] == '\n' || buffer[found] == '\r'){
+					this->redirection.insert(std::pair<int, std::string>(atoi(num.c_str()), str));
+					cout << this->redirection << endl;
+					return 1;
+				}
+				str.push_back(buffer[found]);
+				found++;
+			}
+		}
+		found++;
+	}
+	return 1;
+}
+
+std::string	Location::getRedirection(int code)
+{
+	return this->redirection.find(code)->second;
+}
+
 std::ostream	&operator<<(std::ostream &os, std::map<int, std::string> map)
 {
 	for (std::map<int, std::string>::iterator it = map.begin(); it != map.end(); it++){
@@ -275,4 +311,5 @@ std::ostream	&operator<<(std::ostream &os, std::map<int, std::string> map)
 	}
 	return os;
 }
+
 

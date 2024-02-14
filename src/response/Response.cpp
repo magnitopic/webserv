@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 14:56:49 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 19:50:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,4 +157,29 @@ void	showData(Request &req, Response &response)
 	std::cout << "[" << day << "-" << month << "-" << year << " " << hour << ":" << minute << ":" << second  << "] \"" << req.getMethod() <<
 	" " << req.getUri() << " HTTP/1.1\" " << response.getErrorCode() << " " << response.getContentLength() << std::endl;
 
+}
+
+void	Response::generateRedirection(Server& server)
+{
+	this->response = "<html>\n<head>\n<title>";
+	this->response += to_string(code);
+	this->response += " " + getErrorMsg(code);
+	this->response += "</title>\n</head>\n<body>\n<center><h1>";
+	this->response += to_string(code);
+	this->response += " " + getErrorMsg(code);
+	this->response += "</h1></center>\n<hr><center>";
+	this->response += server.getName();
+	this->response += "</center>\n</body>\n</html>";
+}
+
+void	Response::generateRedirectHeader(Location& location, int code)
+{
+	std::string resp = "";
+	resp += this->header;
+	resp += "Content-Length: ";
+	resp += std::to_string(this->contentLength);
+	resp += "Location: ";
+	resp += location.getRedirection(code);
+	resp += "\n\n";
+	resp += this->response;
 }

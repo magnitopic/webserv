@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 14:36:36 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 19:50:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
  * The aim of this class is to store the information that will eventually make
  * up the response given to the client.
 */
+
+class Location;
+
 class Response
 {
 private:
@@ -58,6 +61,8 @@ public:
 	void		generateHeader(int code, Server& server);
 	void		generateHeaderContent(int code, std::string type, Server& server);
 	void		generateResponse(int code, std::string def, Server& server);
+	void		generateRedirection(Server& server);
+	void		generateRedirectHeader(Location& location, int code);
 };
 
 #endif

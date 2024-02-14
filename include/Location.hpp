@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 12:52:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 19:49:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,18 @@
 class Location
 {
 private:
-	std::string				directory;
-	std::string				buffer;			// contains all the information inside this location in the config file
-	std::list<std::string>	actions; 		// actions that can be performed inside the directory
-	std::list<std::string>	forbidden;		// actions denied in the directory
-	std::string				header;			// header given to the request
-	std::string				contentType;	// type of content that will be given to the request
-	std::list<std::string>	actionsArr;		// this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
-	std::string				root;			// indicates the root directory for the location
-	std::string				contentLength;
-	std::string				index;			// path of the index, if there is one in the config file
-	bool					autoIndex;
+	std::string					directory;
+	std::string					buffer;			// contains all the information inside this location in the config file
+	std::list<std::string>		actions; 		// actions that can be performed inside the directory
+	std::list<std::string>		forbidden;		// actions denied in the directory
+	std::string					header;			// header given to the request
+	std::string					contentType;	// type of content that will be given to the request
+	std::list<std::string>		actionsArr;		// this will be a list which contents will be ["GET", "POST", "DELETE"] and will be used to compare with the enum
+	std::string					root;			// indicates the root directory for the location
+	std::string					contentLength;
+	std::string					index;			// path of the index, if there is one in the config file
+	std::map<int, std::string>	redirection;	// url to which redirect the traffic
+	bool						autoIndex;
 
 public:
 	// orthodox canonical form
@@ -66,6 +67,8 @@ public:
 	std::string				getIndex();
 	void					setIndex();
 	void					setValues(std::string str);
+	int						setRedirection();
+	std::string				getRedirection(int code);
 	// methods
 
 	std::string	generateHttpResponse(void);

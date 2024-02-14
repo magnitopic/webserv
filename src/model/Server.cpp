@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 12:53:23 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 19:22:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,9 +254,7 @@ void Server::setErrorPages(std::string str)
 	std::string num;
 	std::list<int> lst;
 	if (found > str.length() || found < 11)
-	{
 		return;
-	}
 	std::string strcpy = str;
 	while (found < strcpy.length() && found > 11)
 	{
@@ -288,9 +286,7 @@ void Server::setErrorPages(std::string str)
 		if (temp[i] == ';' || temp[i] == '\n')
 		{
 			for (std::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
-			{
 				this->errorPages.insert(std::pair<int, std::string>(*it, aux));
-			}
 		}
 		aux.clear();
 		strcpy = strcpy.substr(i, temp.length() - i);
