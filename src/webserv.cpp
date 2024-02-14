@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 12:58:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/14 16:21:34 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -94,7 +94,10 @@ void createConection(std::string str)
 					break;
 			}
 			if (readVal == -1)
+			{
+				std::cout << "Numero de clientes que hay contectado cuando peta el server: " << clients.size() << std::endl; // TODO: Remove this <--
 				raiseError("error reading data");
+			}
 			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive
 			{
 				close(*it);
