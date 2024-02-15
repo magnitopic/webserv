@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Post.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/14 17:12:52 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:46:25 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -24,7 +24,7 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 		response.setErrorCode(200);
 		response.setResponseHTML(200);
 		response.setContentLength(response.getResponse());
-		response.generateHeaderContent(200, "text/html", server);
+		response.generateHeaderContent(201, "text/html", server);
 		return;
 	}
 	std::istringstream temp(req.getReqBuffer().substr(pos, req.getReqBuffer().length() - pos));

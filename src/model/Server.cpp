@@ -1,16 +1,16 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 19:22:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:46:21 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
-#include "../../include/Server.hpp"
+#include "../../include/webserv.hpp"
 
 Server::Server()
 {
@@ -301,4 +301,9 @@ std::map<int, std::string> Server::getErrorPages()
 void Server::addSocket(const Socket &socket)
 {
 	this->sockets.push_back(socket);
+}
+
+void Server::setLocations(std::vector<Location> locations)
+{
+	this->locations = locations;
 }
