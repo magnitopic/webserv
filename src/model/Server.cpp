@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 11:46:21 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/15 12:48:20 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -68,6 +68,7 @@ void Server::setPort(std::string str)
 		found++;
 	while (found < str.length())
 	{
+		std::cout << (char)found << std::endl;
 		if (isdigit(str[found]))
 			num.push_back(str[found]);
 		else if (isspace(str[found]))
@@ -75,8 +76,6 @@ void Server::setPort(std::string str)
 			this->ports.push_back(std::atoi(num.c_str()));
 			return;
 		}
-		else
-			raiseError("error in configuration file");
 		found++;
 	}
 	this->ports.push_back(std::atoi(num.c_str()));
@@ -96,14 +95,13 @@ void Server::setActions(std::string str)
 {
 	int flag = 0;
 	std::string aux = "server ";
-	if (str.find(aux) >= str.length())
-		raiseError("No server block in configuration file");
 	std::string methods;
 	if (str.find("location") < str.length())
-		methods = str.substr(str.find(aux), str.find("location") - str.find(aux));
+		methods = str.substr(0, str.find("location"));
 	else
 		methods = str;
 	std::string word;
+	
 	int i = methods.find("limit_except") + 12;
 	while (i < static_cast<int>(methods.length()) && i > 12)
 	{
