@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 15:16:47 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 17:19:44 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,14 @@ void createConection(std::string str)
 					break;
 			}
 			if (readVal == -1)
-			{
-				std::cout << "Numero de clientes que hay contectado cuando peta el server: " << clients.size() << std::endl; // TODO: Remove this <--
 				raiseError("error reading data");
-			}
 			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive
 			{
 				close(*it);
 				it = clients.erase(it);
 				continue;
 			}
+			std::cout << buffer << std::endl;
 			handleRequests(*it, servers[0], buf, clients, str); // ! temporary, server should be the server that handles the request
 		}
 	}
