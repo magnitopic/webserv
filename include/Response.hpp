@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/14 19:50:43 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:31:40 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ public:
 	void		generateHeaderContent(int code, std::string type, Server& server);
 	void		generateResponse(int code, std::string def, Server& server);
 	void		generateRedirection(Server& server);
-	void		generateRedirectHeader(Location& location, int code);
+	void		generateRedirectHeader(Location& location, Server& server);
 };
 
 #endif

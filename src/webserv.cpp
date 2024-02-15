@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 13:09:07 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:31:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,10 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 	location.setValues(str);
 	if (location.setRedirection()){
-		response.setErrorCode(301);
+		response.setErrorCode(location.getRedirection().begin()->first);
 		response.generateRedirection(server); // Crete new function to redirect to the selected URL
 		response.setContentLength(response.getResponse());
-		response.generateRedirectHeader(location, response.getErrorCode());
+		response.generateRedirectHeader(location, server);
 	}
 	req.setAbsPath(server);
 	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() < 100)

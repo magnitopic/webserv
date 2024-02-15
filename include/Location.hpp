@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 19:49:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:29:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,27 @@ public:
 
 	// setters and getters
 
-	void					setBuffer(std::string configFile);
-	std::string				getBuffer(void);
-	void					setDirectory(std::string directory);
-	std::string				getDirectory(void);
-	void					setResponse(std::string response);
-	std::string				getResponse(void);
-	void					setForbidden();
-	void					setAutoIndex(bool autoIndex);
-	bool					getAutoIndex(void);
-	void					setActions(std::string text);
-	std::list<std::string>	getActions(void);
-	std::string				getRoot(void);
-	void					setContentType(std::string type);
-	std::string				getContentType(void);
-	std::list<std::string>	getForbidden(void);
-	void					emptyActions(void);
-	std::string				getIndex();
-	void					setIndex();
-	void					setValues(std::string str);
-	int						setRedirection();
-	std::string				getRedirection(int code);
+	void						setBuffer(std::string configFile);
+	std::string					getBuffer(void);
+	void						setDirectory(std::string directory);
+	std::string					getDirectory(void);
+	void						setResponse(std::string response);
+	std::string					getResponse(void);
+	void						setForbidden();
+	void						setAutoIndex(bool autoIndex);
+	bool						getAutoIndex(void);
+	void						setActions(std::string text);
+	std::list<std::string>		getActions(void);
+	std::string					getRoot(void);
+	void						setContentType(std::string type);
+	std::string					getContentType(void);
+	std::list<std::string>		getForbidden(void);
+	void						emptyActions(void);
+	std::string					getIndex();
+	void						setIndex();
+	void						setValues(std::string str);
+	int							setRedirection();
+	std::map<int, std::string>	getRedirection();
 	// methods
 
 	std::string	generateHttpResponse(void);

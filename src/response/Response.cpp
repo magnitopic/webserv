@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/14 19:50:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:31:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,14 +172,15 @@ void	Response::generateRedirection(Server& server)
 	this->response += "</center>\n</body>\n</html>";
 }
 
-void	Response::generateRedirectHeader(Location& location, int code)
+void	Response::generateRedirectHeader(Location& location, Server& server)
 {
-	std::string resp = "";
-	resp += this->header;
-	resp += "Content-Length: ";
-	resp += std::to_string(this->contentLength);
-	resp += "Location: ";
-	resp += location.getRedirection(code);
-	resp += "\n\n";
-	resp += this->response;
+	this->header = "HTTP/1.1 ";
+	this->header += to_string(location.getRedirection().begin()->first);
+	this->header += " " + getErrorMsg(location.getRedirection().begin()->first);
+	this->header += "\nServer: " + server.getName();
+	this->header += "\nContent-Type: text/html; charset=utf-8\n";
+	this->header += "Location: ";
+	this->header += location.getRedirection().begin()->second;
+	this->header += "\n\n";
+	this->header += this->response;
 }

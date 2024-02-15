@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 13:08:01 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:29:36 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,7 +285,6 @@ int	Location::setRedirection()
 			{
 				if (isspace(buffer[found]) || buffer[found] == '\n' || buffer[found] == '\r'){
 					this->redirection.insert(std::pair<int, std::string>(atoi(num.c_str()), str));
-					cout << this->redirection << endl;
 					return 1;
 				}
 				str.push_back(buffer[found]);
@@ -294,14 +293,13 @@ int	Location::setRedirection()
 		}
 		found++;
 	}
-	//cout << str << endl;
 	this->redirection.insert(std::pair<int, std::string>(atoi(num.c_str()), str));
 	return 1;
 }
 
-std::string	Location::getRedirection(int code)
+std::map<int, std::string>	Location::getRedirection()
 {
-	return this->redirection.find(code)->second;
+	return this->redirection;
 }
 
 std::ostream	&operator<<(std::ostream &os, std::map<int, std::string> map)
