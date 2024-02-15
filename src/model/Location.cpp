@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 11:46:17 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:08:01 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -243,7 +243,7 @@ void	Location::setIndex()
 	if (buffer.length() < 1)
 		return;
 	std::string word;
-	unsigned int i = buffer.find("index ") + 6;
+	std::size_t i = buffer.find("index ") + 6;
 	if (i > buffer.length() || (buffer[i - 7] && isalnum(buffer[i - 7])))
 		return;
 	std::string temp = buffer.substr(i, buffer.length() - i);
@@ -279,9 +279,7 @@ int	Location::setRedirection()
 	{
 		if (isdigit(buffer[found]))
 			num.push_back(buffer[found]);
-		else if (isspace(buffer[found]) && num.length() > 0)
-			continue;
-		else
+		else if (!isspace(buffer[found]) || num.length() < 0)
 		{
 			while (buffer[found] != ';')
 			{
@@ -296,6 +294,8 @@ int	Location::setRedirection()
 		}
 		found++;
 	}
+	//cout << str << endl;
+	this->redirection.insert(std::pair<int, std::string>(atoi(num.c_str()), str));
 	return 1;
 }
 

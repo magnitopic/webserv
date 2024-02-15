@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 11:46:12 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:09:07 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -127,7 +127,6 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 	location.setValues(str);
 	if (location.setRedirection()){
-		exit(0);
 		response.setErrorCode(301);
 		response.generateRedirection(server); // Crete new function to redirect to the selected URL
 		response.setContentLength(response.getResponse());
@@ -152,7 +151,7 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 				deleteMethod(server, req, response);
 		}
 	}
-	else if (response.getErrorCode() != 413)
+	else if (response.getErrorCode() < 100)
 	{
 		response.setErrorCode(501);
 		response.generateResponse(501, response.getErrorMsg(501), server);
