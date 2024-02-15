@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/15 14:31:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 15:23:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ void Response::generateHeader(int code, Server &server)
 	this->header += " " + getErrorMsg(code);
 	this->header += "\nServer: " + server.getName();
 	this->header += "\nContent-Type: text/html; charset=utf-8\n";
+	this->header += "Content-Length: ";
+	this->header += std::to_string(this->contentLength);
+	this->header += "\n\n";
 	return;
 }
 
@@ -109,6 +112,9 @@ void Response::generateHeaderContent(int code, std::string type, Server &server)
 	this->header += "\nServer: " + server.getName();
 	this->header += "\nContent-Type: " + type;
 	this->header += "; charset=utf-8\n";
+	this->header += "Content-Length: ";
+	this->header += std::to_string(this->contentLength);
+	this->header += "\n\n";
 	return;
 }
 
@@ -121,9 +127,6 @@ std::string Response::generateHttpResponse()
 {
 	std::string resp = "";
 	resp += this->header;
-	resp += "Content-Length: ";
-	resp += std::to_string(this->contentLength);
-	resp += "\n\n";
 	resp += this->response;
 	return resp;
 }
@@ -159,17 +162,9 @@ void	showData(Request &req, Response &response)
 
 }
 
-void	Response::generateRedirection(Server& server)
+void	Response::generateRedirection(Location& location)
 {
-	this->response = "<html>\n<head>\n<title>";
-	this->response += to_string(code);
-	this->response += " " + getErrorMsg(code);
-	this->response += "</title>\n</head>\n<body>\n<center><h1>";
-	this->response += to_string(code);
-	this->response += " " + getErrorMsg(code);
-	this->response += "</h1></center>\n<hr><center>";
-	this->response += server.getName();
-	this->response += "</center>\n</body>\n</html>";
+	this->response = "Redirecting to " + location.getRedirection().begin()->second;
 }
 
 void	Response::generateRedirectHeader(Location& location, Server& server)
@@ -181,6 +176,9 @@ void	Response::generateRedirectHeader(Location& location, Server& server)
 	this->header += "\nContent-Type: text/html; charset=utf-8\n";
 	this->header += "Location: ";
 	this->header += location.getRedirection().begin()->second;
+	this->header += "\n";
+	this->header += "Content-Length: ";
+	this->header += std::to_string(this->contentLength);
 	this->header += "\n\n";
 	this->header += this->response;
 }

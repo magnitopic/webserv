@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 14:31:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/15 15:16:47 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 	location.setValues(str);
 	if (location.setRedirection()){
 		response.setErrorCode(location.getRedirection().begin()->first);
-		response.generateRedirection(server); // Crete new function to redirect to the selected URL
+		response.generateRedirection(location); // Crete new function to redirect to the selected URL
 		response.setContentLength(response.getResponse());
 		response.generateRedirectHeader(location, server);
 	}
