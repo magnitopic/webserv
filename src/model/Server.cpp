@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 12:48:20 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/15 12:58:59 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -68,7 +68,6 @@ void Server::setPort(std::string str)
 		found++;
 	while (found < str.length())
 	{
-		std::cout << (char)found << std::endl;
 		if (isdigit(str[found]))
 			num.push_back(str[found]);
 		else if (isspace(str[found]))
