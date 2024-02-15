@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:39:08 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 15:40:56 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/15 12:03:05 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -42,6 +42,11 @@ std::vector<std::string> splitServerDirectives(std::string configFile)
 		{
 			if (openBraces >= 1)
 				processLine(line, serverDirective);
+			else
+			{
+				if (line.find("server") == std::string::npos)
+					raiseError("Found invalid directive outside of server block");
+			}
 			openBraces++;
 		}
 		else if (closeBrace != std::string::npos && openBraces > 0)
@@ -58,13 +63,15 @@ std::vector<std::string> splitServerDirectives(std::string configFile)
 		else if (openBraces > 0)
 			processLine(line, serverDirective);
 	}
+	if (servers.size() == 0)
+		raiseError("No server directives found in the config fileeeee");
 	return servers;
 }
 
 /**
  * Finds the location directives inside a server directive and stores each one
  * along with it's correspondig directives an a std::vector<std::string>
-*/
+ */
 std::vector<std::string> splitLocationDirectives(std::string serverDirectives)
 {
 	std::vector<std::string> locations;
