@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 17:19:44 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/18 21:33:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,18 @@ void createConection(std::string str)
 		for (std::vector<int>::iterator it = clients.begin(); it != clients.end(); it++)
 		{
 			char buffer[1024]; // This size of 8000 is temporary, we can set 8000 by default but it can also be specified in the config file
-			ssize_t readVal = read(*it, buffer, sizeof(buffer));
-			std::string buf = buffer;
-			while (readVal > 0 && !strchr(buffer, '\0')){
-				readVal = read(*it, buffer, sizeof(buffer));
-				buf += buffer;
-				if (readVal != 1024)
+			std::string buf = "";
+			int readVal = 0;
+			while (42){
+				memset(buffer, 0, 1024);
+				cout << "Readval: " << readVal << endl;
+				readVal = recv(*it, buffer, sizeof(buffer), 0);
+				if (readVal == -1)
+					raiseError("error reading data");
+				else if (readVal == 0)
 					break;
+				buf += buffer;
+				cout << "Received: " << buf << endl;
 			}
 			if (readVal == -1)
 				raiseError("error reading data");
@@ -102,6 +107,7 @@ void createConection(std::string str)
 				continue;
 			}
 			std::cout << buffer << std::endl;
+			exit(0);
 			handleRequests(*it, servers[0], buf, clients, str); // ! temporary, server should be the server that handles the request
 		}
 	}

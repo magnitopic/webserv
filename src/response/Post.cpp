@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Post.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/15 11:46:25 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/18 18:48:59 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -36,6 +36,8 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
+		cout << post.getFileName() << endl;
+		exit(0);
 		ofstream newfile(req.getAbsPath() + "/" + post.getFileName());
 		newfile << post.getFileContent();
 		newfile.close();
