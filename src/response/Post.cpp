@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/18 18:48:59 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:01:54 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
-		cout << post.getFileName() << endl;
-		exit(0);
 		ofstream newfile(req.getAbsPath() + "/" + post.getFileName());
 		newfile << post.getFileContent();
 		newfile.close();

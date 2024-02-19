@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/18 21:33:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:52:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void createConection(std::string str)
 		{
 			Socket newSocket(*it2);
 			struct pollfd pfd;
+			if (fcntl(newSocket.getSocketFD(), F_SETFL, fcntl(newSocket.getSocketFD(), F_GETFL, 0) | O_NONBLOCK) < 0)
+				raiseError("Setting socket as non-blocking");
 			pfd.fd = newSocket.getSocketFD();
 			pfd.events = POLLIN;
 			fds.push_back(pfd);
@@ -66,9 +68,11 @@ void createConection(std::string str)
 		int pollVal = poll(&fds[0], fds.size(), -1);
 		if (pollVal == -1)
 			raiseError("error polling data");
+		std::vector<client> clients;
+		if (pollVal > 0){
 
+		}
 		// iterate through the servers and accept new connections
-		std::vector<int> clients;
 		for (std::vector<pollfd>::iterator it = fds.begin(); it != fds.end(); it++)
 		{
 			if (it->revents == POLLIN)
@@ -77,47 +81,44 @@ void createConection(std::string str)
 				if (socket == -1)
 					raiseError("error accepting data");
 				// add new connection to the clients list
-				clients.push_back(socket);
+				client aux;
+				aux.fd = socket;
+				aux.finalbuffer = "";
+				clients.push_back(aux);
 			}
 		}
 
 		// iterate through the clients and handle requests
-		for (std::vector<int>::iterator it = clients.begin(); it != clients.end(); it++)
+		for (int i = 0; i < static_cast<int>(clients.size()); i++)
 		{
-			char buffer[1024]; // This size of 8000 is temporary, we can set 8000 by default but it can also be specified in the config file
-			std::string buf = "";
 			int readVal = 0;
-			while (42){
-				memset(buffer, 0, 1024);
-				cout << "Readval: " << readVal << endl;
-				readVal = recv(*it, buffer, sizeof(buffer), 0);
-				if (readVal == -1)
-					raiseError("error reading data");
-				else if (readVal == 0)
-					break;
-				buf += buffer;
-				cout << "Received: " << buf << endl;
-			}
+			memset(clients[i].buf, 0, 1024);
+			readVal = recv(clients[i].fd, clients[i].buf, sizeof(clients[i].buf), 0);
+			std::cout << readVal << std::endl;
+			cout << clients[i].buf << endl;
 			if (readVal == -1)
 				raiseError("error reading data");
-			else if (readVal == 0)	// ! disconnecting clients like this is temporary, we should check keep-alive
+
+			clients[i].finalbuffer += clients[i].buf;
+			if (clients[i].finalbuffer.find("\0") && clients[i].finalbuffer.find("\0") <= clients[i].finalbuffer.length())
 			{
-				close(*it);
-				it = clients.erase(it);
+				cout << clients[i].finalbuffer << endl;
+				handleRequests(i, servers[0], clients, str);
+				close(clients[i].fd);
+				clients.erase(clients.begin() + i);
+				i--;
 				continue;
 			}
-			std::cout << buffer << std::endl;
-			exit(0);
-			handleRequests(*it, servers[0], buf, clients, str); // ! temporary, server should be the server that handles the request
 		}
 	}
+	exit(0);
 }
 
-void handleRequests(int clientFd, Server &server, std::string buffer, std::vector<int> clients, std::string str)
+void handleRequests(int clientPos, Server &server, std::vector<client> clients, std::string str)
 {
-	Request req = parseReq(buffer);
-	req.setReqBuffer(buffer);
-	std::string aux = buffer;
+	Request req = parseReq(clients[clientPos].finalbuffer);
+	req.setReqBuffer(clients[clientPos].finalbuffer);
+	std::string aux = clients[clientPos].finalbuffer;
 	req.setContentLength();
 	server.setMaxClientSize(str);
 	Response response;
@@ -163,11 +164,11 @@ void handleRequests(int clientFd, Server &server, std::string buffer, std::vecto
 		response.generateHeader(501, server);
 	}
 	std::string resp = response.generateHttpResponse();
-	int writeVal = write(clientFd, resp.c_str(), resp.length());
+	int writeVal = write(clients[clientPos].fd, resp.c_str(), resp.length());
 	if (writeVal == -1)
 		raiseError("error writing data");
-	close(clientFd);
-	clients.erase(std::remove(clients.begin(), clients.end(), clientFd), clients.end());
+	close(clients[clientPos].fd);
+	clients.erase(clients.begin() + clientPos);
 	location.emptyActions();
 	showData(req, response);
 }

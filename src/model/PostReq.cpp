@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/18 18:49:38 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:01:32 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ PostReq::~PostReq() {}
 void	PostReq::setFileName(std::string request)
 {
 	int pos = request.find("filename=\"") + 10;
-	cout << "---------------------" << endl;
-	cout << request << endl;
-	exit(0);
 	if (pos >= static_cast<int>(request.length()) || pos < 10){
 		this->fileName = "";
 		return;

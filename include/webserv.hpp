@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/18 21:11:28 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/19 16:10:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ using namespace std;
 
 #define MAX_SERVERS 1024
 
+struct	client{
+	unsigned int	fd;
+	char			buf[1024];
+	std::string		finalbuffer;
+};
 int							setAction(std::string);
 Request						parseReq(std::string passedReq);
 std::string					configToString(char *str);
@@ -49,7 +54,7 @@ void						raiseError(const char *msg);
 std::string					getFile(const std::string &fileAdr);
 std::vector<Server>			parseConfigFile(std::string file_name);
 int							isAllowed(Server &server, Request & req, Location &location);
-void						handleRequests(int clientFd, Server &server, std::string buffer, std::vector<int> clients, std::string str);
+void 						handleRequests(int clientFd, Server &server, std::vector<client> clients, std::string str);
 std::string					parseContentType(std::string extension);
 void						createConection(std::string str);
 void						getMethod(Location &location, Server &server, Request &req, Response &resp);

@@ -25,7 +25,7 @@ OBJS			=	$(WEB_SRC:.cpp=.o)
 # Compiler
 CXX				=	c++
 RM				=	rm -f
-CXXFLAGS		=	-Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
+CXXFLAGS		=	-Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 
 # Colours
 RED				=	\033[0;31m
@@ -55,7 +55,7 @@ fclean:		clean
 re:			fclean all
 			@printf "$(BLUE)==> $(CYAN)Webserv recompiled 🔄\n$(RESET)"
 
-docker:		
+docker:
 			@docker build --rm -t nginx-test .
 			@docker run --rm -it -p 80:8080 nginx-test
 
