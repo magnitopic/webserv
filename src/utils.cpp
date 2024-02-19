@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 17:03:28 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:21:55 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,12 +14,13 @@
 
 void raiseError(const char *msg)
 {
-	std::cout << "\033[0;31m" << std::endl;
+	std::cout << RED << std::endl;
 	perror(msg);
+	std::cout << RESET << std::endl;
 	exit(1);
 }
 
-int	myOwnFind(Location &location, Request &req)
+int myOwnFind(Location &location, Request &req)
 {
 	std::list<std::string> aux = location.getActions();
 	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++)
@@ -30,25 +31,27 @@ int	myOwnFind(Location &location, Request &req)
 	return 0;
 }
 
-int	myOwnFindServ(Server &location, Request &req)
+int myOwnFindServ(Server &location, Request &req)
 {
 	std::list<std::string> aux = location.getActions();
-	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++){
+	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++)
+	{
 		if (*it == req.getMethod())
 			return 1;
 	}
 	return 0;
 }
 
-std::string	configToString(char *str)
+std::string configToString(char *str)
 {
-	std::ifstream	configFile;
-	std::string		file;
+	std::ifstream configFile;
+	std::string file;
 
 	configFile.open(str, std::ifstream::in);
 	if (!configFile.is_open())
 		raiseError("error opening the input file");
-	while (configFile.good()){
+	while (configFile.good())
+	{
 		char c = configFile.get();
 		file.push_back(c);
 	}
@@ -56,38 +59,43 @@ std::string	configToString(char *str)
 	return file;
 }
 
-int	isAllowed(Server &server, Request &req, Location &location)
+int isAllowed(Server &server, Request &req, Location &location)
 {
-	if (location.getForbidden().size() > 1){
+	if (location.getForbidden().size() > 1)
+	{
 		std::list<std::string>::iterator it = std::find(location.getForbidden().begin(), (std::prev(location.getForbidden().end())), req.getMethod());
 		if (it != location.getForbidden().end())
 			return 0;
 	}
-	else if (location.getForbidden().size() == 1){
+	else if (location.getForbidden().size() == 1)
+	{
 		if (req.getMethod() == *location.getForbidden().begin())
 			return 0;
 	}
-	if (location.getActions().size() > 1){
+	if (location.getActions().size() > 1)
+	{
 		int it = myOwnFind(location, req);
 		if (it)
 			return 1;
 	}
-	else if (location.getActions().size() == 1){
+	else if (location.getActions().size() == 1)
+	{
 		if (req.getMethod() == *location.getActions().begin())
 			return 1;
 	}
-	if (server.getActions().size() > 1){
+	if (server.getActions().size() > 1)
+	{
 		int it = myOwnFindServ(server, req);
 		if (it)
 			return 1;
 	}
-	else if (server.getActions().size() == 1){
+	else if (server.getActions().size() == 1)
+	{
 		if (req.getMethod() == *server.getActions().begin())
 			return 1;
 	}
 	return 0;
 }
-
 
 std::string deleteFirstElement(std::string str)
 {
@@ -97,4 +105,4 @@ std::string deleteFirstElement(std::string str)
 	return str;
 }
 
-//void	setIndex(finalRoute, socketClass.getDirectory())
+// void	setIndex(finalRoute, socketClass.getDirectory())

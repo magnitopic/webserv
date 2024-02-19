@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/19 16:52:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:24:14 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -39,7 +39,7 @@ void createConection(std::string str)
 	servers.push_back(Server(str));
 	servers[0].setActions(str);
 
-	std::cout << "\033[0;34m==> \033[0;36mWebserv running ✅\n\033[0;34m==>\033[0;36m And listening on these addresses:\033[0;33m" << std::endl;
+	std::cout << BLUE << "==> " << CYAN << "Webserv running ✅\n" << BLUE << "==>" << CYAN << "And listening on these addresses:" << YELLOW << std::endl;
 	// Create a socket for every port. Each server can have multiple ports
 	std::vector<pollfd> fds;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
@@ -59,7 +59,7 @@ void createConection(std::string str)
 			std::cout << "\thttp://localhost:" << *it2 << std::endl;
 		}
 	}
-	std::cout << "\033[0m----------------------------------" << std::endl;
+	std::cout << RESET << "----------------------------------" << std::endl;
 
 	// Main loop that handles connections
 	while (true)
@@ -69,8 +69,8 @@ void createConection(std::string str)
 		if (pollVal == -1)
 			raiseError("error polling data");
 		std::vector<client> clients;
-		if (pollVal > 0){
-
+		if (pollVal > 0)
+		{
 		}
 		// iterate through the servers and accept new connections
 		for (std::vector<pollfd>::iterator it = fds.begin(); it != fds.end(); it++)
@@ -98,7 +98,6 @@ void createConection(std::string str)
 			cout << clients[i].buf << endl;
 			if (readVal == -1)
 				raiseError("error reading data");
-
 			clients[i].finalbuffer += clients[i].buf;
 			if (clients[i].finalbuffer.find("\0") && clients[i].finalbuffer.find("\0") <= clients[i].finalbuffer.length())
 			{
@@ -131,7 +130,8 @@ void handleRequests(int clientPos, Server &server, std::vector<client> clients, 
 	}
 	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
 	location.setValues(str);
-	if (location.setRedirection()){
+	if (location.setRedirection())
+	{
 		response.setErrorCode(location.getRedirection().begin()->first);
 		response.generateRedirection(location); // Crete new function to redirect to the selected URL
 		response.setContentLength(response.getResponse());
@@ -147,7 +147,8 @@ void handleRequests(int clientPos, Server &server, std::vector<client> clients, 
 			response.setContentLength(response.getResponse());
 			response.generateHeader(405, server);
 		}
-		else{
+		else
+		{
 			if (req.getMethod() == "GET")
 				getMethod(location, server, req, response);
 			else if (req.getMethod() == "POST")

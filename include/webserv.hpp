@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/19 16:10:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/19 17:23:52 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -41,12 +41,23 @@
 using namespace std;
 
 #define MAX_SERVERS 1024
+// colours
+
+#define RED		"\033[0;31m"
+#define GREEN	"\033[0;32m"
+#define YELLOW	"\033[0;33m"
+#define BLUE	"\033[0;34m"
+#define PURPLE	"\033[0;35m"
+#define CYAN	"\033[0;36m"
+#define RESET	"\033[0m"
 
 struct	client{
 	unsigned int	fd;
 	char			buf[1024];
 	std::string		finalbuffer;
 };
+
+
 int							setAction(std::string);
 Request						parseReq(std::string passedReq);
 std::string					configToString(char *str);
