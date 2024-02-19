@@ -56,7 +56,7 @@ re:			fclean all
 			@printf "$(BLUE)==> $(CYAN)Webserv recompiled 🔄\n$(RESET)"
 
 docker:		
-			@docker build -t nginx-test .
-			@docker run -it -p 8080:8080 nginx-test
+			@docker build --rm -t nginx-test .
+			@docker run --rm -it -p 80:8080 nginx-test
 
 .PHONY:		all clean fclean re docker
