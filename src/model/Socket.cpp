@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/13 12:08:45 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/19 19:23:47 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 #include "../../include/Socket.hpp"
@@ -22,10 +22,15 @@ Socket::Socket(unsigned int port)
 	if (this->socketFD == -1)
 		raiseError("Error creating socket");
 
+	// Non-blocking
+	if (fcntl(this->socketFD, F_SETFL, fcntl(this->socketFD, F_GETFL, 0) | O_NONBLOCK) < 0)
+		raiseError("Setting socket as non-blocking");
+
 	// Reset socket to reuse address
 	int reuseAddr = 1;
 	if (setsockopt(this->socketFD, SOL_SOCKET, SO_REUSEADDR, &reuseAddr, sizeof(reuseAddr)) == -1)
 		raiseError("Error setting socket option");
+
 
 	// Bind socket
 	sockaddr_in serverScruct;

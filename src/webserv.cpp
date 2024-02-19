@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/19 17:24:14 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/19 18:28:03 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -49,8 +49,6 @@ void createConection(std::string str)
 		{
 			Socket newSocket(*it2);
 			struct pollfd pfd;
-			if (fcntl(newSocket.getSocketFD(), F_SETFL, fcntl(newSocket.getSocketFD(), F_GETFL, 0) | O_NONBLOCK) < 0)
-				raiseError("Setting socket as non-blocking");
 			pfd.fd = newSocket.getSocketFD();
 			pfd.events = POLLIN;
 			fds.push_back(pfd);
@@ -91,21 +89,17 @@ void createConection(std::string str)
 		// iterate through the clients and handle requests
 		for (int i = 0; i < static_cast<int>(clients.size()); i++)
 		{
-			int readVal = 0;
-			memset(clients[i].buf, 0, 1024);
-			readVal = recv(clients[i].fd, clients[i].buf, sizeof(clients[i].buf), 0);
-			std::cout << readVal << std::endl;
-			cout << clients[i].buf << endl;
-			if (readVal == -1)
+			memset(clients[i].buf, 0, 10000);
+			if (read(clients[i].fd, clients[i].buf, sizeof(clients[i].buf)) == -1)
 				raiseError("error reading data");
 			clients[i].finalbuffer += clients[i].buf;
-			if (clients[i].finalbuffer.find("\0") && clients[i].finalbuffer.find("\0") <= clients[i].finalbuffer.length())
+			if (clients[i].finalbuffer.find("\r\n\r\n") && clients[i].finalbuffer.find("\r\n\r\n") <= clients[i].finalbuffer.length())
 			{
 				cout << clients[i].finalbuffer << endl;
 				handleRequests(i, servers[0], clients, str);
-				close(clients[i].fd);
+				/* close(clients[i].fd);
 				clients.erase(clients.begin() + i);
-				i--;
+				i--; */
 				continue;
 			}
 		}
