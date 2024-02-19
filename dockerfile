@@ -1,12 +1,11 @@
-# Use the official Nginx base image
-FROM nginx:latest
+FROM nginx
 
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy custom Nginx configuration file from the host to the container
-#COPY nginx.conf /etc/nginx/nginx.conf
+COPY webserv.conf /etc/nginx/conf.d/
 
-# Expose port 80 for Nginx
+COPY pages/ /etc/nginx/pages/
+
 EXPOSE 80
 
-# Start Nginx server in the foreground
 CMD ["nginx", "-g", "daemon off;"]
