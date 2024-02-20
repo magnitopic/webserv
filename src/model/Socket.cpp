@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/19 19:23:47 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/20 15:45:33 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 #include "../../include/Socket.hpp"
@@ -23,7 +23,8 @@ Socket::Socket(unsigned int port)
 		raiseError("Error creating socket");
 
 	// Non-blocking
-	if (fcntl(this->socketFD, F_SETFL, fcntl(this->socketFD, F_GETFL, 0) | O_NONBLOCK) < 0)
+	int flag = fcntl(this->socketFD, F_GETFL, 0);
+	if (fcntl(this->socketFD, F_SETFL, flag & ~O_NONBLOCK) < 0)
 		raiseError("Setting socket as non-blocking");
 
 	// Reset socket to reuse address
