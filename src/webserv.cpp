@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/20 16:58:44 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:40:41 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,39 @@
 	-	Disconnect
  */
 
+static void	readRequest(std::vector<client> clients, std::string str, std::vector<Server> servers, std::vector<int> connections, int fd)
+{
+	// iterate through the clients and handle requests
+	for (int i = 0; i < static_cast<int>(clients.size()); i++)
+	{
+		memset(clients[i].buf, 0, 10000);
+		if (read(clients[i].fd, clients[i].buf, sizeof(clients[i].buf)) == -1)
+			raiseError("error reading data");
+		clients[i].finalbuffer += clients[i].buf;
+		cout << clients[i].finalbuffer << endl;
+		if (clients[i].finalbuffer.find("\r\n\r\n") && clients[i].finalbuffer.find("\r\n\r\n") <= clients[i].finalbuffer.length())
+		{
+			std::string aux = clients[i].finalbuffer.substr(clients[i].finalbuffer.find("\r\n\r\n"), clients[i].finalbuffer.length() - clients[i].finalbuffer.find("\r\n\r\n"));
+			if (static_cast<int>(aux.length()) >= parsedContentLength(clients[i].finalbuffer) || parsedContentLength(clients[i].finalbuffer) < 0){
+				cout << "aux len: " << aux.length() << endl;
+				cout << "parsed len: " << parsedContentLength(clients[i].finalbuffer) << endl;
+				cout << clients[i].finalbuffer << endl;
+				handleRequests(i, servers[0], clients, str);
+				close(clients[i].fd);
+				clients.erase(clients.begin() + i);
+				i--;
+				connections.erase(std::find(connections.begin(), connections.end(), fd));
+				//continue;
+			}
+			else if (greatExpectations(clients[i].finalbuffer))
+			{
+				cout << "we are having great expectations" << endl;
+				send(clients[i].fd, "HTTP/1.1 100 Continue\n\n", 23, 0);
+			}
+		}
+	}
+}
+
 void createConection(std::string str)
 {
 	std::vector<Server> servers;
@@ -38,6 +71,7 @@ void createConection(std::string str)
 	// ! These two lines are temporary
 	servers.push_back(Server(str));
 	servers[0].setActions(str);
+	std::vector<int>	connections;
 
 	std::cout << BLUE << "==> " << CYAN << "Webserv running ✅\n" << BLUE << "==>" << CYAN << "And listening on these addresses:" << YELLOW << std::endl;
 	// Create a socket for every port. Each server can have multiple ports
@@ -67,50 +101,26 @@ void createConection(std::string str)
 		if (pollVal == -1)
 			raiseError("error polling data");
 		std::vector<client> clients;
-		if (pollVal > 0)
-		{
-		}
 		// iterate through the servers and accept new connections
 		for (std::vector<pollfd>::iterator it = fds.begin(); it != fds.end(); it++)
 		{
+			cout << "a" << endl;
 			if (it->revents == POLLIN)
 			{
-				int socket = accept(it->fd, NULL, NULL);
-				if (socket == -1)
-					raiseError("error accepting data");
-				// add new connection to the clients list
-				client aux;
-				aux.fd = socket;
-				aux.finalbuffer = "";
-				clients.push_back(aux);
-			}
-		}
-
-		// iterate through the clients and handle requests
-		for (int i = 0; i < static_cast<int>(clients.size()); i++)
-		{
-			memset(clients[i].buf, 0, 10000);
-			if (read(clients[i].fd, clients[i].buf, sizeof(clients[i].buf)) == -1)
-				raiseError("error reading data");
-			clients[i].finalbuffer += clients[i].buf;
-			if (clients[i].finalbuffer.find("\r\n\r\n") && clients[i].finalbuffer.find("\r\n\r\n") <= clients[i].finalbuffer.length())
-			{
-				std::string aux = clients[i].finalbuffer.substr(clients[i].finalbuffer.find("\r\n\r\n"), clients[i].finalbuffer.length() - clients[i].finalbuffer.find("\r\n\r\n"));
-				if (static_cast<int>(aux.length()) >= parsedContentLength(clients[i].finalbuffer) || parsedContentLength(clients[i].finalbuffer) < 0){
-					cout << "aux len: " << aux.length() << endl;
-					cout << "parsed len: " << parsedContentLength(clients[i].finalbuffer) << endl;
-					cout << clients[i].finalbuffer << endl;
-					handleRequests(i, servers[0], clients, str);
-					close(clients[i].fd);
-					clients.erase(clients.begin() + i);
-					i--;
-					//continue;
-				}
-				else if (greatExpectations(clients[i].finalbuffer))
+				if (std::find(connections.begin(), connections.end(), it->fd) == connections.end())	// TODO: check if the connection was already established or not, if it was we have to keep reading, if not we accpet the new connection
 				{
-					cout << "we are having great expectations" << endl;
-					send(clients[i].fd, "HTTP/1.1 100 Continue\n\n", 23, 0);
+					int socket = accept(it->fd, NULL, NULL);
+					if (socket == -1)
+						raiseError("error accepting data");
+					// add new connection to the clients list
+					client aux;
+					aux.fd = socket;
+					aux.finalbuffer = "";
+					clients.push_back(aux);
+					connections.push_back(it->fd);
+					readRequest(clients, str, servers, connections, it->fd); // In manu's webserv this goes inside al else statement, but if I do it now it is locked in an infinite loop
 				}
+				//else
 			}
 		}
 	}
