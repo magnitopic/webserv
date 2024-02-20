@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/19 18:28:03 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:58:44 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,25 @@ void createConection(std::string str)
 			clients[i].finalbuffer += clients[i].buf;
 			if (clients[i].finalbuffer.find("\r\n\r\n") && clients[i].finalbuffer.find("\r\n\r\n") <= clients[i].finalbuffer.length())
 			{
-				cout << clients[i].finalbuffer << endl;
-				handleRequests(i, servers[0], clients, str);
-				/* close(clients[i].fd);
-				clients.erase(clients.begin() + i);
-				i--; */
-				continue;
+				std::string aux = clients[i].finalbuffer.substr(clients[i].finalbuffer.find("\r\n\r\n"), clients[i].finalbuffer.length() - clients[i].finalbuffer.find("\r\n\r\n"));
+				if (static_cast<int>(aux.length()) >= parsedContentLength(clients[i].finalbuffer) || parsedContentLength(clients[i].finalbuffer) < 0){
+					cout << "aux len: " << aux.length() << endl;
+					cout << "parsed len: " << parsedContentLength(clients[i].finalbuffer) << endl;
+					cout << clients[i].finalbuffer << endl;
+					handleRequests(i, servers[0], clients, str);
+					close(clients[i].fd);
+					clients.erase(clients.begin() + i);
+					i--;
+					//continue;
+				}
+				else if (greatExpectations(clients[i].finalbuffer))
+				{
+					cout << "we are having great expectations" << endl;
+					send(clients[i].fd, "HTTP/1.1 100 Continue\n\n", 23, 0);
+				}
 			}
 		}
 	}
-	exit(0);
 }
 
 void handleRequests(int clientPos, Server &server, std::vector<client> clients, std::string str)
@@ -132,7 +141,7 @@ void handleRequests(int clientPos, Server &server, std::vector<client> clients, 
 		response.generateRedirectHeader(location, server);
 	}
 	req.setAbsPath(server);
-	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() < 100)
+	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() < 90)
 	{
 		if (!isAllowed(server, req, location))
 		{

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:21:43 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 15:44:48 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:39:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,3 +43,25 @@ Request parseReq(std::string passedReq)
 	return req;
 }
 
+int	parsedContentLength(std::string str)
+{
+	size_t pos = str.find("Content-Length:") + 15;
+	if (pos < 14 || pos > str.length())
+		return -1;
+	while (isspace(str[pos]))
+		pos++;
+	std::string	num;
+	while (isdigit(str[pos])){
+		num.push_back(str[pos]);
+		pos++;
+	}
+	return atoi(num.c_str());
+}
+
+int greatExpectations(std::string str)
+{
+	size_t pos = str.find("Expect: 100-continue") + 20;
+	if (pos < 20 || pos > str.length())
+		return 0;
+	return 1;
+}

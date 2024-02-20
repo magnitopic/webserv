@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/15 15:23:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:46:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 Response::Response()
 {
+	this->errorCode.insert(std::pair<int, std::string>(100, "Continue"));
 	this->errorCode.insert(std::pair<int, std::string>(200, "OK"));
 	this->errorCode.insert(std::pair<int, std::string>(201, "Created"));
 	this->errorCode.insert(std::pair<int, std::string>(202, "Accepted"));
@@ -101,6 +102,15 @@ void Response::generateHeader(int code, Server &server)
 	this->header += "Content-Length: ";
 	this->header += std::to_string(this->contentLength);
 	this->header += "\n\n";
+	return;
+}
+
+void Response::generateHeaderContinue(int code)
+{
+	this->header = "HTTP/1.1 ";
+	this->header += to_string(code);
+	this->header += " " + getErrorMsg(code);
+	this->header += "\r\n\r\n";
 	return;
 }
 

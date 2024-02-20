@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/19 18:14:57 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:12:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,8 @@ void						deleteMethod(Server &server, Request &req, Response &resp);
 void						showData(Request &req, Response &response);
 std::vector<std::string>	splitServerDirectives(std::string configFile);
 std::vector<std::string>	splitLocationDirectives(std::string serverDirectives);
+int							parsedContentLength(std::string str);
+int							greatExpectations(std::string str);
+void						continueConnecting();
 
 #endif

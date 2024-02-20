@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   DefaultPages.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 19:37:25 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 19:56:01 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/20 16:20:08 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -28,4 +28,14 @@ void	Response::setResponseHTML(int code)
 void	Response::setResponseForbidden()
 {
 	this->response = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\" />\n<title>403 Forbidden</title>\n</head>\n<body>\n<center>\n<h1>Error 403 - Forbidden</h1>\n<hr width=\"80%\" />\n</center>\n</body>\n</html>\n";
+}
+
+void	continueConnecting()
+{
+	std::string response;
+	response = "HTTP/1.1 ";
+	response += "100";
+	response += " Continue";
+	response += "\n\n";
+	//send()
 }
