@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 14:56:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 16:42:55 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,13 @@ void	Socket::initializePollfdStruct()
 
 void	Socket::justWaiting()
 {
-	while (this->new_sd != -1)
+	bool	end_server = false;
+	bool	close_conn = false;
+	bool	compress_array = false;
+	char	buffer[80];
+
+	memset(buffer, 0, sizeof(buffer));
+	while (end_server == false)
 	{
 		cout << "Waiting on poll()..." << endl;
 		this->rc = poll(this->fds, this->nfds, this->timeout);
@@ -153,7 +159,7 @@ void	Socket::justWaiting()
 				continue;
 			if (this->fds[i].revents != POLLIN){
 				cerr << "Error! revents = " << this->fds[i].revents << endl;
-				//end_server = TRUE;
+				end_server = true;
 				break;
 			}
 			if (this->fds[i].fd == this->listen_sd){
@@ -161,22 +167,66 @@ void	Socket::justWaiting()
 
 				// Accept all queued incoming connections
 
-				this->new_sd = accept(this->listen_sd, NULL, NULL);
-				if (this->new_sd < 0){
-					if (errno != EWOULDBLOCK){
-						perror("accept() failed");
-						//end_server = TRUE;
+				while (this->new_sd != -1){
+					this->new_sd = accept(this->listen_sd, NULL, NULL);
+					if (this->new_sd < 0){
+						if (errno != EWOULDBLOCK){
+							perror("accept() failed");
+							end_server = true;
+						}
+						break;
 					}
-					break;
-				}
 
 				// Adding incoming connection to the pollfd structure
 
-				cout << "New incoming connection" << endl;
-				this->fds[nfds].fd = this->new_sd;
-				this->fds[nfds].events = POLLIN;
-				this->nfds++;
+					cout << "New incoming connection" << endl;
+					this->fds[nfds].fd = this->new_sd;
+					this->fds[nfds].events = POLLIN;
+					this->nfds++;
+				}
+			}
+			else{
+				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
+				close_conn = false;
+				this->rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
+				if (this->rc < 0){
+					if (errno != EWOULDBLOCK){
+						perror("recv() failed");
+						close_conn = true;
+					}
+					break;
+				}
+				else if (this->rc == 0){
+					cout << "Connection closed" << endl;
+					close_conn = true;
+					break;
+				}
+				cout << buffer << endl;
+				//exit(0);
+				//handleRequests(fds[i].fd, server, clients, str);
+				if (close_conn)
+				{
+					close(fds[i].fd);
+					fds[i].fd = -1;
+					compress_array = true;
+				}
 			}
 		}
+		if (compress_array){
+			compress_array = false;
+			for (int i = 0; i < nfds; i++){
+				if (fds[i].fd == -1){
+					for (int j = i; j < nfds; j++)
+						fds[j].fd = fds[j + 1].fd;
+					i--;
+					nfds--;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < nfds; i++){
+		if (fds[i].fd >= 0)
+			close(fds[i].fd);
 	}
 }
