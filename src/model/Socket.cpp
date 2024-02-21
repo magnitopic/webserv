@@ -6,14 +6,14 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 14:23:07 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:56:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 #include "../../include/Socket.hpp"
 
-Socket::Socket(unsigned int port)
+/*Socket::Socket(unsigned int port)
 {
 	this->port = port;
 
@@ -44,11 +44,12 @@ Socket::Socket(unsigned int port)
 	// Listen socket
 	if (listen(this->socketFD, 10) == -1)
 		raiseError("Error listening socket");
-}
+}*/
 
 Socket::Socket(){
 	this->on = 1;
 	this->nfds = 1;
+	this->new_sd = 1;
 	return;
 }
 
@@ -62,7 +63,7 @@ Socket &Socket::operator=(const Socket &assign)
 	if (this != &assign)
 	{
 		this->socketFD = assign.socketFD;
-		this->port = assign.port;
+		//this->port = assign.port;
 	}
 return *this;
 }
@@ -103,8 +104,11 @@ void	Socket::createSocket()
 
 void	Socket::bindSocket(std::vector<Server> &server)
 {
+	(void)server;
 	memset(&this->addr, 0, sizeof(this->addr));
-	this->port = htons(server[0].getPorts()[0]);
+	this->addr.sin6_family = AF_INET6;
+	memcpy(&this->addr.sin6_addr, &in6addr_any, sizeof(in6addr_any));
+	this->addr.sin6_port = htons(8080); // TODO: the port number is temporary until we can parse correctly the config file
 	bind(this->listen_sd, reinterpret_cast<struct sockaddr *>(&this->addr), sizeof(this->addr));
 }
 
@@ -132,7 +136,7 @@ void	Socket::initializePollfdStruct()
 
 void	Socket::justWaiting()
 {
-	while (42)
+	while (this->new_sd != -1)
 	{
 		cout << "Waiting on poll()..." << endl;
 		this->rc = poll(this->fds, this->nfds, this->timeout);
@@ -143,6 +147,36 @@ void	Socket::justWaiting()
 		else if (this->rc == 0){
 			cout << "Timeout. End program" << endl;
 			break;
+		}
+		for (int i = 0; i < this->nfds; i++){
+			if (this->fds[i].revents == 0)
+				continue;
+			if (this->fds[i].revents != POLLIN){
+				cerr << "Error! revents = " << this->fds[i].revents << endl;
+				//end_server = TRUE;
+				break;
+			}
+			if (this->fds[i].fd == this->listen_sd){
+				cout << "Listening socket is readable" << endl;
+
+				// Accept all queued incoming connections
+
+				this->new_sd = accept(this->listen_sd, NULL, NULL);
+				if (this->new_sd < 0){
+					if (errno != EWOULDBLOCK){
+						perror("accept() failed");
+						//end_server = TRUE;
+					}
+					break;
+				}
+
+				// Adding incoming connection to the pollfd structure
+
+				cout << "New incoming connection" << endl;
+				this->fds[nfds].fd = this->new_sd;
+				this->fds[nfds].events = POLLIN;
+				this->nfds++;
+			}
 		}
 	}
 }

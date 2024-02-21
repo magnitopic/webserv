@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/21 14:22:06 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:44:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void createConection(std::string str)
 	 * Server should contain a list of all the ports it listens to
 	 * and a list of all the directories it has configured
 	 */
-	// servers = parseConfigFile(str);
+	//servers = parseConfigFile(str);
 
 	(void)str;
 	socket.createSocket();

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 14:18:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:48:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@ class Server;
 class Socket
 {
 private:
-	int				socketFD;
-	unsigned int	port;
-	int				listen_sd;
-	int				rc;
-	int				on;
-	int				nfds;
-	int				timeout;
-	struct sockaddr	addr;
-	struct pollfd	fds[200];
+	int					socketFD;
+	int					listen_sd;
+	int					rc;
+	int					on;
+	int					nfds;
+	int					timeout;
+	int					new_sd;
+	struct sockaddr_in6	addr;
+	struct pollfd		fds[200];
 
 
 public:
