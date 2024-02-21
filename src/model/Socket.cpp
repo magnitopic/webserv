@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 17:29:26 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:38:24 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,33 +198,33 @@ void	Socket::justWaiting()
 				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
 				close_conn = false;
 				this->rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
+				cout << this->rc << endl;
 				if (this->rc < 0){
 					if (errno != EWOULDBLOCK){
 						perror("recv() failed");
 						close_conn = true;
 					}
-					break;
 				}
 				else if (this->rc == 0){
 					cout << "Connection closed" << endl;
 					close_conn = true;
-					break;
 				}
 				finalBuf += buffer;
 				this->rc = send(fds[i].fd, buffer, strlen(buffer), 0);
 				if (this->rc == 0){
 					perror("send() failed");
 					close_conn = true;
-					break;
 				}
 				memset(buffer, 0, sizeof(buffer));
 				//exit(0);
 				//handleRequests(fds[i].fd, server, clients, str);
 				if (close_conn)
 				{
+					cout << "Bye!" << endl;
 					close(fds[i].fd);
 					fds[i].fd = -1;
 					compress_array = true;
+					exit(0);
 				}
 			}
 		}
