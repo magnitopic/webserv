@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 16:42:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 17:29:26 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,12 +134,21 @@ void	Socket::initializePollfdStruct()
 	this->timeout = (3 * 60 * 1000);
 }
 
+static void	closeConnections(struct pollfd fds[200], int nfds)
+{
+	for (int i = 0; i < nfds; i++){
+		if (fds[i].fd >= 0)
+			close(fds[i].fd);
+	}
+}
+
 void	Socket::justWaiting()
 {
-	bool	end_server = false;
-	bool	close_conn = false;
-	bool	compress_array = false;
-	char	buffer[80];
+	bool		end_server = false;
+	bool		close_conn = false;
+	bool		compress_array = false;
+	char		buffer[80];
+	std::string	finalBuf;
 
 	memset(buffer, 0, sizeof(buffer));
 	while (end_server == false)
@@ -201,7 +210,14 @@ void	Socket::justWaiting()
 					close_conn = true;
 					break;
 				}
-				cout << buffer << endl;
+				finalBuf += buffer;
+				this->rc = send(fds[i].fd, buffer, strlen(buffer), 0);
+				if (this->rc == 0){
+					perror("send() failed");
+					close_conn = true;
+					break;
+				}
+				memset(buffer, 0, sizeof(buffer));
 				//exit(0);
 				//handleRequests(fds[i].fd, server, clients, str);
 				if (close_conn)
@@ -224,9 +240,7 @@ void	Socket::justWaiting()
 			}
 		}
 	}
-
-	for (int i = 0; i < nfds; i++){
-		if (fds[i].fd >= 0)
-			close(fds[i].fd);
-	}
+	cout << finalBuf << endl;
+	closeConnections(fds, nfds);
+	exit(0);
 }
