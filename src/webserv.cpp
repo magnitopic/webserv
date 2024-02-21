@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/20 19:40:41 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:22:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,18 @@
 	-	Disconnect
  */
 
-static void	readRequest(std::vector<client> clients, std::string str, std::vector<Server> servers, std::vector<int> connections, int fd)
+/*static int	readRequest(std::vector<client> clients, std::string str, std::vector<Server> servers, std::vector<int> connections, int fd)
 {
 	// iterate through the clients and handle requests
 	for (int i = 0; i < static_cast<int>(clients.size()); i++)
 	{
 		memset(clients[i].buf, 0, 10000);
-		if (read(clients[i].fd, clients[i].buf, sizeof(clients[i].buf)) == -1)
-			raiseError("error reading data");
+		if (read(clients[i].fd, clients[i].buf, sizeof(clients[i].buf)) == -1){
+			close(clients[i].fd);
+			clients.erase(clients.begin() + i);
+			return -1;
+		}
+			//raiseError("error reading data");
 		clients[i].finalbuffer += clients[i].buf;
 		cout << clients[i].finalbuffer << endl;
 		if (clients[i].finalbuffer.find("\r\n\r\n") && clients[i].finalbuffer.find("\r\n\r\n") <= clients[i].finalbuffer.length())
@@ -55,11 +59,13 @@ static void	readRequest(std::vector<client> clients, std::string str, std::vecto
 			}
 		}
 	}
-}
+	return 0;
+}*/
 
 void createConection(std::string str)
 {
 	std::vector<Server> servers;
+	Socket				socket;
 
 	/**
 	 * Parse the config file and store the servers in a vector
@@ -68,62 +74,12 @@ void createConection(std::string str)
 	 */
 	// servers = parseConfigFile(str);
 
-	// ! These two lines are temporary
-	servers.push_back(Server(str));
-	servers[0].setActions(str);
-	std::vector<int>	connections;
-
-	std::cout << BLUE << "==> " << CYAN << "Webserv running ✅\n" << BLUE << "==>" << CYAN << "And listening on these addresses:" << YELLOW << std::endl;
-	// Create a socket for every port. Each server can have multiple ports
-	std::vector<pollfd> fds;
-	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
-	{
-		std::vector<unsigned int> ports = it->getPorts();
-		for (std::vector<unsigned int>::iterator it2 = ports.begin(); it2 != ports.end(); it2++)
-		{
-			Socket newSocket(*it2);
-			struct pollfd pfd;
-			pfd.fd = newSocket.getSocketFD();
-			pfd.events = POLLIN;
-			fds.push_back(pfd);
-			// add socket to this servers socket list
-			it->addSocket(newSocket);
-			std::cout << "\thttp://localhost:" << *it2 << std::endl;
-		}
-	}
-	std::cout << RESET << "----------------------------------" << std::endl;
-
-	// Main loop that handles connections
-	while (true)
-	{
-		// polling data from clients
-		int pollVal = poll(&fds[0], fds.size(), -1);
-		if (pollVal == -1)
-			raiseError("error polling data");
-		std::vector<client> clients;
-		// iterate through the servers and accept new connections
-		for (std::vector<pollfd>::iterator it = fds.begin(); it != fds.end(); it++)
-		{
-			cout << "a" << endl;
-			if (it->revents == POLLIN)
-			{
-				if (std::find(connections.begin(), connections.end(), it->fd) == connections.end())	// TODO: check if the connection was already established or not, if it was we have to keep reading, if not we accpet the new connection
-				{
-					int socket = accept(it->fd, NULL, NULL);
-					if (socket == -1)
-						raiseError("error accepting data");
-					// add new connection to the clients list
-					client aux;
-					aux.fd = socket;
-					aux.finalbuffer = "";
-					clients.push_back(aux);
-					connections.push_back(it->fd);
-					readRequest(clients, str, servers, connections, it->fd); // In manu's webserv this goes inside al else statement, but if I do it now it is locked in an infinite loop
-				}
-				//else
-			}
-		}
-	}
+	(void)str;
+	socket.createSocket();
+	socket.bindSocket(servers);
+	socket.listenSocket();
+	socket.initializePollfdStruct();
+	socket.justWaiting();
 }
 
 void handleRequests(int clientPos, Server &server, std::vector<client> clients, std::string str)

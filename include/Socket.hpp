@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/12 18:02:02 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/21 14:18:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,26 @@
 
 class Server;
 /**
- * 
+ *
 */
 class Socket
 {
 private:
-	int	socketFD;
+	int				socketFD;
 	unsigned int	port;
-	
+	int				listen_sd;
+	int				rc;
+	int				on;
+	int				nfds;
+	int				timeout;
+	struct sockaddr	addr;
+	struct pollfd	fds[200];
+
 
 public:
 	// orthodox canonical form
 
+	Socket();
 	Socket(unsigned int port);
 	Socket(const Socket &socket);
 	Socket &operator=(const Socket &socket);
@@ -42,10 +50,12 @@ public:
 	int getSocketFD(void);
 	// methods
 
-	void	createSocket(Server &server);
-	void	bindSocket(Server &server);
-	void	listenSocket(Server &server);
-	
+	void	createSocket();
+	void	bindSocket(std::vector<Server> &server);
+	void	listenSocket();
+	void	initializePollfdStruct();
+	void	justWaiting();
+
 };
 
 

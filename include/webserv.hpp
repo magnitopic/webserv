@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/20 16:12:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 13:34:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include <sstream>
 #include <algorithm>
 #include <sys/time.h>
+#include <sys/ioctl.h>
 
 #include "enums.hpp"
 #include "Socket.hpp"
