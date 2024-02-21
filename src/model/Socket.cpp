@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 18:22:49 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:24:55 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,16 +219,16 @@ void	Socket::justWaiting()
 					cout << "Connection closed" << endl;
 					close_conn = true;
 				}
-				if (this->rc == 0){
-					perror("send() failed");
-					close_conn = true;
-				}
 				memset(buffer, 0, sizeof(buffer));
 				//exit(0);
 				//handleRequests(fds[i].fd, server, clients, str);
 				if (close_conn)
 				{
 					this->rc = send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0);
+					if (this->rc == 0){
+						perror("send() failed");
+						close_conn = true;
+					}
 					close(fds[i].fd);
 					fds[i].fd = -1;
 					compress_array = true;
