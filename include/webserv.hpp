@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/21 13:34:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:22:38 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ std::vector<std::string>	splitLocationDirectives(std::string serverDirectives);
 int							parsedContentLength(std::string str);
 int							greatExpectations(std::string str);
 void						continueConnecting();
+std::string					bodyReq(std::string str);
 
 #endif

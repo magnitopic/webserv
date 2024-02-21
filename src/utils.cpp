@@ -1,16 +1,24 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/19 17:21:55 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:22:25 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
+
+std::string	bodyReq(std::string str)
+{
+	size_t pos = str.find("\r\n\r\n") + 4;
+	if (pos < 4 || pos > str.length() + 3)
+		return str;
+	return str.substr(pos, str.length() - pos);
+}
 
 void raiseError(const char *msg)
 {

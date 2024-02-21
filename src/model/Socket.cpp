@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 17:38:24 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:22:49 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void	Socket::justWaiting()
 	bool		end_server = false;
 	bool		close_conn = false;
 	bool		compress_array = false;
-	char		buffer[80];
+	char		buffer[800];
 	std::string	finalBuf;
 
 	memset(buffer, 0, sizeof(buffer));
@@ -171,7 +171,15 @@ void	Socket::justWaiting()
 				end_server = true;
 				break;
 			}
-			if (this->fds[i].fd == this->listen_sd){
+
+			if (this->fds[i].revents == POLLOUT){
+				cout << "HOLI" << endl;
+				exit(0);
+				break;
+			}
+
+			if (this->fds[i].fd == this->listen_sd)
+			{
 				cout << "Listening socket is readable" << endl;
 
 				// Accept all queued incoming connections
@@ -198,19 +206,19 @@ void	Socket::justWaiting()
 				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
 				close_conn = false;
 				this->rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
-				cout << this->rc << endl;
 				if (this->rc < 0){
 					if (errno != EWOULDBLOCK){
 						perror("recv() failed");
 						close_conn = true;
 					}
 				}
-				else if (this->rc == 0){
+				finalBuf += buffer;
+				cout << "|" << finalBuf << "|" << endl;
+				cout << parsedContentLength(finalBuf) << endl;
+				if (this->rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0)){
 					cout << "Connection closed" << endl;
 					close_conn = true;
 				}
-				finalBuf += buffer;
-				this->rc = send(fds[i].fd, buffer, strlen(buffer), 0);
 				if (this->rc == 0){
 					perror("send() failed");
 					close_conn = true;
@@ -220,11 +228,10 @@ void	Socket::justWaiting()
 				//handleRequests(fds[i].fd, server, clients, str);
 				if (close_conn)
 				{
-					cout << "Bye!" << endl;
+					this->rc = send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0);
 					close(fds[i].fd);
 					fds[i].fd = -1;
 					compress_array = true;
-					exit(0);
 				}
 			}
 		}
@@ -240,7 +247,5 @@ void	Socket::justWaiting()
 			}
 		}
 	}
-	cout << finalBuf << endl;
 	closeConnections(fds, nfds);
-	exit(0);
 }
