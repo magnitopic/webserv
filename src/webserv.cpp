@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/21 14:44:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:52:00 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,48 +24,122 @@
 	-	Disconnect
  */
 
-/*static int	readRequest(std::vector<client> clients, std::string str, std::vector<Server> servers, std::vector<int> connections, int fd)
+static void	closeConnections(struct pollfd fds[200], int nfds)
 {
-	// iterate through the clients and handle requests
-	for (int i = 0; i < static_cast<int>(clients.size()); i++)
+	for (int i = 0; i < nfds; i++){
+		if (fds[i].fd >= 0)
+			close(fds[i].fd);
+	}
+}
+
+void	justWaiting(Socket &socket, struct pollfd fds[200], int i)
+{
+	bool		end_server = false;
+	bool		close_conn = false;
+	bool		compress_array = false;
+	char		buffer[80];
+	std::string	finalBuf;
+
+	memset(buffer, 0, sizeof(buffer));
+	while (end_server == false)
 	{
-		memset(clients[i].buf, 0, 10000);
-		if (read(clients[i].fd, clients[i].buf, sizeof(clients[i].buf)) == -1){
-			close(clients[i].fd);
-			clients.erase(clients.begin() + i);
-			return -1;
+		cout << "Waiting on poll()..." << endl;
+		socket.setRc(poll(fds, socket.getNfds(), socket.getTimeout()));
+		if (socket.getRc() < 0){
+			perror("poll() failed");
+			break;
 		}
-			//raiseError("error reading data");
-		clients[i].finalbuffer += clients[i].buf;
-		cout << clients[i].finalbuffer << endl;
-		if (clients[i].finalbuffer.find("\r\n\r\n") && clients[i].finalbuffer.find("\r\n\r\n") <= clients[i].finalbuffer.length())
-		{
-			std::string aux = clients[i].finalbuffer.substr(clients[i].finalbuffer.find("\r\n\r\n"), clients[i].finalbuffer.length() - clients[i].finalbuffer.find("\r\n\r\n"));
-			if (static_cast<int>(aux.length()) >= parsedContentLength(clients[i].finalbuffer) || parsedContentLength(clients[i].finalbuffer) < 0){
-				cout << "aux len: " << aux.length() << endl;
-				cout << "parsed len: " << parsedContentLength(clients[i].finalbuffer) << endl;
-				cout << clients[i].finalbuffer << endl;
-				handleRequests(i, servers[0], clients, str);
-				close(clients[i].fd);
-				clients.erase(clients.begin() + i);
-				i--;
-				connections.erase(std::find(connections.begin(), connections.end(), fd));
-				//continue;
+		else if (socket.getRc() == 0){
+			cout << "Timeout. End program" << endl;
+			break;
+		}
+		int current_size = socket.getNfds();
+		for (int i = 0; i < current_size; i++){
+			if (fds[i].revents == 0)
+				continue;
+			if (fds[i].revents != POLLIN){
+				cerr << "Error! revents = " << fds[i].revents << endl;
+				end_server = true;
+				break;
 			}
-			else if (greatExpectations(clients[i].finalbuffer))
+
+			if (fds[i].fd == socket.getListen_sd())
 			{
-				cout << "we are having great expectations" << endl;
-				send(clients[i].fd, "HTTP/1.1 100 Continue\n\n", 23, 0);
+				cout << "Listening socket is readable" << endl;
+
+				// Accept all queued incoming connections
+
+				socket.setNew_sd(0);
+				while (socket.getNew_sd() != -1){
+					socket.setNew_sd(accept(socket.getListen_sd(), NULL, NULL));
+					if (socket.getNew_sd() < 0){
+						if (errno != EWOULDBLOCK){
+							perror("accept() failed");
+							end_server = true;
+						}
+						break;
+					}
+
+				// Adding incoming connection to the pollfd structure
+
+					cout << "New incoming connection" << endl;
+					fds[socket.getNfds()].fd = socket.getNew_sd();
+					fds[socket.getNfds()].events = POLLIN;
+					socket.increaseNfds();
+				}
+			}
+			else{
+				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
+				close_conn = false;
+				socket.setRc(recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0));
+				if (socket.getRc() < 0){
+					if (errno != EWOULDBLOCK){
+						perror("recv() failed");
+						close_conn = true;
+					}
+				}
+				finalBuf += buffer;
+				if (socket.getRc() == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0)
+					|| (finalBuf.substr(0, 4) != "POST" && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0)){
+					cout << "|" << finalBuf << "|" << endl;
+					cout << "Connection closed" << endl;
+					close_conn = true;
+				}
+				memset(buffer, 0, sizeof(buffer));
+				if (close_conn)
+				{
+					socket.setRc(send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0));
+					if (socket.getRc() == 0){
+						perror("send() failed");
+						close_conn = true;
+					}
+					close(fds[i].fd);
+					fds[i].fd = -1;
+					compress_array = true;
+				}
+			}
+		}
+		if (compress_array){
+			compress_array = false;
+			for (int i = 0; i < socket.getNfds(); i++){
+				if (fds[i].fd == -1){
+					for (int j = i; j < socket.getNfds(); j++)
+						fds[j].fd = fds[j + 1].fd;
+					i--;
+					socket.decrementNfds();
+				}
 			}
 		}
 	}
-	return 0;
-}*/
+	closeConnections(fds, socket.getNfds());
+}
 
-void createConection(std::string str)
+
+void createConection(std::string str, int i) // The value of i is the counter in which we will be iterating this function
 {
 	std::vector<Server> servers;
 	Socket				socket;
+	struct pollfd		fds[200];
 
 	/**
 	 * Parse the config file and store the servers in a vector
@@ -78,8 +152,11 @@ void createConection(std::string str)
 	socket.createSocket();
 	socket.bindSocket(servers);
 	socket.listenSocket();
-	socket.initializePollfdStruct();
-	socket.justWaiting();
+	memset(fds, 0, sizeof(fds));
+	fds[i].fd = socket.getListen_sd();
+	fds[i].events = POLLIN;
+	socket.setTimeout(3 * 60 * 1000);
+	justWaiting(socket, fds, i);
 }
 
 void handleRequests(int clientPos, Server &server, std::vector<client> clients, std::string str)

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 14:48:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:50:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ private:
 	int					timeout;
 	int					new_sd;
 	struct sockaddr_in6	addr;
-	struct pollfd		fds[200];
 
 
 public:
@@ -47,13 +46,23 @@ public:
 	~Socket(void);
 	// setters and getters
 
-	int getSocketFD(void);
+	int		getListen_sd();
+	void	setRc(int num);
+	int		getRc();
+	int		getNfds();
+	int		getTimeout();
+	void	setTimeout(int time);
+	int 	getSocketFD(void);
+	void	setNew_sd(int num);
+	int		getNew_sd();
+	void	increaseNfds();
+	void	decrementNfds();
+
 	// methods
 
 	void	createSocket();
 	void	bindSocket(std::vector<Server> &server);
 	void	listenSocket();
-	void	initializePollfdStruct();
 	void	justWaiting();
 
 };

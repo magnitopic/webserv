@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 12:38:18 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:51:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,56 @@ Socket::~Socket()
 {
 }
 
+int	Socket::getListen_sd()
+{
+	return this->listen_sd;
+}
+
+int	Socket::getRc()
+{
+	return this->rc;
+}
+
+void	Socket::setRc(int num)
+{
+	this->rc = num;
+}
+
+void	Socket::setTimeout(int time)
+{
+	this->timeout = time;
+}
+
+int	Socket::getNew_sd()
+{
+	return this->new_sd;
+}
+
+void	Socket::increaseNfds()
+{
+	this->nfds++;
+}
+
+void	Socket::decrementNfds()
+{
+	this->nfds--;
+}
+
+void	Socket::setNew_sd(int num)
+{
+	this->new_sd = num;
+}
+
+int	Socket::getTimeout()
+{
+	return this->timeout;
+}
+
+int	Socket::getNfds()
+{
+	return this->nfds;
+}
+
 int Socket::getSocketFD(void)
 {
 	return this->socketFD;
@@ -121,127 +171,4 @@ void	Socket::listenSocket()
 		close(this->listen_sd);
 		raiseError("listen() failed");
 	}
-}
-
-void	Socket::initializePollfdStruct()
-{
-	memset(this->fds, 0, sizeof(fds));
-	this->fds[0].fd = this->listen_sd;
-	fds[0].events = POLLIN;
-
-	// If no activity happended after 3 minutes the program will end
-
-	this->timeout = (3 * 60 * 1000);
-}
-
-static void	closeConnections(struct pollfd fds[200], int nfds)
-{
-	for (int i = 0; i < nfds; i++){
-		if (fds[i].fd >= 0)
-			close(fds[i].fd);
-	}
-}
-
-void	Socket::justWaiting()
-{
-	bool		end_server = false;
-	bool		close_conn = false;
-	bool		compress_array = false;
-	char		buffer[800];
-	std::string	finalBuf;
-
-	memset(buffer, 0, sizeof(buffer));
-	while (end_server == false)
-	{
-		cout << "Waiting on poll()..." << endl;
-		this->rc = poll(this->fds, this->nfds, this->timeout);
-		if (this->rc < 0){
-			perror("poll() failed");
-			break;
-		}
-		else if (this->rc == 0){
-			cout << "Timeout. End program" << endl;
-			break;
-		}
-		int current_size = this->nfds;
-		for (int i = 0; i < current_size; i++){
-			if (this->fds[i].revents == 0)
-				continue;
-			if (this->fds[i].revents != POLLIN){
-				cerr << "Error! revents = " << this->fds[i].revents << endl;
-				end_server = true;
-				break;
-			}
-
-			if (this->fds[i].fd == this->listen_sd)
-			{
-				cout << "Listening socket is readable" << endl;
-
-				// Accept all queued incoming connections
-
-				this->new_sd = 0;
-				while (this->new_sd != -1){
-					this->new_sd = accept(this->listen_sd, NULL, NULL);
-					if (this->new_sd < 0){
-						if (errno != EWOULDBLOCK){
-							perror("accept() failed");
-							end_server = true;
-						}
-						break;
-					}
-
-				// Adding incoming connection to the pollfd structure
-
-					cout << "New incoming connection" << endl;
-					this->fds[nfds].fd = this->new_sd;
-					this->fds[nfds].events = POLLIN;
-					this->nfds++;
-				}
-			}
-			else{
-				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
-				close_conn = false;
-				this->rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
-				if (this->rc < 0){
-					if (errno != EWOULDBLOCK){
-						perror("recv() failed");
-						close_conn = true;
-					}
-				}
-				finalBuf += buffer;
-				if (this->rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0)
-					|| (finalBuf.substr(0, 4) != "POST" && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0)){
-					cout << "|" << finalBuf << "|" << endl;
-					cout << "Connection closed" << endl;
-					close_conn = true;
-				}
-				memset(buffer, 0, sizeof(buffer));
-				//exit(0);
-				//handleRequests(fds[i].fd, server, clients, str);
-				if (close_conn)
-				{
-					this->rc = send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0);
-					if (this->rc == 0){
-						perror("send() failed");
-						close_conn = true;
-					}
-					close(fds[i].fd);
-					fds[i].fd = -1;
-					compress_array = true;
-				}
-			}
-		}
-		if (compress_array){
-			compress_array = false;
-			for (int i = 0; i < nfds; i++){
-				if (fds[i].fd == -1){
-					for (int j = i; j < nfds; j++)
-						fds[j].fd = fds[j + 1].fd;
-					i--;
-					nfds--;
-				}
-			}
-		}
-	}
-	closeConnections(fds, nfds);
 }
