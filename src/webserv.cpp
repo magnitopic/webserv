@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 14:52:00 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:02:09 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -32,7 +32,7 @@ static void	closeConnections(struct pollfd fds[200], int nfds)
 	}
 }
 
-void	justWaiting(Socket &socket, struct pollfd fds[200], int i)
+static void	justWaiting(Socket &socket, struct pollfd fds[200])
 {
 	bool		end_server = false;
 	bool		close_conn = false;
@@ -156,7 +156,7 @@ void createConection(std::string str, int i) // The value of i is the counter in
 	fds[i].fd = socket.getListen_sd();
 	fds[i].events = POLLIN;
 	socket.setTimeout(3 * 60 * 1000);
-	justWaiting(socket, fds, i);
+	justWaiting(socket, fds);
 }
 
 void handleRequests(int clientPos, Server &server, std::vector<client> clients, std::string str)
@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 	}
 	while (true)
 	{
-		createConection(file);
+		createConection(file, 0);		// TODO: 0 is temporaray, shoudl be what server needs the connection
 		sleep(1);
 	}
 	return 0;

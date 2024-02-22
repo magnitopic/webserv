@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 14:27:39 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:01:19 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -68,7 +68,7 @@ std::vector<Server>			parseConfigFile(std::string file_name);
 int							isAllowed(Server &server, Request & req, Location &location);
 void 						handleRequests(int clientFd, Server &server, std::vector<client> clients, std::string str);
 std::string					parseContentType(std::string extension);
-void						createConection(std::string str);
+void						createConection(std::string str, int i);
 void						getMethod(Location &location, Server &server, Request &req, Response &resp);
 void						handlePost(Location &location, Server &server, Request &req, Response &response);
 std::string					deleteFirstElement(std::string str);
