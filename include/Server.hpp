@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/14 17:40:29 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 16:37:49 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -55,7 +55,7 @@ public:
 	std::vector<unsigned int>	getPorts(void);
 	std::string					getRoot(void);
 	std::string					getName(void);
-	std::list<std::string> 		getActions(void);
+	std::list<std::string>		getActions(void);
 	void						setMaxClientSize(std::string str);
 	unsigned long				getMaxClientSize();
 	void						setErrorPages(std::string str);

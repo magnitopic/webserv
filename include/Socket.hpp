@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 14:50:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 16:30:22 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef SOCKET_HPP_
 #define SOCKET_HPP_
@@ -29,8 +29,8 @@ private:
 	int					socketFD;
 	int					listen_sd;
 	int					rc;
-	int					on;
 	int					nfds;
+	int					on;
 	int					timeout;
 	int					new_sd;
 	struct sockaddr_in6	addr;
@@ -61,7 +61,7 @@ public:
 	// methods
 
 	void	createSocket();
-	void	bindSocket(std::vector<Server> &server);
+	void	bindSocket(unsigned int port);
 	void	listenSocket();
 	void	justWaiting();
 

@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 15:01:19 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:01:37 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -42,6 +42,7 @@
 using namespace std;
 
 #define MAX_SERVERS 1024
+#define TIMEOUT 180000
 // colours
 
 #define RED		"\033[0;31m"
