@@ -1,52 +1,20 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 14:51:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:05:45 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 #include "../../include/Socket.hpp"
 
-/*Socket::Socket(unsigned int port)
+Socket::Socket()
 {
-	this->port = port;
-
-	// Create socket
-	this->socketFD = socket(AF_INET, SOCK_STREAM, 0);
-	if (this->socketFD == -1)
-		raiseError("Error creating socket");
-
-	// Non-blocking
-	int flag = fcntl(this->socketFD, F_GETFL, 0);
-	if (fcntl(this->socketFD, F_SETFL, flag & ~O_NONBLOCK) < 0)
-		raiseError("Setting socket as non-blocking");
-
-	// Reset socket to reuse address
-	int reuseAddr = 1;
-	if (setsockopt(this->socketFD, SOL_SOCKET, SO_REUSEADDR, &reuseAddr, sizeof(reuseAddr)) == -1)
-		raiseError("Error setting socket option");
-
-
-	// Bind socket
-	sockaddr_in serverScruct;
-	serverScruct.sin_family = AF_INET;
-	serverScruct.sin_addr.s_addr = INADDR_ANY;
-	serverScruct.sin_port = htons(this->port);
-	if (bind(this->socketFD, (struct sockaddr *)&serverScruct, sizeof(serverScruct)) == -1)
-		raiseError("Error binding socket");
-
-	// Listen socket
-	if (listen(this->socketFD, 10) == -1)
-		raiseError("Error listening socket");
-}*/
-
-Socket::Socket(){
 	this->on = 1;
 	this->nfds = 1;
 	this->new_sd = 1;
@@ -63,61 +31,61 @@ Socket &Socket::operator=(const Socket &assign)
 	if (this != &assign)
 	{
 		this->socketFD = assign.socketFD;
-		//this->port = assign.port;
+		// this->port = assign.port;
 	}
-return *this;
+	return *this;
 }
 
 Socket::~Socket()
 {
 }
 
-int	Socket::getListen_sd()
+int Socket::getListen_sd()
 {
 	return this->listen_sd;
 }
 
-int	Socket::getRc()
+int Socket::getRc()
 {
 	return this->rc;
 }
 
-void	Socket::setRc(int num)
+void Socket::setRc(int num)
 {
 	this->rc = num;
 }
 
-void	Socket::setTimeout(int time)
+void Socket::setTimeout(int time)
 {
 	this->timeout = time;
 }
 
-int	Socket::getNew_sd()
+int Socket::getNew_sd()
 {
 	return this->new_sd;
 }
 
-void	Socket::increaseNfds()
+void Socket::increaseNfds()
 {
 	this->nfds++;
 }
 
-void	Socket::decrementNfds()
+void Socket::decrementNfds()
 {
 	this->nfds--;
 }
 
-void	Socket::setNew_sd(int num)
+void Socket::setNew_sd(int num)
 {
 	this->new_sd = num;
 }
 
-int	Socket::getTimeout()
+int Socket::getTimeout()
 {
 	return this->timeout;
 }
 
-int	Socket::getNfds()
+int Socket::getNfds()
 {
 	return this->nfds;
 }
@@ -127,7 +95,7 @@ int Socket::getSocketFD(void)
 	return this->socketFD;
 }
 
-void	Socket::createSocket()
+void Socket::createSocket()
 {
 	// Creation of the Socket
 
@@ -138,7 +106,8 @@ void	Socket::createSocket()
 	// Allowing socket fd to be reusable
 
 	this->rc = setsockopt(listen_sd, SOL_SOCKET, SO_REUSEADDR, reinterpret_cast<char *>(&this->on), sizeof(this->on));
-	if (this->rc < 0){
+	if (this->rc < 0)
+	{
 		close(listen_sd);
 		raiseError("setsockopt() failed");
 	}
@@ -146,13 +115,14 @@ void	Socket::createSocket()
 	// Setting socket as non-blocking
 
 	this->rc = ioctl(listen_sd, FIONBIO, reinterpret_cast<char *>(&on));
-	if (this->rc < 0){
+	if (this->rc < 0)
+	{
 		close(listen_sd);
 		raiseError("ioctl() failed");
 	}
 }
 
-void	Socket::bindSocket(std::vector<Server> &server)
+void Socket::bindSocket(std::vector<Server> &server)
 {
 	(void)server;
 	memset(&this->addr, 0, sizeof(this->addr));
@@ -162,12 +132,13 @@ void	Socket::bindSocket(std::vector<Server> &server)
 	bind(this->listen_sd, reinterpret_cast<struct sockaddr *>(&this->addr), sizeof(this->addr));
 }
 
-void	Socket::listenSocket()
+void Socket::listenSocket()
 {
 	// The second argument of the listen() function is the number of connecgtions allowed in the incoming queue
 
 	this->rc = listen(this->listen_sd, 20);
-	if (this->rc < 0){
+	if (this->rc < 0)
+	{
 		close(this->listen_sd);
 		raiseError("listen() failed");
 	}

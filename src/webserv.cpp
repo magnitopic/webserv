@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 15:02:09 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:05:12 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -24,40 +24,45 @@
 	-	Disconnect
  */
 
-static void	closeConnections(struct pollfd fds[200], int nfds)
+static void closeConnections(struct pollfd fds[200], int nfds)
 {
-	for (int i = 0; i < nfds; i++){
+	for (int i = 0; i < nfds; i++)
+	{
 		if (fds[i].fd >= 0)
 			close(fds[i].fd);
 	}
 }
 
-static void	justWaiting(Socket &socket, struct pollfd fds[200])
+static void justWaiting(Socket &socket, struct pollfd fds[200])
 {
-	bool		end_server = false;
-	bool		close_conn = false;
-	bool		compress_array = false;
-	char		buffer[80];
-	std::string	finalBuf;
+	bool end_server = false;
+	bool close_conn = false;
+	bool compress_array = false;
+	char buffer[80];
+	std::string finalBuf;
 
 	memset(buffer, 0, sizeof(buffer));
 	while (end_server == false)
 	{
 		cout << "Waiting on poll()..." << endl;
 		socket.setRc(poll(fds, socket.getNfds(), socket.getTimeout()));
-		if (socket.getRc() < 0){
+		if (socket.getRc() < 0)
+		{
 			perror("poll() failed");
 			break;
 		}
-		else if (socket.getRc() == 0){
+		else if (socket.getRc() == 0)
+		{
 			cout << "Timeout. End program" << endl;
 			break;
 		}
 		int current_size = socket.getNfds();
-		for (int i = 0; i < current_size; i++){
+		for (int i = 0; i < current_size; i++)
+		{
 			if (fds[i].revents == 0)
 				continue;
-			if (fds[i].revents != POLLIN){
+			if (fds[i].revents != POLLIN)
+			{
 				cerr << "Error! revents = " << fds[i].revents << endl;
 				end_server = true;
 				break;
@@ -70,17 +75,20 @@ static void	justWaiting(Socket &socket, struct pollfd fds[200])
 				// Accept all queued incoming connections
 
 				socket.setNew_sd(0);
-				while (socket.getNew_sd() != -1){
+				while (socket.getNew_sd() != -1)
+				{
 					socket.setNew_sd(accept(socket.getListen_sd(), NULL, NULL));
-					if (socket.getNew_sd() < 0){
-						if (errno != EWOULDBLOCK){
+					if (socket.getNew_sd() < 0)
+					{
+						if (errno != EWOULDBLOCK)
+						{
 							perror("accept() failed");
 							end_server = true;
 						}
 						break;
 					}
 
-				// Adding incoming connection to the pollfd structure
+					// Adding incoming connection to the pollfd structure
 
 					cout << "New incoming connection" << endl;
 					fds[socket.getNfds()].fd = socket.getNew_sd();
@@ -88,19 +96,22 @@ static void	justWaiting(Socket &socket, struct pollfd fds[200])
 					socket.increaseNfds();
 				}
 			}
-			else{
+			else
+			{
 				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
 				close_conn = false;
 				socket.setRc(recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0));
-				if (socket.getRc() < 0){
-					if (errno != EWOULDBLOCK){
+				if (socket.getRc() < 0)
+				{
+					if (errno != EWOULDBLOCK)
+					{
 						perror("recv() failed");
 						close_conn = true;
 					}
 				}
 				finalBuf += buffer;
-				if (socket.getRc() == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0)
-					|| (finalBuf.substr(0, 4) != "POST" && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0)){
+				if (socket.getRc() == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (finalBuf.substr(0, 4) != "POST" && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
+				{
 					cout << "|" << finalBuf << "|" << endl;
 					cout << "Connection closed" << endl;
 					close_conn = true;
@@ -109,7 +120,8 @@ static void	justWaiting(Socket &socket, struct pollfd fds[200])
 				if (close_conn)
 				{
 					socket.setRc(send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0));
-					if (socket.getRc() == 0){
+					if (socket.getRc() == 0)
+					{
 						perror("send() failed");
 						close_conn = true;
 					}
@@ -119,10 +131,13 @@ static void	justWaiting(Socket &socket, struct pollfd fds[200])
 				}
 			}
 		}
-		if (compress_array){
+		if (compress_array)
+		{
 			compress_array = false;
-			for (int i = 0; i < socket.getNfds(); i++){
-				if (fds[i].fd == -1){
+			for (int i = 0; i < socket.getNfds(); i++)
+			{
+				if (fds[i].fd == -1)
+				{
 					for (int j = i; j < socket.getNfds(); j++)
 						fds[j].fd = fds[j + 1].fd;
 					i--;
@@ -134,19 +149,18 @@ static void	justWaiting(Socket &socket, struct pollfd fds[200])
 	closeConnections(fds, socket.getNfds());
 }
 
-
 void createConection(std::string str, int i) // The value of i is the counter in which we will be iterating this function
 {
 	std::vector<Server> servers;
-	Socket				socket;
-	struct pollfd		fds[200];
+	Socket socket;
+	struct pollfd fds[200];
 
 	/**
 	 * Parse the config file and store the servers in a vector
 	 * Server should contain a list of all the ports it listens to
 	 * and a list of all the directories it has configured
 	 */
-	//servers = parseConfigFile(str);
+	// servers = parseConfigFile(str);
 
 	(void)str;
 	socket.createSocket();
@@ -240,7 +254,7 @@ int main(int argc, char **argv)
 	}
 	while (true)
 	{
-		createConection(file, 0);		// TODO: 0 is temporaray, shoudl be what server needs the connection
+		createConection(file, 0); // TODO: 0 is temporaray, shoudl be what server needs the connection
 		sleep(1);
 	}
 	return 0;
