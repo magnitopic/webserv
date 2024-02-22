@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 17:25:01 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:02:28 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -48,7 +48,6 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 	while (end_server == false)
 	{
 		cout << "Waiting on poll()..." << endl;
-		cout << sockets[0].getListen_sd() << endl;
 		rc = poll(fds, nfds, TIMEOUT);
 		if (rc < 0)
 		{
@@ -161,7 +160,6 @@ Socket createConection(unsigned int port) // The value of i is the counter in wh
 	socket.createSocket();
 	socket.bindSocket(port);
 	socket.listenSocket();
-	cout << socket.getListen_sd() << endl;
 	return socket;
 }
 
@@ -254,10 +252,9 @@ int main(int argc, char **argv)
 		std::vector<unsigned int> ports = it->getPorts();
 		for (std::vector<unsigned int>::iterator it2 = ports.begin(); it2 != ports.end(); it2++)
 		{
-			sockets.push_back(createConection((*it2)));
-			cout << "i: " << i << endl;
-			cout << sockets[i].getListen_sd() << endl;
-			fds[i].fd = sockets[i].getListen_sd();
+			Socket aux = createConection(*it2);
+			sockets.push_back(aux);
+			fds[i].fd = aux.getListen_sd();
 			fds[i].events = POLLIN;
 			i++;
 		}

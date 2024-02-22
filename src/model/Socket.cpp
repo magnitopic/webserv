@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 16:29:41 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:01:00 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -30,8 +30,8 @@ Socket &Socket::operator=(const Socket &assign)
 {
 	if (this != &assign)
 	{
-		this->socketFD = assign.socketFD;
-		// this->port = assign.port;
+		this->listen_sd = assign.listen_sd;
+		this->addr = assign.addr;
 	}
 	return *this;
 }
@@ -88,11 +88,6 @@ int Socket::getTimeout()
 int Socket::getNfds()
 {
 	return this->nfds;
-}
-
-int Socket::getSocketFD(void)
-{
-	return this->socketFD;
 }
 
 void Socket::createSocket()

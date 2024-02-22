@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 16:30:22 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 18:01:13 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -26,7 +26,6 @@ class Server;
 class Socket
 {
 private:
-	int					socketFD;
 	int					listen_sd;
 	int					rc;
 	int					nfds;
@@ -52,7 +51,6 @@ public:
 	int		getNfds();
 	int		getTimeout();
 	void	setTimeout(int time);
-	int 	getSocketFD(void);
 	void	setNew_sd(int num);
 	int		getNew_sd();
 	void	increaseNfds();
