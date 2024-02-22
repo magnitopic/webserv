@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/21 19:24:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/22 12:38:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	Socket::createSocket()
 
 	// Setting socket as non-blocking
 
-	this->rc = ioctl(listen_sd, FIONBIO, (char *)&on);
+	this->rc = ioctl(listen_sd, FIONBIO, reinterpret_cast<char *>(&on));
 	if (this->rc < 0){
 		close(listen_sd);
 		raiseError("ioctl() failed");
@@ -163,18 +163,13 @@ void	Socket::justWaiting()
 			cout << "Timeout. End program" << endl;
 			break;
 		}
-		for (int i = 0; i < this->nfds; i++){
+		int current_size = this->nfds;
+		for (int i = 0; i < current_size; i++){
 			if (this->fds[i].revents == 0)
 				continue;
 			if (this->fds[i].revents != POLLIN){
 				cerr << "Error! revents = " << this->fds[i].revents << endl;
 				end_server = true;
-				break;
-			}
-
-			if (this->fds[i].revents == POLLOUT){
-				cout << "HOLI" << endl;
-				exit(0);
 				break;
 			}
 
@@ -184,6 +179,7 @@ void	Socket::justWaiting()
 
 				// Accept all queued incoming connections
 
+				this->new_sd = 0;
 				while (this->new_sd != -1){
 					this->new_sd = accept(this->listen_sd, NULL, NULL);
 					if (this->new_sd < 0){
@@ -213,9 +209,9 @@ void	Socket::justWaiting()
 					}
 				}
 				finalBuf += buffer;
-				cout << "|" << finalBuf << "|" << endl;
-				cout << parsedContentLength(finalBuf) << endl;
-				if (this->rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0)){
+				if (this->rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0)
+					|| (finalBuf.substr(0, 4) != "POST" && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0)){
+					cout << "|" << finalBuf << "|" << endl;
 					cout << "Connection closed" << endl;
 					close_conn = true;
 				}
