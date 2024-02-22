@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 15:05:12 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/22 15:51:33 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -110,7 +110,7 @@ static void justWaiting(Socket &socket, struct pollfd fds[200])
 					}
 				}
 				finalBuf += buffer;
-				if (socket.getRc() == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (finalBuf.substr(0, 4) != "POST" && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
+				if (socket.getRc() == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
 				{
 					cout << "|" << finalBuf << "|" << endl;
 					cout << "Connection closed" << endl;
@@ -120,6 +120,7 @@ static void justWaiting(Socket &socket, struct pollfd fds[200])
 				if (close_conn)
 				{
 					socket.setRc(send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0));
+					finalBuf.clear();
 					if (socket.getRc() == 0)
 					{
 						perror("send() failed");
