@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 18:02:28 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/25 17:07:54 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -42,7 +42,7 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 	std::string finalBuf;
 	int rc = 0;
 	int new_sd = 0;
-	int nfds = 1;
+	int nfds = sockets.size();
 
 	memset(buffer, 0, sizeof(buffer));
 	while (end_server == false)
@@ -71,7 +71,7 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 				break;
 			}
 
-			if (fds[i].fd == sockets[i].getListen_sd())
+			if (i < static_cast<int>(sockets.size()) && fds[i].fd == sockets[i].getListen_sd())
 			{
 				cout << "Listening socket is readable" << endl;
 
@@ -98,6 +98,7 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 					fds[nfds].events = POLLIN;
 					nfds++;
 				}
+				cout << "iii: " << i << endl;
 			}
 			else
 			{
