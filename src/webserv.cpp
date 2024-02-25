@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 17:07:54 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:25:32 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void closeConnections(struct pollfd fds[200], int nfds)
 	}
 }
 
-static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
+static void justWaiting(std::vector<Server> &servers, std::vector<Socket> sockets, struct pollfd fds[200], std::string configFile)
 {
 	bool end_server = false;
 	bool close_conn = false;
@@ -47,7 +47,6 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 	memset(buffer, 0, sizeof(buffer));
 	while (end_server == false)
 	{
-		cout << "Waiting on poll()..." << endl;
 		rc = poll(fds, nfds, TIMEOUT);
 		if (rc < 0)
 		{
@@ -56,7 +55,7 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 		}
 		else if (rc == 0)
 		{
-			cout << "Timeout. End program" << endl;
+			cerr << "Timeout. End program" << endl;
 			break;
 		}
 		int current_size = nfds;
@@ -73,7 +72,6 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 
 			if (i < static_cast<int>(sockets.size()) && fds[i].fd == sockets[i].getListen_sd())
 			{
-				cout << "Listening socket is readable" << endl;
 
 				// Accept all queued incoming connections
 
@@ -93,16 +91,13 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 
 					// Adding incoming connection to the pollfd structure
 
-					cout << "New incoming connection" << endl;
 					fds[nfds].fd = new_sd;
 					fds[nfds].events = POLLIN;
 					nfds++;
 				}
-				cout << "iii: " << i << endl;
 			}
 			else
 			{
-				cout << "Descriptor " << fds[i].fd << " is readable" << endl;
 				close_conn = false;
 				rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
 				if (rc < 0)
@@ -116,14 +111,15 @@ static void justWaiting(std::vector<Socket> sockets, struct pollfd fds[200])
 				finalBuf += buffer;
 				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
 				{
-					cout << "|" << finalBuf << "|" << endl;
-					cout << "Connection closed" << endl;
+					client	cl;
+					cl.fd = fds[i].fd;
+					cl.finalbuffer = finalBuf;
+					handleRequests(servers, cl, configFile);
 					close_conn = true;
 				}
 				memset(buffer, 0, sizeof(buffer));
 				if (close_conn)
 				{
-					rc = send(fds[i].fd, finalBuf.c_str(), finalBuf.size(), 0);
 					finalBuf.clear();
 					if (rc == 0)
 					{
@@ -164,64 +160,84 @@ Socket createConection(unsigned int port) // The value of i is the counter in wh
 	return socket;
 }
 
-void handleRequests(int clientPos, Server &server, std::vector<client> clients, std::string str)
+void handleRequests(std::vector<Server> &servers, client& clients, std::string str)
 {
-	Request req = parseReq(clients[clientPos].finalbuffer);
-	req.setReqBuffer(clients[clientPos].finalbuffer);
-	std::string aux = clients[clientPos].finalbuffer;
+	Request req = parseReq(clients.finalbuffer);
+	req.setReqBuffer(clients.finalbuffer);
+	req.setPort();
+	int i = 0;
+	for (i = 0; i < static_cast<int>(servers.size()); i++){
+		if (servers[i].getPorts().size() > 1 && std::find(servers[i].getPorts().begin(), servers[i].getPorts().end(), req.getPort()) != servers[i].getPorts().end())
+			break;
+		else if (servers[i].getPorts().size() == 1 && *servers[i].getPorts().begin() == static_cast<unsigned int>(req.getPort()))
+			break;
+	}
+	if (i >= static_cast<int>(servers.size()))
+		raiseError("Unexpected error occurred");
+	servers[i].setActions(str);
+	std::string aux = clients.finalbuffer;
 	req.setContentLength();
-	server.setMaxClientSize(str);
+	servers[i].setMaxClientSize(str);
 	Response response;
-	if (req.getContentLength() > static_cast<int>(server.getMaxClientSize()))
+	if (req.getContentLength() > static_cast<int>(servers[i].getMaxClientSize()))
 	{
 		response.setErrorCode(413);
-		response.generateResponse(413, response.getErrorMsg(413), server);
+		response.generateResponse(413, response.getErrorMsg(413), servers[i]);
 		response.setContentLength(response.getResponse());
-		response.generateHeader(413, server);
+		response.generateHeader(413, servers[i]);
 	}
-	Location location(aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1));
+	std::string temp;
+	if (req.getMethod() == "DELETE"){
+		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
+		if (temp.rfind("/") == 0)
+			temp = temp.substr(0, temp.rfind("/") + 1);
+		else
+			temp = temp.substr(0, temp.rfind("/"));
+	}
+	else
+		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
+	Location location(temp);
 	location.setValues(str);
 	if (location.setRedirection())
 	{
 		response.setErrorCode(location.getRedirection().begin()->first);
 		response.generateRedirection(location); // Crete new function to redirect to the selected URL
 		response.setContentLength(response.getResponse());
-		response.generateRedirectHeader(location, server);
+		response.generateRedirectHeader(location, servers[i]);
 	}
-	req.setAbsPath(server);
+	req.setAbsPath(servers[i]);
 	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() < 90)
 	{
-		if (!isAllowed(server, req, location))
+		if (!isAllowed(servers[i], req, location))
 		{
 			response.setErrorCode(405);
-			response.generateResponse(405, response.getErrorMsg(405), server);
+			response.generateResponse(405, response.getErrorMsg(405), servers[i]);
 			response.setContentLength(response.getResponse());
-			response.generateHeader(405, server);
+			response.generateHeader(405, servers[i]);
 		}
 		else
 		{
 			if (req.getMethod() == "GET")
-				getMethod(location, server, req, response);
+				getMethod(location, servers[i], req, response);
 			else if (req.getMethod() == "POST")
-				handlePost(location, server, req, response);
+				handlePost(servers[i], req, response);
 			else if (req.getMethod() == "DELETE")
-				deleteMethod(server, req, response);
+				deleteMethod(servers[i], req, response);
 		}
 	}
 	else if (response.getErrorCode() < 100)
 	{
 		response.setErrorCode(501);
-		response.generateResponse(501, response.getErrorMsg(501), server);
+		response.generateResponse(501, response.getErrorMsg(501), servers[i]);
 		response.setContentLength(response.getResponse());
-		response.generateHeader(501, server);
+		response.generateHeader(501, servers[i]);
 	}
 	std::string resp = response.generateHttpResponse();
-	int writeVal = write(clients[clientPos].fd, resp.c_str(), resp.length());
+	int writeVal = write(clients.fd, resp.c_str(), resp.length());
 	if (writeVal == -1)
 		raiseError("error writing data");
-	close(clients[clientPos].fd);
-	clients.erase(clients.begin() + clientPos);
-	location.emptyActions();
+	close(clients.fd);
+	//location.emptyActions();
 	showData(req, response);
 }
 
@@ -260,6 +276,6 @@ int main(int argc, char **argv)
 			i++;
 		}
 	}
-	justWaiting(sockets, fds);
+	justWaiting(servers, sockets, fds, file);
 	return 0;
 }

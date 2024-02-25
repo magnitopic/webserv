@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/18 17:59:46 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 19:06:42 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ private:
 	std::string	postType;
 	int			contentLength;
 	int			clientBodySize;	// the maximum size of the body send by the client
+	int			port;
 
 public:
 	// orthodox canonical form
@@ -77,6 +78,8 @@ public:
 	int			getClientBodySize();
 	void		setClientBodySize(int maxSize);
 	void		handleSlash();
+	void		setPort();
+	int			getPort();
 	// methods
 
 	Request		parseReq(std::string passedReq);

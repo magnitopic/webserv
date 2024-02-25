@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/15 14:29:36 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:33:32 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ std::string Location::getDirectory(void)
 
 void Location::setActions(std::string text)
 {
-	std::string aux = "location " + directory;
+	std::string aux = "location " + directory + " ";
 	if (text.find(aux) >= text.length())
 		return;
 	std::string methods = text.substr(text.find(aux), text.find("}") - text.find(aux));
@@ -84,6 +84,14 @@ void Location::setActions(std::string text)
 			word = "";
 		}
 		i++;
+	}
+	if (this->actions.size() > 0){
+		if (find(this->actions.begin(), this->actions.end(), "GET") == this->actions.end())
+			this->forbidden.push_back("GET");
+		if (find(this->actions.begin(), this->actions.end(), "POST") == this->actions.end())
+			this->forbidden.push_back("POST");
+			if (find(this->actions.begin(), this->actions.end(), "DELETE") == this->actions.end())
+			this->forbidden.push_back("DELETE");
 	}
 	i = methods.find("allow") + 5;
 	while (i < static_cast<int>(methods.length()) || i < 5)
@@ -244,7 +252,7 @@ void	Location::setIndex()
 		return;
 	std::string word;
 	std::size_t i = buffer.find("index ") + 6;
-	if (i > buffer.length() || (buffer[i - 7] && isalnum(buffer[i - 7])))
+	if (i < 6 || i > buffer.length() || (buffer[i - 7] && isalnum(buffer[i - 7])))
 		return;
 	std::string temp = buffer.substr(i, buffer.length() - i);
 	word = temp.substr(0, temp.find(';'));

@@ -6,15 +6,14 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/19 16:01:54 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:16:51 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
-void	handlePost(Location &location, Server &server, Request &req, Response &response)
+void	handlePost(Server &server, Request &req, Response &response)
 {
-	(void)location;
 	PostReq	post;
 	if (response.getErrorCode() > 1)
 		return;
@@ -36,7 +35,9 @@ void	handlePost(Location &location, Server &server, Request &req, Response &resp
 	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
-		ofstream newfile(req.getAbsPath() + "/" + post.getFileName());
+		std::string name = req.getAbsPath() + "/" + post.getFileName();
+		ofstream newfile(name);
+		open(name.c_str(), O_RDWR | O_CREAT, 0666);
 		newfile << post.getFileContent();
 		newfile.close();
 		response.setErrorCode(201);

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Delete.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:22:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/13 10:29:53 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:22:30 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -17,7 +17,7 @@
 */
 void deleteMethod(Server &server, Request &req, Response &resp)
 {
-	if (access(req.getAbsPath().c_str(), X_OK) == 0)
+	if (access(req.getAbsPath().c_str(), F_OK) == 0)
 	{
 		const int result = remove(req.getAbsPath().c_str());
 		if (result == 0)
@@ -39,10 +39,10 @@ void deleteMethod(Server &server, Request &req, Response &resp)
 	}
 	else
 	{
-		resp.setErrorCode(405);
-		resp.setResponseHTML(405);
+		resp.setErrorCode(404);
+		resp.setResponseHTML(404);
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
-		resp.generateHeader(405, server);
+		resp.generateHeader(404, server);
 	}
 }

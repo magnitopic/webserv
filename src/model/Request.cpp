@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/18 18:47:57 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 19:15:31 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,4 +220,25 @@ void	Request::setClientBodySize(int maxSize)
 void	Request::handleSlash()
 {
 	this->absPath.pop_back();
+}
+
+void	Request::setPort()
+{
+	size_t pos = this->reqBuffer.find("ocalhost:") + 9;
+	if (pos < 10 || pos > this->reqBuffer.length())
+		raiseError("Unexpected error");
+	std::string num;
+	while (pos < this->reqBuffer.length()){
+		if (isdigit(this->reqBuffer[pos]))
+			num.push_back(this->reqBuffer[pos]);
+		else
+			break;
+		pos++;
+	}
+	this->port = std::atoi(num.c_str());
+}
+
+int	Request::getPort()
+{
+	return this->port;
 }

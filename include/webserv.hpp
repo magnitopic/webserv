@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/22 17:01:37 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:06:08 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -55,7 +55,6 @@ using namespace std;
 
 struct	client{
 	unsigned int	fd;
-	char			buf[10000];
 	std::string		finalbuffer;
 };
 
@@ -67,11 +66,11 @@ void						raiseError(const char *msg);
 std::string					getFile(const std::string &fileAdr);
 std::vector<Server>			parseConfigFile(std::string file_name);
 int							isAllowed(Server &server, Request & req, Location &location);
-void 						handleRequests(int clientFd, Server &server, std::vector<client> clients, std::string str);
+void 						handleRequests(std::vector<Server> &servers, client& clients, std::string str);
 std::string					parseContentType(std::string extension);
 void						createConection(std::string str, int i);
 void						getMethod(Location &location, Server &server, Request &req, Response &resp);
-void						handlePost(Location &location, Server &server, Request &req, Response &response);
+void						handlePost(Server &server, Request &req, Response &response);
 std::string					deleteFirstElement(std::string str);
 void						deleteMethod(Server &server, Request &req, Response &resp);
 void						showData(Request &req, Response &response);

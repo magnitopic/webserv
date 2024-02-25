@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/21 18:22:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:34:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int isAllowed(Server &server, Request &req, Location &location)
 		if (req.getMethod() == *server.getActions().begin())
 			return 1;
 	}
+	cout << server.getActions() << endl;
 	return 0;
 }
 
