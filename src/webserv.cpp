@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 20:25:32 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/25 20:37:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 		{
 			if (fds[i].revents == 0)
 				continue;
-			if (fds[i].revents != POLLIN)
+			/*if (fds[i].revents != POLLIN)
 			{
 				cerr << "Error! revents = " << fds[i].revents << endl;
 				end_server = true;
 				break;
-			}
+			}*/
 
 			if (i < static_cast<int>(sockets.size()) && fds[i].fd == sockets[i].getListen_sd())
 			{
