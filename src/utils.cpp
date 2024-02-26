@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 20:34:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:36:50 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,3 +115,11 @@ std::string deleteFirstElement(std::string str)
 }
 
 // void	setIndex(finalRoute, socketClass.getDirectory())
+
+
+std::map<int, std::string>::iterator	getMapIterator(std::map<int, std::string> map, int code)
+{
+	std::map<int, std::string>::iterator temp;
+	temp = map.find(code);
+	return temp;
+}

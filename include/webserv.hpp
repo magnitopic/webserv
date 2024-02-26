@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 20:06:08 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:32:05 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,27 +59,28 @@ struct	client{
 };
 
 
-int							setAction(std::string);
-Request						parseReq(std::string passedReq);
-std::string					configToString(char *str);
-void						raiseError(const char *msg);
-std::string					getFile(const std::string &fileAdr);
-std::vector<Server>			parseConfigFile(std::string file_name);
-int							isAllowed(Server &server, Request & req, Location &location);
-void 						handleRequests(std::vector<Server> &servers, client& clients, std::string str);
-std::string					parseContentType(std::string extension);
-void						createConection(std::string str, int i);
-void						getMethod(Location &location, Server &server, Request &req, Response &resp);
-void						handlePost(Server &server, Request &req, Response &response);
-std::string					deleteFirstElement(std::string str);
-void						deleteMethod(Server &server, Request &req, Response &resp);
-void						showData(Request &req, Response &response);
-std::vector<std::string>	splitServerDirectives(std::string configFile);
-std::vector<std::string>	splitLocationDirectives(std::string serverDirectives);
-int							parsedContentLength(std::string str);
-int							greatExpectations(std::string str);
-void						continueConnecting();
-std::string					bodyReq(std::string str);
-struct pollfd				*initializePollfdStruct(struct pollfd fds[200], int listen_sd);
+int										setAction(std::string);
+Request									parseReq(std::string passedReq);
+std::string								configToString(char *str);
+void									raiseError(const char *msg);
+std::string								getFile(const std::string &fileAdr);
+std::vector<Server>						parseConfigFile(std::string file_name);
+int										isAllowed(Server &server, Request & req, Location &location);
+void 									handleRequests(std::vector<Server> &servers, client& clients, std::string str);
+std::string								parseContentType(std::string extension);
+void									createConection(std::string str, int i);
+void									getMethod(Location &location, Server &server, Request &req, Response &resp);
+void									handlePost(Server &server, Request &req, Response &response);
+std::string								deleteFirstElement(std::string str);
+void									deleteMethod(Server &server, Request &req, Response &resp);
+void									showData(Request &req, Response &response);
+std::vector<std::string>				splitServerDirectives(std::string configFile);
+std::vector<std::string>				splitLocationDirectives(std::string serverDirectives);
+int										parsedContentLength(std::string str);
+int										greatExpectations(std::string str);
+void									continueConnecting();
+std::string								bodyReq(std::string str);
+struct pollfd							*initializePollfdStruct(struct pollfd fds[200], int listen_sd);
+std::map<int, std::string>::iterator	getMapIterator(std::map<int, std::string> map, int code);
 
 #endif

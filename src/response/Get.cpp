@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/14 19:13:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 15:51:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,22 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	req.setExtension();
 	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/')
 		req.handleSlash();
-	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG)
+	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG) // This is a file
 	{
-		resp.setErrorCode(200);
-		resp.setResponse(getFile(req.getAbsPath()));
-		resp.setContentLength(resp.getResponse());
-		resp.generateHeader(200, server);
-		req.setContentType(parseContentType(req.getExtension()));
-		resp.generateHeaderContent(200, req.getContentType(), server);
+		if (access(req.getAbsPath().c_str(), R_OK) != 0){
+			resp.setErrorCode(403);
+			resp.generateResponse(403, resp.getErrorMsg(403), server);
+			resp.setContentLength(resp.getResponse());
+			resp.generateHeader(403, server);
+		}
+		else{
+			resp.setErrorCode(200);
+			resp.setResponse(getFile(req.getAbsPath()));
+			resp.setContentLength(resp.getResponse());
+			resp.generateHeader(200, server);
+			req.setContentType(parseContentType(req.getExtension()));
+			resp.generateHeaderContent(200, req.getContentType(), server);
+		}
 	}
 	else if (access(req.getAbsPath().c_str(), F_OK) == 0 &&
 			 stat((req.getAbsPath() + "/" + location.getIndex()).c_str(), &s) == 0 && S_ISREG(s.st_mode))
