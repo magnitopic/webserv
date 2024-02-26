@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 19:15:31 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:05:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,9 +224,11 @@ void	Request::handleSlash()
 
 void	Request::setPort()
 {
-	size_t pos = this->reqBuffer.find("ocalhost:") + 9;
-	if (pos < 10 || pos > this->reqBuffer.length())
+	size_t pos = this->reqBuffer.find("localhost:") + 10;
+	if (pos < 10 || pos > this->reqBuffer.length()){
+		cout << this->reqBuffer << endl;
 		raiseError("Unexpected error");
+	}
 	std::string num;
 	while (pos < this->reqBuffer.length()){
 		if (isdigit(this->reqBuffer[pos]))

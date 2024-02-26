@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 16:36:50 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:02:40 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,9 @@ void raiseError(const char *msg)
 	exit(1);
 }
 
-int myOwnFind(Location &location, Request &req)
+int myOwnFind(std::list<std::string> lst, Request &req)
 {
-	std::list<std::string> aux = location.getActions();
-	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++)
-	{
-		if (*it == req.getMethod())
-			return 1;
-	}
-	return 0;
-}
-
-int myOwnFindServ(Server &location, Request &req)
-{
-	std::list<std::string> aux = location.getActions();
+	std::list<std::string> aux = lst;
 	for (list<string>::iterator it = aux.begin(); it != aux.end(); it++)
 	{
 		if (*it == req.getMethod())
@@ -71,8 +60,8 @@ int isAllowed(Server &server, Request &req, Location &location)
 {
 	if (location.getForbidden().size() > 1)
 	{
-		std::list<std::string>::iterator it = std::find(location.getForbidden().begin(), (std::prev(location.getForbidden().end())), req.getMethod());
-		if (it != location.getForbidden().end())
+		int it = myOwnFind(location.getForbidden(), req);
+		if (it)
 			return 0;
 	}
 	else if (location.getForbidden().size() == 1)
@@ -82,7 +71,7 @@ int isAllowed(Server &server, Request &req, Location &location)
 	}
 	if (location.getActions().size() > 1)
 	{
-		int it = myOwnFind(location, req);
+		int it = myOwnFind(location.getActions(), req);
 		if (it)
 			return 1;
 	}
@@ -93,7 +82,7 @@ int isAllowed(Server &server, Request &req, Location &location)
 	}
 	if (server.getActions().size() > 1)
 	{
-		int it = myOwnFindServ(server, req);
+		int it = myOwnFind(server.getActions(), req);
 		if (it)
 			return 1;
 	}
@@ -102,7 +91,6 @@ int isAllowed(Server &server, Request &req, Location &location)
 		if (req.getMethod() == *server.getActions().begin())
 			return 1;
 	}
-	cout << server.getActions() << endl;
 	return 0;
 }
 
