@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 17:02:40 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 19:38:22 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -22,9 +22,9 @@ std::string	bodyReq(std::string str)
 
 void raiseError(const char *msg)
 {
-	std::cout << RED << std::endl;
+	std::cerr << RED << std::endl;
 	perror(msg);
-	std::cout << RESET << std::endl;
+	std::cerr << RESET << std::endl;
 	exit(1);
 }
 

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 17:47:41 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 19:35:08 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -229,8 +229,9 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	showData(req, response);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **env)
 {
+	(void)env;
 	std::string file;
 	std::vector<Server> servers;
 
