@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 17:09:17 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:47:41 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,6 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 		{
 			if (fds[i].revents == 0)
 				continue;
-			/*if (fds[i].revents != POLLIN)
-			{
-				cerr << "Error! revents = " << fds[i].revents << endl;
-				end_server = true;
-				break;
-			}*/
-
 			if (i < static_cast<int>(sockets.size()) && fds[i].fd == sockets[i].getListen_sd())
 			{
 
@@ -111,7 +104,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 				finalBuf += buffer;
 				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
 				{
-					client	cl;
+					client cl;
 					cl.fd = fds[i].fd;
 					cl.finalbuffer = finalBuf;
 					handleRequests(servers, cl, configFile);
@@ -121,11 +114,6 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 				if (close_conn)
 				{
 					finalBuf.clear();
-					if (rc == 0)
-					{
-						perror("send() failed");
-						close_conn = true;
-					}
 					close(fds[i].fd);
 					fds[i].fd = -1;
 					compress_array = true;
@@ -160,13 +148,14 @@ Socket createConection(unsigned int port) // The value of i is the counter in wh
 	return socket;
 }
 
-void handleRequests(std::vector<Server> &servers, client& clients, std::string str)
+void handleRequests(std::vector<Server> &servers, client &clients, std::string str)
 {
 	Request req = parseReq(clients.finalbuffer);
 	req.setReqBuffer(clients.finalbuffer);
 	req.setPort();
 	int i = 0;
-	for (i = 0; i < static_cast<int>(servers.size()); i++){
+	for (i = 0; i < static_cast<int>(servers.size()); i++)
+	{
 		if (servers[i].getPorts().size() > 1 && std::find(servers[i].getPorts().begin(), servers[i].getPorts().end(), req.getPort()) != servers[i].getPorts().end())
 			break;
 		else if (servers[i].getPorts().size() == 1 && *servers[i].getPorts().begin() == static_cast<unsigned int>(req.getPort()))
@@ -187,7 +176,8 @@ void handleRequests(std::vector<Server> &servers, client& clients, std::string s
 		response.generateHeader(413, servers[i]);
 	}
 	std::string temp;
-	if (req.getMethod() == "DELETE"){
+	if (req.getMethod() == "DELETE")
+	{
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
 		if (temp.rfind("/") == 0)
 			temp = temp.substr(0, temp.rfind("/") + 1);
@@ -234,10 +224,8 @@ void handleRequests(std::vector<Server> &servers, client& clients, std::string s
 	}
 	std::string resp = response.generateHttpResponse();
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
-	if (writeVal == -1)
-		raiseError("error writing data");
-	close(clients.fd);
-	//location.emptyActions();
+	if (writeVal < 1)
+		raiseError("send() failed");
 	showData(req, response);
 }
 
