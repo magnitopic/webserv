@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 13:04:16 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 14:35:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 std::string	bodyReq(std::string str)
 {
 	size_t pos = str.find("\r\n\r\n") + 4;
-	if (pos < 4 || pos > str.length() + 3){
-		if (strncmp(str.substr(0, 4).c_str(), "POST", 4))
+	if (pos < 4 || pos > str.length()){
+		if (!strncmp(str.substr(0, 4).c_str(), "POST", 4))
 			return "";
 		else
 			return str;
@@ -111,7 +111,9 @@ std::string deleteFirstElement(std::string str)
 
 std::map<int, std::string>::iterator	getMapIterator(std::map<int, std::string> map, int code)
 {
-	std::map<int, std::string>::iterator temp;
-	temp = map.find(code);
-	return temp;
+	for (std::map<int, std::string>::iterator it = map.begin(); it != map.end(); it++){
+		if (it->first == code)
+			return it;
+	}
+	return map.end();
 }

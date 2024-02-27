@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/27 13:05:28 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 15:21:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	handlePost(Server &server, Request &req, Response &response)
 	else if (!strncmp("text/plain", post.getPostType().c_str(), 10)){
 		// TODO: Fill with code
 	}
-	else if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
-		// TODO: Fill with code
+	else if (!strncmp("application/x-www-form-urlencoded", post.getPostType().c_str(), 33)){
+		const char* arr[] = {"python3", req.getAbsPath().c_str()};
+		execve(arr[0], const_cast<char **>(arr), NULL);
 	}
 	else{ // This should be treated by default as an application/octet-stream
 		// TODO: Fill with code
