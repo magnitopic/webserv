@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/26 15:49:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 13:05:28 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	handlePost(Server &server, Request &req, Response &response)
 {
 	PostReq	post;
+	cout << req.getReqBuffer() << endl;
 	if (response.getErrorCode() > 1)
 		return;
 	int pos = req.getReqBuffer().find("Content-Type:") + 14;
@@ -55,5 +56,4 @@ void	handlePost(Server &server, Request &req, Response &response)
 	else{ // This should be treated by default as an application/octet-stream
 		// TODO: Fill with code
 	}
-	cout << req.getReqBuffer() << endl;
 }
