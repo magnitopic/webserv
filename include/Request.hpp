@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 19:06:42 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:30:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ public:
 	std::string	getVersion();
 	void		setVersion(std::string version);
 	std::string	getHost();
-	void		setHost(std::string host);
+	void		setHost();
 	std::string	getUser_agent();
 	void		setUser_agent(std::string user_agent);
 	std::string	getAccept();
@@ -80,6 +80,7 @@ public:
 	void		handleSlash();
 	void		setPort();
 	int			getPort();
+	void		newSetPort(unsigned int nport);
 	// methods
 
 	Request		parseReq(std::string passedReq);

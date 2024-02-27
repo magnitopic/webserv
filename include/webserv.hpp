@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 16:32:05 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:15:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,8 @@ void									continueConnecting();
 std::string								bodyReq(std::string str);
 struct pollfd							*initializePollfdStruct(struct pollfd fds[200], int listen_sd);
 std::map<int, std::string>::iterator	getMapIterator(std::map<int, std::string> map, int code);
+int										fixingCPP(std::vector<Server> &servers, Request& req);
+int										fixingCPPAgain(std::vector<Server> &servers, Request& req);
+int										myOwnFindVector(std::vector<unsigned int> vector, unsigned int num);
 
 #endif
