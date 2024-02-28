@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 17:12:32 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:29:14 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -34,18 +34,19 @@ static bool checkTimeoutCGI(pid_t id, int fds[2])
 				kill(id, SIGKILL);
 				close(fds[0]);
 				// TODO: http 508 error response
-				std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Infinite loop" << RESET << std::endl;
-				return false;
+				//std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Infinite loop" << RESET << std::endl;
+				return 1;
 			}
 		}
 		else if (result == -1)
 		{
-			std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Error executing script" << RESET << std::endl;
+			return 2;
+			//std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Error executing script" << RESET << std::endl;
 		}
 		else
 			cgiFinished = !cgiFinished;
 	}
-	return true;
+	return 0;
 }
 
 static void generateCGIresponse(Request &req, Response &resp, Server &server, std::string cgiResponse)
@@ -55,6 +56,14 @@ static void generateCGIresponse(Request &req, Response &resp, Server &server, st
 	resp.setContentLength(resp.getResponse());
 	req.setContentType(parseContentType("html"));
 	resp.generateHeaderContent(200, req.getContentType(), server);
+}
+
+static void generateCGIerror(Response &resp, Server &server, int code)
+{
+	resp.setErrorCode(code);
+	resp.generateResponse(code, resp.getErrorMsg(code), server);
+	resp.setContentLength(resp.getResponse());
+	resp.generateHeader(code, server);
 }
 
 bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
@@ -91,8 +100,15 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 	// original process
 	close(fds[1]);
 
-	if (!checkTimeoutCGI(id, fds))
+	int status = checkTimeoutCGI(id, fds);
+	if (status == 1){
+		generateCGIerror(resp, server, 508);
 		return false;
+	}
+	else if (status == 2){
+		generateCGIerror(resp, server, 500);
+		return false;
+	}
 
 	char buf;
 	std::string cgiResponse = "";

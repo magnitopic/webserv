@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/27 15:20:07 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:31:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ Response::Response()
 	this->errorCode.insert(std::pair<int, std::string>(502, "Bad Gateway"));
 	this->errorCode.insert(std::pair<int, std::string>(503, "Service Unavailable"));
 	this->errorCode.insert(std::pair<int, std::string>(504, "Gateway Timeout"));
+	this->errorCode.insert(std::pair<int, std::string>(508, "Loop Detected"));
 	this->code = 0;
 }
 
@@ -175,9 +176,13 @@ void	showData(Request &req, Response &response)
 	int minute = localTime->tm_min;
 	int second = localTime->tm_sec;
 
+	std::string	uri = req.getUri();
+	if (uri.find("?") >= 0 && uri.find("?") < uri.length())
+		uri = uri.substr(0, uri.find("?"));
+
 	// Print the result
 	std::cout << "[" << day << "-" << month << "-" << year << " " << hour << ":" << minute << ":" << second  << "] \"" << req.getMethod() <<
-	" " << req.getUri() << " HTTP/1.1\" " << response.getErrorCode() << " " << response.getContentLength() << std::endl;
+	" " << uri << " HTTP/1.1\" " << response.getErrorCode() << " " << response.getContentLength() << std::endl;
 
 }
 

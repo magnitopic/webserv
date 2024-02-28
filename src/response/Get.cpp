@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Get.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 17:00:07 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:20:59 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -29,6 +29,12 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 		req.handleSlash();
 	if (req.getAbsPath().substr(req.getAbsPath().length() - 3, 3) == ".py")
 		cgiForPostReq(req, resp, server, GET);
+	else if (req.getUri() == "/teapot"){
+		resp.setErrorCode(418);
+		resp.generateResponse(418, resp.getErrorMsg(418), server);
+		resp.setContentLength(resp.getResponse());
+		resp.generateHeader(418, server);
+	}
 	else if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG) // This is a file
 	{
 		if (access(req.getAbsPath().c_str(), R_OK) != 0){
