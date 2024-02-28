@@ -1,18 +1,18 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 17:29:14 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:17:12 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
-static bool checkTimeoutCGI(pid_t id, int fds[2])
+static int checkTimeoutCGI(pid_t id, int fds[2])
 {
 	bool cgiFinished = 0;
 	pid_t result;
@@ -32,6 +32,8 @@ static bool checkTimeoutCGI(pid_t id, int fds[2])
 			if ((auxTime - cgiTime) > MAX_CGI_TIME)
 			{
 				kill(id, SIGKILL);
+				int status;
+				waitpid(id, &status, 0);
 				close(fds[0]);
 				// TODO: http 508 error response
 				//std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Infinite loop" << RESET << std::endl;
