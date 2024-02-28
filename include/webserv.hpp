@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 18:15:43 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 10:22:48 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <sys/time.h>
 #include <sys/ioctl.h>
+#include <signal.h>
 
 #include "enums.hpp"
 #include "Socket.hpp"
@@ -43,6 +44,7 @@ using namespace std;
 
 #define MAX_SERVERS 1024
 #define TIMEOUT 180000
+#define MAX_CGI_TIME 5
 // colours
 
 #define RED		"\033[0;31m"
