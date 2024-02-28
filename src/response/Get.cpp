@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 17:20:59 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:41:48 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 		cgiForPostReq(req, resp, server, GET);
 	else if (req.getUri() == "/teapot"){
 		resp.setErrorCode(418);
-		resp.generateResponse(418, resp.getErrorMsg(418), server);
+		resp.generateTeapotResponse(418, server);
 		resp.setContentLength(resp.getResponse());
 		resp.generateHeader(418, server);
 	}

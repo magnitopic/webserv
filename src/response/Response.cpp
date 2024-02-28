@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/28 17:31:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:43:17 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,28 @@ void Response::generateHeaderContent(int code, std::string type, Server &server)
 	this->header += std::to_string(this->contentLength);
 	this->header += "\n\n";
 	return;
+}
+
+void	Response::generateTeapotResponse(int code, Server &server)
+{
+	if (server.getErrorPages().size() > 0)
+	{
+		std::map<int, std::string>::iterator it = getMapIterator(server.getErrorPages(), code);
+		if (it != server.getErrorPages().end()){
+			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
+			if (this->response.length() > 0)
+				return;
+		}
+	}
+	this->response = "<html>\n<head>\n<title>";
+	this->response += to_string(code);
+	this->response += " " + getErrorMsg(code);
+	this->response += "</title>\n<link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\"></head>\n<body>\n<center><img src=\"images/our_server.jpg\"></img></center><center><h1>";
+	this->response += to_string(code);
+	this->response += " " + getErrorMsg(code);
+	this->response += "</h1></center>\n<hr><center>";
+	this->response += server.getName();
+	this->response += "</center>\n</body>\n</html>";
 }
 
 std::string Response::getHeader(void)

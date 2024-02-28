@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/26 15:49:05 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:39:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ public:
 	void		generateResponse(int code, std::string def, Server &server);
 	void		generateRedirection(Location& location);
 	void		generateRedirectHeader(Location& location, Server& server);
+	void		generateTeapotResponse(int code, Server &server);
 };
 
 #endif
