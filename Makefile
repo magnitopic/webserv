@@ -5,6 +5,7 @@ WEB_SRC			=	src/utils.cpp \
 					src/webserv.cpp \
 					src/getFile.cpp \
 					src/contentType.cpp \
+					src/cgi.cpp \
 					src/model/Server.cpp \
 					src/model/Socket.cpp \
 					src/model/Request.cpp \
@@ -25,7 +26,7 @@ OBJS			=	$(WEB_SRC:.cpp=.o)
 # Compiler
 CXX				=	c++
 RM				=	rm -f
-CXXFLAGS		=	-Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
+CXXFLAGS		=	-Wall -Werror -Wextra -std=c++98
 
 # Colours
 RED				=	\033[0;31m

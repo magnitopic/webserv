@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Get.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 15:46:23 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:00:07 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -24,11 +24,12 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	 */
 	struct stat s;
 	req.setAbsPath(server);
-	cout << req.getterGetArgs() << endl;
 	req.setExtension();
 	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/')
 		req.handleSlash();
-	if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG) // This is a file
+	if (req.getAbsPath().substr(req.getAbsPath().length() - 3, 3) == ".py")
+		cgiForPostReq(req, resp, server, GET);
+	else if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG) // This is a file
 	{
 		if (access(req.getAbsPath().c_str(), R_OK) != 0){
 			resp.setErrorCode(403);

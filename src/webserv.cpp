@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 18:35:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 17:00:51 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -138,7 +138,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 	closeConnections(fds, nfds);
 }
 
-Socket createConection(unsigned int port) // The value of i is the counter in which we will be iterating this function
+Socket createConection(unsigned int port)
 {
 	Socket socket;
 
