@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 18:30:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:45:45 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ private:
 	std::string	extension;
 	std::string	contentType;
 	std::string	postType;
+	std::string	getArgs;	// arguments received in case of a GET request with a query ("url?value1&value2")
 	int			contentLength;
 	int			clientBodySize;	// the maximum size of the body send by the client
 	int			port;
@@ -81,6 +82,7 @@ public:
 	void		setPort();
 	int			getPort();
 	void		newSetPort(unsigned int nport);
+	std::string	getterGetArgs();
 	// methods
 
 	Request		parseReq(std::string passedReq);

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 15:05:57 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:45:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,9 +150,15 @@ void	Request::setAbsPath(Server& server)
 		this->absPath.pop_back();
 	if (this->uri.find("?") < this->uri.length() && this->uri.find("?") >= 0){
 		this->absPath += this->uri.substr(0, this->uri.find("?"));
+		this->getArgs = this->uri.substr(this->uri.find("?"), this->uri.length() - this->uri.find("?"));
 		return;
 	}
 	this->absPath += this->uri;
+}
+
+std::string	Request::getterGetArgs()
+{
+	return this->getArgs;
 }
 
 std::string	Request::getAbsPath()
