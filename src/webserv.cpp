@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 17:00:51 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:13:54 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -38,7 +38,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 	bool end_server = false;
 	bool close_conn = false;
 	bool compress_array = false;
-	char buffer[80];
+	char buffer[1024];
 	std::string finalBuf;
 	int rc = 0;
 	int new_sd = 0;
@@ -102,7 +102,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 					}
 				}
 				finalBuf += buffer;
-				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
+				if ((static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
 				{
 					client cl;
 					cl.fd = fds[i].fd;
@@ -177,6 +177,7 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.generateHeader(413, servers[i]);
 	}
 	std::string temp;
+	// ! El error está aquí porque debemos leer mal la request
 	if (req.getMethod() == "DELETE")
 	{
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
@@ -227,6 +228,7 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
 	if (writeVal < 1)
 		raiseError("send() failed");
+	cout << "ADIOS" << endl;
 	showData(req, response);
 }
 

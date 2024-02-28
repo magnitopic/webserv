@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Get.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 17:41:48 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:46:28 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -71,7 +71,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	else
 	{
 		resp.setErrorCode(404);
-		resp.setResponseNotFound();
+		resp.generateResponse(404, resp.getErrorMsg(404), server);
 		resp.setContentLength(resp.getResponse());
 		req.setContentType(parseContentType("html"));
 		resp.generateHeader(404, server);

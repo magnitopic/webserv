@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 16:58:22 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/28 19:05:59 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -88,5 +88,6 @@ int										fixingCPP(std::vector<Server> &servers, Request& req);
 int										fixingCPPAgain(std::vector<Server> &servers, Request& req);
 int										myOwnFindVector(std::vector<unsigned int> vector, unsigned int num);
 bool									cgiForPostReq(Request &req, Response &resp, Server &server, e_action type);
+int										fixingMapOperator(std::map<int, std::string> map, int code);
 
 #endif

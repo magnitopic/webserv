@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 18:17:12 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/28 18:36:50 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -118,6 +118,8 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 		cgiResponse += buf;
 
 	generateCGIresponse(req, resp, server, cgiResponse);
+	if (resp.getContentLength() == 0)
+		generateCGIerror(resp, server, 500);
 	close(fds[0]);
 	return true;
 }
