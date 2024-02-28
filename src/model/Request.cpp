@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 17:05:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:42:42 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,21 @@ std::string	Request::getHost()
 	return this->host;
 }
 
-void	Request::setHost(std::string host)
+void	Request::setHost()
 {
-	this->host = host;
+	size_t pos = this->reqBuffer.find("Host:") + 5;
+	std::string temp;
+	if (pos < 5 || pos > this->reqBuffer.length() + 5)
+		this->host = "localhost";
+	else{
+		while (isspace(this->reqBuffer[pos]))
+			pos++;
+		while (this->reqBuffer[pos] != '\n' && this->reqBuffer[pos] != ':' && this->reqBuffer[pos] != '\r'){
+			temp.push_back(this->reqBuffer[pos]);
+			pos++;
+		}
+	}
+	this->host = temp;
 }
 
 std::string	Request::getUser_agent()
@@ -224,12 +236,13 @@ void	Request::handleSlash()
 
 void	Request::setPort()
 {
-	size_t pos = this->reqBuffer.find("localhost:") + 10;
-	if (pos < 10 || pos > this->reqBuffer.length()){
-		cout << this->reqBuffer << endl;
+	size_t pos = this->reqBuffer.find(this->host) + this->host.length();
+	if (pos < this->host.length() || pos > this->reqBuffer.length()){
 		raiseError("Unexpected error");
 	}
 	std::string num;
+	while (this->reqBuffer[pos] == ':')
+		pos++;
 	while (pos < this->reqBuffer.length()){
 		if (isdigit(this->reqBuffer[pos]))
 			num.push_back(this->reqBuffer[pos]);
@@ -243,4 +256,9 @@ void	Request::setPort()
 int	Request::getPort()
 {
 	return this->port;
+}
+
+void	Request::newSetPort(unsigned int nport)
+{
+	this->port = nport;
 }

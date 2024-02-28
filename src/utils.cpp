@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 14:35:43 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:43:35 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,4 +116,50 @@ std::map<int, std::string>::iterator	getMapIterator(std::map<int, std::string> m
 			return it;
 	}
 	return map.end();
+}
+
+int myOwnFindVector(std::vector<unsigned int> vector, unsigned int num)
+{
+	std::vector<unsigned int> aux = vector;
+	for (std::vector<unsigned int>::iterator it = aux.begin(); it != aux.end(); it++)
+	{
+		if (*it == num)
+			return 1;
+	}
+	return 0;
+}
+
+
+int	fixingCPP(std::vector<Server> &servers, Request& req)
+{
+	int i = 0;
+
+	unsigned int temp = *servers[i].getPorts().begin();
+	for (i = 0; i < static_cast<int>(servers.size()); i++)
+	{
+		temp = *servers[i].getPorts().begin();
+		if (!strncmp(servers[i].getName().c_str(), req.getHost().c_str(), req.getHost().length()) && servers[i].getPorts().size() > 1 && std::find(servers[i].getPorts().begin(), servers[i].getPorts().end(), req.getPort()) != servers[i].getPorts().end())
+			break;
+		else if (!strncmp(servers[i].getName().c_str(), req.getHost().c_str(), req.getHost().length()) && servers[i].getPorts().size() == 1 && temp == static_cast<unsigned int>(req.getPort()))
+			break;
+		else if (!strncmp(servers[i].getName().c_str(), req.getHost().c_str(), req.getHost().length()) && req.getPort() == 0)
+			break;
+	}
+	return i;
+}
+
+int	fixingCPPAgain(std::vector<Server> &servers, Request& req)
+{
+	int i = 0;
+
+	unsigned int temp;
+	for (i = 0; i < static_cast<int>(servers.size()); i++)
+	{
+		temp = *servers[i].getPorts().begin();
+		if (servers[i].getPorts().size() > 1 && myOwnFindVector(servers[i].getPorts(), req.getPort()))
+			break;
+		else if (servers[i].getPorts().size() == 1 && temp == static_cast<unsigned int>(req.getPort()))
+			break;
+	}
+	return i;
 }

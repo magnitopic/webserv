@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 15:11:24 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/27 18:35:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,17 +152,18 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 {
 	Request req = parseReq(clients.finalbuffer);
 	req.setReqBuffer(clients.finalbuffer);
+	req.setHost();
 	req.setPort();
-	int i = 0;
-	for (i = 0; i < static_cast<int>(servers.size()); i++)
-	{
-		if (servers[i].getPorts().size() > 1 && std::find(servers[i].getPorts().begin(), servers[i].getPorts().end(), req.getPort()) != servers[i].getPorts().end())
-			break;
-		else if (servers[i].getPorts().size() == 1 && *servers[i].getPorts().begin() == static_cast<unsigned int>(req.getPort()))
-			break;
-	}
+	int i = fixingCPP(servers, req);
 	if (i >= static_cast<int>(servers.size()))
-		raiseError("Unexpected error occurred");
+	{
+		i = 0;
+		i = fixingCPPAgain(servers, req);
+	}
+	if (req.getPort() == 0)
+		req.newSetPort(servers[0].getPorts()[0]);
+	if (i >= static_cast<int>(servers.size()))
+		i = 0;
 	servers[i].setActions(str);
 	std::string aux = clients.finalbuffer;
 	req.setContentLength();
@@ -253,16 +254,21 @@ int main(int argc, char **argv, char **env)
 	memset(fds, 0, sizeof(fds));
 	std::vector<Socket> sockets;
 	int i = 0;
+	std::vector<int> openPorts;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
 	{
 		std::vector<unsigned int> ports = it->getPorts();
 		for (std::vector<unsigned int>::iterator it2 = ports.begin(); it2 != ports.end(); it2++)
 		{
-			Socket aux = createConection(*it2);
-			sockets.push_back(aux);
-			fds[i].fd = aux.getListen_sd();
-			fds[i].events = POLLIN;
-			i++;
+			if (find(openPorts.begin(), openPorts.end(), *it2) == openPorts.end())
+			{
+				Socket aux = createConection(*it2);
+				sockets.push_back(aux);
+				fds[i].fd = aux.getListen_sd();
+				fds[i].events = POLLIN;
+				i++;
+				openPorts.push_back(*it2);
+			}
 		}
 	}
 	justWaiting(servers, sockets, fds, file);
