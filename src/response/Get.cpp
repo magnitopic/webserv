@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/26 16:54:21 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:06:22 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	 */
 	struct stat s;
 	req.setAbsPath(server);
+	cout << req.getAbsPath() << endl;
 	req.setExtension();
 	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/')
 		req.handleSlash();

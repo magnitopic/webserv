@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 18:42:42 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/28 15:05:57 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,10 @@ void	Request::setAbsPath(Server& server)
 	this->absPath = server.getRoot();
 	if (this->uri[0] == '/' && absPath[absPath.length() - 1] == '/')
 		this->absPath.pop_back();
+	if (this->uri.find("?") < this->uri.length() && this->uri.find("?") >= 0){
+		this->absPath += this->uri.substr(0, this->uri.find("?"));
+		return;
+	}
 	this->absPath += this->uri;
 }
 
