@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 18:44:25 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/28 10:17:38 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -37,7 +37,7 @@ bool cgiForPostReq(char *route, char **args, char **env)
 		close(fds[0]);
 		dup2(fds[1], STDOUT_FILENO);
 		close(fds[1]);
-		execve(route, args, env);
+		execve("/usr/bin/python3", args, env);
 		perror("execve");
 		return false;
 	}
@@ -79,7 +79,7 @@ bool cgiForPostReq(char *route, char **args, char **env)
 
 int main(int argc, char **argv, char **env)
 {
-	cgiForPostReq(*argv, argv, env);
+	cgiForPostReq(argv[1], argv, env);
 	return 0;
 }
 
