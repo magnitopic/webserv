@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/19 16:01:32 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:56:34 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	PostReq::setFileContent(std::string request)
 	}
 	else
 		this->content = reqcpy.substr(0, pos2 - 2);
+	this->content.push_back('\0');
 
 
 

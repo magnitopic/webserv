@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 12:06:48 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:46:01 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -177,7 +177,6 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.generateHeader(413, servers[i]);
 	}
 	std::string temp;
-	// ! El error está aquí porque debemos leer mal la request
 	if (req.getMethod() == "DELETE")
 	{
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
@@ -228,7 +227,6 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
 	if (writeVal < 1)
 		raiseError("send() failed");
-	cout << "ADIOS" << endl;
 	showData(req, response);
 }
 

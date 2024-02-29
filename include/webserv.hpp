@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 11:59:52 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:29:25 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -43,7 +43,7 @@
 using namespace std;
 
 #define MAX_SERVERS 1024
-#define TIMEOUT 18000
+#define TIMEOUT 180000
 #define MAX_CGI_TIME 5
 // colours
 
@@ -87,7 +87,8 @@ std::map<int, std::string>::const_iterator	getMapIterator(const std::map<int, st
 int											fixingCPP(std::vector<Server> &servers, Request& req);
 int											fixingCPPAgain(std::vector<Server> &servers, Request& req);
 int											myOwnFindVector(std::vector<unsigned int> vector, unsigned int num);
-bool										cgiForPostReq(Request &req, Response &resp, Server &server, e_action type);
+bool										cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server);
+bool										cgiForGetReq(Request &req, Response &resp, Server &server);
 int											fixingMapOperator(std::map<int, std::string> map, int code);
 
 #endif

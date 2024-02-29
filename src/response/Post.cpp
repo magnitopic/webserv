@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Post.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/29 11:03:25 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:29:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -31,6 +31,7 @@ void	handleMultipartFormData(PostReq& post, Request& req, Response& response, Se
 	else{
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
+		cgiForPostReq(post, req, response, server);
 		// TODO: Send this data to the CGI via STDIN
 		response.setErrorCode(201);
 		response.generateResponse(201, response.getErrorMsg(201), server);

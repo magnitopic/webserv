@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Get.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 18:46:28 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 15:23:58 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -28,7 +28,7 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/')
 		req.handleSlash();
 	if (req.getAbsPath().substr(req.getAbsPath().length() - 3, 3) == ".py")
-		cgiForPostReq(req, resp, server, GET);
+		cgiForGetReq(req, resp, server);
 	else if (req.getUri() == "/teapot"){
 		resp.setErrorCode(418);
 		resp.generateTeapotResponse(418, server);

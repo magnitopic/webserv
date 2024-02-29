@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 12:05:53 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 16:43:32 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -35,16 +35,11 @@ static int checkTimeoutCGI(pid_t id, int fds[2])
 				int status;
 				waitpid(id, &status, 0);
 				close(fds[0]);
-				// TODO: http 508 error response
-				// std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Infinite loop" << RESET << std::endl;
 				return 1;
 			}
 		}
 		else if (result == -1)
-		{
 			return 2;
-			// std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Error executing script" << RESET << std::endl;
-		}
 		else
 			cgiFinished = !cgiFinished;
 	}
@@ -68,7 +63,7 @@ static void generateCGIerror(Response &resp, Server &server, int code)
 	resp.generateHeader(code, server);
 }
 
-bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
+bool cgiForGetReq(Request &req, Response &resp, Server &server)
 {
 	int fds[2];
 	pid_t id;
@@ -85,11 +80,8 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 	char *args[] = {pyPath, absPathCStr, NULL};
 	char *env[2];
 
-	if (type == 0)
-	{
-		env[0] = pathInfo.data();
-		env[1] = NULL;
-	}
+	env[0] = pathInfo.data();
+	env[1] = NULL;
 
 	// creating child process
 	if (pipe(fds) == -1)
@@ -106,6 +98,71 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 		perror("execve");
 		exit(1);
 	}
+	// original process
+	close(fds[1]);
+	delete[] absPathCStr;
+
+	int status = checkTimeoutCGI(id, fds);
+	if (status == 1)
+	{
+		generateCGIerror(resp, server, 508);
+		return false;
+	}
+	else if (status == 2)
+	{
+		generateCGIerror(resp, server, 500);
+		return false;
+	}
+
+	char buf;
+	std::string cgiResponse = "";
+	while (read(fds[0], &buf, 1) > 0)
+		cgiResponse += buf;
+
+	generateCGIresponse(req, resp, server, cgiResponse);
+	if (resp.getContentLength() == 0)
+		generateCGIerror(resp, server, 500);
+	close(fds[0]);
+	return true;
+}
+
+bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
+{
+	int fds[2];
+	pid_t id;
+	std::string content = "name=" + post.getFileName() + "&content=" + post.getFileContent() + "\0";
+
+	char pyPath[] = "usr/bin/python3";
+
+	std::string absPath = req.getAbsPath();
+	char *absPathCStr = new char[absPath.length() + 1];
+	std::strcpy(absPathCStr, absPath.c_str());
+
+	char *args[] = {pyPath, absPathCStr, NULL};
+
+	// creating child process
+	if (pipe(fds) == -1)
+		raiseError("CGI pipe error");
+	if ((id = fork()) == -1)
+		raiseError("CGI fork error");
+	// child process executes the python CGI
+	if (id == 0)
+	{
+		dup2(fds[1], STDOUT_FILENO);
+		close(fds[1]);
+		dup2(fds[0], STDIN_FILENO);
+		close(fds[0]);
+		execve("/usr/bin/python3", const_cast<char **>(args), NULL);
+		perror("execve");
+		exit(1);
+	}
+
+	while (content.size() > 0)
+	{
+		write(fds[1], content.c_str(), 1);
+		content = content.substr(1, content.length() - 1);
+	}
+	write(fds[1], "\0", 1);
 	// original process
 	close(fds[1]);
 	delete[] absPathCStr;
