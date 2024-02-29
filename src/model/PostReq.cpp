@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/29 14:56:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:53:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ PostReq::~PostReq() {}
 
 // setters and getters
 
+
+void	PostReq::setContentTextPlain(std::string str)
+{
+	this->content = str;
+}
 
 void	PostReq::setFileName(std::string request)
 {

@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:19:39 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/09 21:10:34 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:53:23 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ public:
 	std::string	getPostType();
 	void		setBoundary(std::string request);
 	std::string	getBoundary();
+	void		setContentTextPlain(std::string str);
 
 };
 

@@ -6,13 +6,14 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/29 17:24:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 18:55:45 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
-void	handleMultipartFormData(PostReq& post, Request& req, Response& response, Server& server)
+
+static void	handleMultipartFormData(PostReq& post, Request& req, Response& response, Server& server)
 {
 	if (post.getBoundary().find("WebKitFormBoundary") > post.getBoundary().length() || post.getBoundary().find("WebKitFormBoundary") < 0){
 		post.setFileName(req.getReqBuffer());
@@ -45,13 +46,19 @@ void	handleMultipartFormData(PostReq& post, Request& req, Response& response, Se
 		}
 		else{
 			cgiForPostReq(post, req, response, server);
-			// TODO: Send this data to the CGI via STDIN
 			response.setErrorCode(201);
 			response.generateResponse(201, response.getErrorMsg(201), server);
 			response.setContentLength(response.getResponse());
 			response.generateHeader(201, server);
 		}
 	}
+}
+
+static void	handleTextPlain(PostReq& post, Request& req, Response& response, Server& server)
+{
+	post.setContentTextPlain(bodyReq(req.getReqBuffer()));
+	cgiForPostReq(post, req, response, server);
+
 }
 
 void	handlePost(Server &server, Request &req, Response &response)
@@ -80,7 +87,7 @@ void	handlePost(Server &server, Request &req, Response &response)
 		return;
 	}
 	else if (!strncmp("text/plain", post.getPostType().c_str(), 10)){
-		// TODO: Fill with code
+		handleTextPlain(post, req, response, server);
 	}
 	else if (!strncmp("application/x-www-form-urlencoded", post.getPostType().c_str(), 33)){
 		const char* arr[] = {"python3", absPath.c_str()};
