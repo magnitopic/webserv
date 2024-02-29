@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/29 15:29:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 17:24:55 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,26 @@ void	handleMultipartFormData(PostReq& post, Request& req, Response& response, Se
 	else{
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
-		cgiForPostReq(post, req, response, server);
-		// TODO: Send this data to the CGI via STDIN
-		response.setErrorCode(201);
-		response.generateResponse(201, response.getErrorMsg(201), server);
-		response.setContentLength(response.getResponse());
-		response.generateHeader(201, server);
+		if (access("/uploads", W_OK)){
+			response.setErrorCode(403);
+			response.generateResponse(403, response.getErrorMsg(403), server);
+			response.setContentLength(response.getResponse());
+			response.generateHeader(403, server);
+		}
+		else if (access("/uploads", F_OK)){
+			response.setErrorCode(404);
+			response.generateResponse(404, response.getErrorMsg(404), server);
+			response.setContentLength(response.getResponse());
+			response.generateHeader(404, server);
+		}
+		else{
+			cgiForPostReq(post, req, response, server);
+			// TODO: Send this data to the CGI via STDIN
+			response.setErrorCode(201);
+			response.generateResponse(201, response.getErrorMsg(201), server);
+			response.setContentLength(response.getResponse());
+			response.generateHeader(201, server);
+		}
 	}
 }
 

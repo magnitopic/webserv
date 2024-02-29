@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 16:43:32 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 17:26:31 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
 {
 	int fds[2];
 	pid_t id;
-	std::string content = "name=" + post.getFileName() + "&content=" + post.getFileContent() + "\0";
+	std::string content = "name=../uploads/" + post.getFileName() + "&content=" + post.getFileContent() + "\0";
 
 	char pyPath[] = "usr/bin/python3";
 
