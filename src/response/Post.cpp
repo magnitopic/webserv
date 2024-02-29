@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Post.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/28 14:58:36 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 11:03:25 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -59,6 +59,7 @@ void	handlePost(Server &server, Request &req, Response &response)
 	num += "\n";
 	post.setPostType(num);
 	post.setBoundary(num);
+	std::string absPath = req.getAbsPath();
 	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19)){
 		handleMultipartFormData(post, req, response, server);
 		return;
@@ -67,7 +68,7 @@ void	handlePost(Server &server, Request &req, Response &response)
 		// TODO: Fill with code
 	}
 	else if (!strncmp("application/x-www-form-urlencoded", post.getPostType().c_str(), 33)){
-		const char* arr[] = {"python3", req.getAbsPath().c_str()};
+		const char* arr[] = {"python3", absPath.c_str()};
 		execve(arr[0], const_cast<char **>(arr), NULL);
 	}
 	else{ // This should be treated by default as an application/octet-stream

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/28 17:43:17 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:00:47 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -62,7 +62,7 @@ void Response::generateResponse(int code, std::string def, Server &server)
 {
 	if (server.getErrorPages().size() > 0)
 	{
-		std::map<int, std::string>::iterator it = getMapIterator(server.getErrorPages(), code);
+		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
 		if (it != server.getErrorPages().end()){
 			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)
@@ -142,7 +142,7 @@ void	Response::generateTeapotResponse(int code, Server &server)
 {
 	if (server.getErrorPages().size() > 0)
 	{
-		std::map<int, std::string>::iterator it = getMapIterator(server.getErrorPages(), code);
+		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
 		if (it != server.getErrorPages().end()){
 			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)

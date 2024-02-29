@@ -10,7 +10,7 @@ def main():
 			path_info[i] = path_info[i].split("=")
 
 
-		print(f"<h1>Hola {path_info[0][1]}, bienvenido</h1>")
+		print(f"<h1>Hello there {path_info[0][1]}, welcome</h1>")
 
 		for i in path_info:
 			print("<p>")
@@ -18,7 +18,7 @@ def main():
 				print(j)
 			print("</p>")
 	except:
-		print("<h1>Hello there anonymus user</h1>")
+		print("<h1>Hello there anonymous user</h1>")
 
 if __name__ == "__main__":
 	main()

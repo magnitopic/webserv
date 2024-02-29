@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 19:13:54 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:06:48 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -232,9 +232,8 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	showData(req, response);
 }
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
-	(void)env;
 	std::string file;
 	std::vector<Server> servers;
 

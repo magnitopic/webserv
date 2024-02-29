@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 18:36:50 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:05:53 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,14 +36,14 @@ static int checkTimeoutCGI(pid_t id, int fds[2])
 				waitpid(id, &status, 0);
 				close(fds[0]);
 				// TODO: http 508 error response
-				//std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Infinite loop" << RESET << std::endl;
+				// std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Infinite loop" << RESET << std::endl;
 				return 1;
 			}
 		}
 		else if (result == -1)
 		{
 			return 2;
-			//std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Error executing script" << RESET << std::endl;
+			// std::cerr << BLUE << "==> ❌ " << RED << "CGI ERROR: Error executing script" << RESET << std::endl;
 		}
 		else
 			cgiFinished = !cgiFinished;
@@ -72,14 +72,22 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 {
 	int fds[2];
 	pid_t id;
-	std::string pathInfo = "PATH_INFO=" + req.getterGetArgs();
+	std::string pathInfoStr = "PATH_INFO=" + req.getterGetArgs();
+	std::vector<char> pathInfo(pathInfoStr.begin(), pathInfoStr.end());
+	pathInfo.push_back('\0'); // don't forget the null terminator
+
 	char pyPath[] = "usr/bin/python3";
-	char *args[] = {pyPath, const_cast<char *>(req.getAbsPath().c_str()), NULL};
+
+	std::string absPath = req.getAbsPath();
+	char *absPathCStr = new char[absPath.length() + 1];
+	std::strcpy(absPathCStr, absPath.c_str());
+
+	char *args[] = {pyPath, absPathCStr, NULL};
 	char *env[2];
 
 	if (type == 0)
 	{
-		env[0] = const_cast<char *>(pathInfo.c_str());
+		env[0] = pathInfo.data();
 		env[1] = NULL;
 	}
 
@@ -88,7 +96,6 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 		raiseError("CGI pipe error");
 	if ((id = fork()) == -1)
 		raiseError("CGI fork error");
-
 	// child process executes the python CGI
 	if (id == 0)
 	{
@@ -97,17 +104,20 @@ bool cgiForPostReq(Request &req, Response &resp, Server &server, e_action type)
 		close(fds[1]);
 		execve("/usr/bin/python3", const_cast<char **>(args), const_cast<char **>(env));
 		perror("execve");
-		return false;
+		exit(1);
 	}
 	// original process
 	close(fds[1]);
+	delete[] absPathCStr;
 
 	int status = checkTimeoutCGI(id, fds);
-	if (status == 1){
+	if (status == 1)
+	{
 		generateCGIerror(resp, server, 508);
 		return false;
 	}
-	else if (status == 2){
+	else if (status == 2)
+	{
 		generateCGIerror(resp, server, 500);
 		return false;
 	}

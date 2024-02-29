@@ -1,21 +1,22 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/27 18:43:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/02/29 07:55:29 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
-std::string	bodyReq(std::string str)
+std::string bodyReq(std::string str)
 {
 	size_t pos = str.find("\r\n\r\n") + 4;
-	if (pos < 4 || pos > str.length()){
+	if (pos < 4 || pos > str.length())
+	{
 		if (!strncmp(str.substr(0, 4).c_str(), "POST", 4))
 			return "";
 		else
@@ -108,10 +109,10 @@ std::string deleteFirstElement(std::string str)
 
 // void	setIndex(finalRoute, socketClass.getDirectory())
 
-
-std::map<int, std::string>::iterator	getMapIterator(std::map<int, std::string> map, int code)
+std::map<int, std::string>::const_iterator getMapIterator(const std::map<int, std::string> &map, int code)
 {
-	for (std::map<int, std::string>::iterator it = map.begin(); it != map.end(); it++){
+	for (std::map<int, std::string>::const_iterator it = map.begin(); it != map.end(); it++)
+	{
 		if (it->first == code)
 			return it;
 	}
@@ -129,8 +130,7 @@ int myOwnFindVector(std::vector<unsigned int> vector, unsigned int num)
 	return 0;
 }
 
-
-int	fixingCPP(std::vector<Server> &servers, Request& req)
+int fixingCPP(std::vector<Server> &servers, Request &req)
 {
 	int i = 0;
 
@@ -148,7 +148,7 @@ int	fixingCPP(std::vector<Server> &servers, Request& req)
 	return i;
 }
 
-int	fixingCPPAgain(std::vector<Server> &servers, Request& req)
+int fixingCPPAgain(std::vector<Server> &servers, Request &req)
 {
 	int i = 0;
 
