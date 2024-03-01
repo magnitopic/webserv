@@ -11,5 +11,3 @@ if pos < 8:
     pos = 0
 
 print("<html>\n<body>\n<h1>The text introduced was:</h1><p>\"" + data[pos:].lstrip() + "\"</p>\n</body>\n</html>\0")
-
-

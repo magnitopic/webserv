@@ -4,6 +4,8 @@ def main():
 	path_info = os.environ['PATH_INFO']
 
 	try:
+		path_info = path_info.replace("%40", "@")
+		path_info = path_info.replace("+", " ")
 		path_info = path_info[1:]
 		path_info = path_info.split("&")
 		for i in range(len(path_info)):
