@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 17:26:31 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:54:29 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,16 @@ bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
 	char pyPath[] = "usr/bin/python3";
 
 	std::string absPath = req.getAbsPath();
+	if (absPath.substr(absPath.length() - 3, 3) != ".py")
+		absPath = server.getRoot() + "/cgi-bin/text_user.py";
+	if (access(absPath.c_str(), F_OK)){
+		generateCGIerror(resp, server, 404);
+		return false;
+	}
+	if (access(absPath.c_str(), R_OK)){
+		generateCGIerror(resp, server, 403);
+		return false;
+	}
 	char *absPathCStr = new char[absPath.length() + 1];
 	std::strcpy(absPathCStr, absPath.c_str());
 
@@ -181,9 +191,15 @@ bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
 
 	char buf;
 	std::string cgiResponse = "";
-	while (read(fds[0], &buf, 1) > 0)
-		cgiResponse += buf;
+	while (read(fds[0], &buf, 1) > 0){
+		if (buf == '\n')
+			cgiResponse += '\n';
+		else
+			cgiResponse += buf;
+	}
 
+	if (cgiResponse.back() == '\n')
+		cgiResponse.pop_back();
 	generateCGIresponse(req, resp, server, cgiResponse);
 	if (resp.getContentLength() == 0)
 		generateCGIerror(resp, server, 500);
