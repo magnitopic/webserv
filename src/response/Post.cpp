@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/01 14:32:49 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:59:36 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,16 @@
 
 static void	handleMultipartFormData(PostReq& post, Request& req, Response& response, Server& server)
 {
+	post.setFileName(req.getReqBuffer());
+	post.setFileContent(req.getReqBuffer());
+	if (post.getFileName().length() < 1){
+		response.setErrorCode(400);
+		response.generateResponse(400, response.getErrorMsg(400), server);
+		response.setContentLength(response.getResponse());
+		response.generateHeader(400, server);
+		return;
+	}
 	if (post.getBoundary().find("WebKitFormBoundary") > post.getBoundary().length() || post.getBoundary().find("WebKitFormBoundary") < 0){
-		post.setFileName(req.getReqBuffer());
-		post.setFileContent(req.getReqBuffer());
 		std::string name = req.getAbsPath() + "/" + post.getFileName();
 		ofstream newfile(name);
 		open(name.c_str(), O_RDWR | O_CREAT, 0666);
@@ -58,7 +65,12 @@ static void	handleTextPlain(PostReq& post, Request& req, Response& response, Ser
 {
 	post.setContentTextPlain(bodyReq(req.getReqBuffer()));
 	cgiForPostReq(post, req, response, server);
+}
 
+static void	handleApplication(PostReq& post, Request& req, Response& response, Server& server)
+{
+	post.setContentTextPlain(bodyReq(req.getReqBuffer()));
+	cgiForPostReq(post, req, response, server);
 }
 
 void	handlePost(Server &server, Request &req, Response &response)
@@ -72,7 +84,7 @@ void	handlePost(Server &server, Request &req, Response &response)
 		response.setErrorCode(200);
 		response.setResponseHTML(200);
 		response.setContentLength(response.getResponse());
-		response.generateHeaderContent(201, "text/html", server);
+		response.generateHeaderContent(200, "text/html", server);
 		return;
 	}
 	std::istringstream temp(req.getReqBuffer().substr(pos, req.getReqBuffer().length() - pos));
@@ -90,10 +102,10 @@ void	handlePost(Server &server, Request &req, Response &response)
 		handleTextPlain(post, req, response, server);
 	}
 	else if (!strncmp("application/x-www-form-urlencoded", post.getPostType().c_str(), 33)){
-		const char* arr[] = {"python3", absPath.c_str()};
-		execve(arr[0], const_cast<char **>(arr), NULL);
+		handleApplication(post, req, response, server);
 	}
 	else{ // This should be treated by default as an application/octet-stream
-		// TODO: Fill with code
+		handleTextPlain(post, req, response, server);
+		return;
 	}
 }

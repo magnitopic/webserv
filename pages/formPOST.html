@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Make a POST request</title>
+		<style>
+			form {
+				display: flex;
+				border: 1px solid #000;
+				gap: 1rem;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				padding: 2rem;
+				width: fit-content;
+				margin: 0 auto;
+			}
+			form > div {
+				display: flex;
+				align-items: flex-start;
+				justify-content: flex-start;
+				flex-direction: column;
+				width: 100%;
+				gap: 0.5rem;
+			}
+
+			button {
+				padding: 0.5rem;
+				border: none;
+				background-color: lightblue;
+				font-size: 1.2em;
+				border-radius: 6px;
+			}
+		</style>
+	</head>
+	<body>
+		<form action="/cgi-bin/greet_user_post.py" method="post" enctype="application/x-www-form-urlencoded">
+			<h3>Make a POST request</h3>
+			<div>
+				<label for="1">Name</label>
+				<input type="text" id="1" name="Name" />
+			</div>
+			<div>
+				<label for="2">42 Login</label>
+				<input type="text" id="2" name="Login" />
+			</div>
+			<div>
+				<label for="3">Email</label>
+				<input type="email" id="3" name="Email" />
+			</div>
+			<div>
+				<label for="4">Comments</label>
+				<textarea name="Comments" cols="16" rows="5"></textarea>
+			</div>
+
+			<button>Submit form</button>
+		</form>
+	</body>
+</html>

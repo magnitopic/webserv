@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/01 14:55:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/03 19:45:21 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 					}
 				}
 				finalBuf += buffer;
-				if ((static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0))
+				if ((static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0)
+					|| parsedContentLength(finalBuf) == -1)
 				{
 					client cl;
 					cl.fd = fds[i].fd;
@@ -224,7 +225,6 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.generateHeader(501, servers[i]);
 	}
 	std::string resp = response.generateHttpResponse();
-	cout << resp << endl;
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
 	if (writeVal < 1)
 		raiseError("send() failed");

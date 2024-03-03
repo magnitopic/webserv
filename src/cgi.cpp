@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/01 14:54:29 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:09:13 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,16 @@ bool cgiForGetReq(Request &req, Response &resp, Server &server)
 	char pyPath[] = "usr/bin/python3";
 
 	std::string absPath = req.getAbsPath();
+	if (absPath.substr(absPath.length() - 3, 3) != ".py")
+		absPath = server.getRoot() + "/cgi-bin/text_user.py";
+	if (access(absPath.c_str(), F_OK)){
+		generateCGIerror(resp, server, 404);
+		return false;
+	}
+	if (access(absPath.c_str(), R_OK)){
+		generateCGIerror(resp, server, 403);
+		return false;
+	}
 	char *absPathCStr = new char[absPath.length() + 1];
 	std::strcpy(absPathCStr, absPath.c_str());
 
