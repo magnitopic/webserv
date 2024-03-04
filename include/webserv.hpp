@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 15:29:25 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:52:57 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ Request										parseReq(std::string passedReq);
 std::string									configToString(char *str);
 void										raiseError(const char *msg);
 std::string									getFile(const std::string &fileAdr);
-std::vector<Server>							parseConfigFile(std::string file_name);
+void										parseConfigFile(std::string file_name, std::vector<Server> &serverList);
 int											isAllowed(Server &server, Request & req, Location &location);
 void 										handleRequests(std::vector<Server> &servers, client& clients, std::string str);
 std::string									parseContentType(std::string extension);

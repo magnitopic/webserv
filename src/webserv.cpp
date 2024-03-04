@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 16:11:37 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:33:54 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,16 +240,23 @@ int main(int argc, char **argv)
 		raiseError("Too many arguments");
 	else if (argc == 2)
 	{
-		servers = parseConfigFile(argv[1]);
+		parseConfigFile(argv[1], servers);
 		file = configToString(argv[1]);
 	}
 	else
 	{
 		char *temp = strdup("webserv.conf");
-		servers = parseConfigFile(temp);
+		parseConfigFile(temp, servers);
+		cout << servers[0].getLocations().size() << endl;
+		for (std::vector<Location>::iterator it = servers[0].getLocations().begin(); it != servers[0].getLocations().end(); it++)
+			cout <<"|" << (*it).getRoot() << "|" <<endl;
+		exit(0);
 		file = configToString(temp);
 		free(temp);
 	}
+	for (std::vector<Location>::iterator it = servers[0].getLocations().begin(); it != servers[0].getLocations().end(); it++)
+		cout << (*it).getRoot() << endl;
+	exit(0);
 	struct pollfd fds[200];
 	memset(fds, 0, sizeof(fds));
 	std::vector<Socket> sockets;

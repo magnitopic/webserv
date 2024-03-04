@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 16:30:46 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:43:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ public:
 	void						setValues(std::string str);
 	int							setRedirection();
 	std::map<int, std::string>	getRedirection();
+	void						setTheRoot(std::string str);
 	// methods
 
 	std::string	generateHttpResponse(void);

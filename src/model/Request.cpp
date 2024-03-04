@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 16:25:16 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:16:02 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,10 +286,15 @@ void	Request::fixURI(Server& server)
 	pch = strtok (const_cast<char *>(str.c_str()), "/");
 	while (pch != NULL)
 	{
-		cout << server.getLocations().size() << endl;
 		for (std::vector<Location>::iterator it = server.getLocations().begin(); it != server.getLocations().end(); it++){
-			if (!strncmp(pch, (*it).getDirectory().c_str(), (*it).getDirectory().length())){
+			cout << it->getDirectory() << endl;
+			std::string aux = "/";
+			aux += pch;
+			if ((*it).getRoot().length() > 0 && !strncmp(aux.c_str(), (*it).getDirectory().c_str(), (*it).getDirectory().length())){
+				cout << (*it).getDirectory() << endl;
+				//cout << (*it).getRoot() << endl;
 				if ((*it).getRoot().length() > 0){
+					cout << "root: " << (*it).getRoot() << endl;
 					newUri += (*it).getRoot();
 					newUri += "/";
 				}
@@ -305,5 +310,5 @@ void	Request::fixURI(Server& server)
 		newUri.pop_back();
 	if (newUri.length() > 0)
 		this->uri = newUri;
-	cout << this->uri << endl;
+	cout << "uri: " << this->uri << endl;
 }

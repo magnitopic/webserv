@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 16:53:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 18:43:01 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ Location::Location(std::string directory)
 		i++;
 	}
 	this->index = "index.html";
+	this->root = "";
 	i = directory.find("root ") + 5;
 	if (i > 4 && i < static_cast<int>(directory.length())){
 		while (i < static_cast<int>(directory.length()) && directory[i]){
@@ -47,6 +48,9 @@ Location::Location(std::string directory)
 			i++;
 		}
 	}
+	if (this->root.length() > 0)
+		cout << this->directory << ": " << this->root << endl;
+	cout << this->root.length() << endl;
 }
 
 Location::Location(const Location &location)
@@ -130,6 +134,10 @@ void Location::setActions(std::string text)
 		}
 		i++;
 	}
+}
+
+void	Location::setTheRoot(std::string str){
+	this->root = str;
 }
 
 void Location::setForbidden()
