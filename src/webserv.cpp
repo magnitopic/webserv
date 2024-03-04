@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/03 19:45:21 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:58:10 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -102,8 +102,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 					}
 				}
 				finalBuf += buffer;
-				if ((static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0)
-					|| parsedContentLength(finalBuf) == -1)
+				if ((static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0) || parsedContentLength(finalBuf) == -1)
 				{
 					client cl;
 					cl.fd = fds[i].fd;
@@ -255,6 +254,9 @@ int main(int argc, char **argv)
 	std::vector<Socket> sockets;
 	int i = 0;
 	std::vector<int> openPorts;
+	std::cout << BLUE << "==> " << CYAN << "Webserv running ✅\n"
+			  << BLUE << "==>" << CYAN << "And listening on these addresses:"
+			  << YELLOW << std::endl;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
 	{
 		std::vector<unsigned int> ports = it->getPorts();
@@ -268,9 +270,11 @@ int main(int argc, char **argv)
 				fds[i].events = POLLIN;
 				i++;
 				openPorts.push_back(*it2);
+				std::cout << "\thttp://localhost:" << *it2 << std::endl;
 			}
 		}
 	}
+	std::cout << RESET << "----------------------------------" << std::endl;
 	justWaiting(servers, sockets, fds, file);
 	return 0;
 }

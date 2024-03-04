@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parseReq.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:21:43 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 19:56:59 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:58:19 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -43,15 +43,16 @@ Request parseReq(std::string passedReq)
 	return req;
 }
 
-int	parsedContentLength(std::string str)
+int parsedContentLength(std::string str)
 {
 	size_t pos = str.find("Content-Length:") + 15;
 	if (pos < 15 || pos > str.length())
 		return -1;
 	while (isspace(str[pos]))
 		pos++;
-	std::string	num;
-	while (isdigit(str[pos])){
+	std::string num;
+	while (isdigit(str[pos]))
+	{
 		num.push_back(str[pos]);
 		pos++;
 	}

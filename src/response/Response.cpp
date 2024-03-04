@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/29 12:00:47 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:57:37 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -63,7 +63,8 @@ void Response::generateResponse(int code, std::string def, Server &server)
 	if (server.getErrorPages().size() > 0)
 	{
 		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
-		if (it != server.getErrorPages().end()){
+		if (it != server.getErrorPages().end())
+		{
 			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)
 				return;
@@ -138,12 +139,13 @@ void Response::generateHeaderContent(int code, std::string type, Server &server)
 	return;
 }
 
-void	Response::generateTeapotResponse(int code, Server &server)
+void Response::generateTeapotResponse(int code, Server &server)
 {
 	if (server.getErrorPages().size() > 0)
 	{
 		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
-		if (it != server.getErrorPages().end()){
+		if (it != server.getErrorPages().end())
+		{
 			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)
 				return;
@@ -173,22 +175,22 @@ std::string Response::generateHttpResponse()
 	return resp;
 }
 
-void	Response::setErrorCode(int code)
+void Response::setErrorCode(int code)
 {
 	this->code = code;
 }
 
-int	Response::getErrorCode()
+int Response::getErrorCode()
 {
 	return this->code;
 }
 
-void	showData(Request &req, Response &response)
+void showData(Request &req, Response &response)
 {
 	std::time_t currentTime = std::time(nullptr);
 
 	// Convert to local time structure
-	std::tm* localTime = std::localtime(&currentTime);
+	std::tm *localTime = std::localtime(&currentTime);
 
 	// Access components of the time structure
 	int year = localTime->tm_year + 1900;
@@ -198,22 +200,20 @@ void	showData(Request &req, Response &response)
 	int minute = localTime->tm_min;
 	int second = localTime->tm_sec;
 
-	std::string	uri = req.getUri();
+	std::string uri = req.getUri();
 	if (uri.find("?") >= 0 && uri.find("?") < uri.length())
 		uri = uri.substr(0, uri.find("?"));
 
 	// Print the result
-	std::cout << "[" << day << "-" << month << "-" << year << " " << hour << ":" << minute << ":" << second  << "] \"" << req.getMethod() <<
-	" " << uri << " HTTP/1.1\" " << response.getErrorCode() << " " << response.getContentLength() << std::endl;
-
+	std::cout << "[" << day << "-" << month << "-" << year << " " << hour << ":" << minute << ":" << second << "] \"" << req.getMethod() << " " << uri << " HTTP/1.1\" " << response.getErrorCode() << " " << response.getContentLength() << std::endl;
 }
 
-void	Response::generateRedirection(Location& location)
+void Response::generateRedirection(Location &location)
 {
 	this->response = "Redirecting to " + location.getRedirection().begin()->second;
 }
 
-void	Response::generateRedirectHeader(Location& location, Server& server)
+void Response::generateRedirectHeader(Location &location, Server &server)
 {
 	this->header = "HTTP/1.1 ";
 	this->header += to_string(location.getRedirection().begin()->first);

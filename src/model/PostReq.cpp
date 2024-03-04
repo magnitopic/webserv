@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   PostReq.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/29 18:53:06 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:59:02 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -25,7 +25,7 @@ PostReq &PostReq::operator=(const PostReq &assign)
 {
 	if (this != &assign)
 	{
-		this->fileName= assign.fileName;
+		this->fileName = assign.fileName;
 	}
 	return *this;
 }
@@ -34,16 +34,16 @@ PostReq::~PostReq() {}
 
 // setters and getters
 
-
-void	PostReq::setContentTextPlain(std::string str)
+void PostReq::setContentTextPlain(std::string str)
 {
 	this->content = str;
 }
 
-void	PostReq::setFileName(std::string request)
+void PostReq::setFileName(std::string request)
 {
 	int pos = request.find("filename=\"") + 10;
-	if (pos >= static_cast<int>(request.length()) || pos < 10){
+	if (pos >= static_cast<int>(request.length()) || pos < 10)
+	{
 		this->fileName = "";
 		return;
 	}
@@ -51,21 +51,23 @@ void	PostReq::setFileName(std::string request)
 	this->fileName = temp.substr(0, temp.find("\""));
 }
 
-std::string	PostReq::getFileName()
+std::string PostReq::getFileName()
 {
 	return this->fileName;
 }
 
-void	PostReq::setFileContent(std::string request)
+void PostReq::setFileContent(std::string request)
 {
 	int pos = request.find("Content-Type:") + 14;
-	if (pos >= static_cast<int>(request.length()) || pos < 14){
+	if (pos >= static_cast<int>(request.length()) || pos < 14)
+	{
 		this->content = "";
 		return;
 	}
-	std::string	reqcpy = request.substr(pos, request.length() - pos);
+	std::string reqcpy = request.substr(pos, request.length() - pos);
 	pos = reqcpy.find("Content-Type:") + 14;
-	if (pos >= static_cast<int>(reqcpy.length()) || pos < 14){
+	if (pos >= static_cast<int>(reqcpy.length()) || pos < 14)
+	{
 		this->content = "";
 		return;
 	}
@@ -73,16 +75,15 @@ void	PostReq::setFileContent(std::string request)
 	reqcpy = reqcpy.substr(reqcpy.find("\n"), reqcpy.length() - reqcpy.find("\n"));
 	if (boundary[boundary.length() - 1] == '\n' || boundary[boundary.length() - 1] == '\r')
 		boundary = boundary.substr(0, boundary.length() - 1);
-	std::size_t	pos2 = reqcpy.find(boundary);
-	std::size_t	check = reqcpy.rfind(boundary);
-	if (pos2 < reqcpy.length() && pos2 < check && check < reqcpy.length()){
+	std::size_t pos2 = reqcpy.find(boundary);
+	std::size_t check = reqcpy.rfind(boundary);
+	if (pos2 < reqcpy.length() && pos2 < check && check < reqcpy.length())
+	{
 		this->content = reqcpy.substr(pos2 + boundary.length(), reqcpy.length() - pos2 - boundary.length() - check - 2);
 	}
 	else
 		this->content = reqcpy.substr(0, pos2 - 2);
 	this->content.push_back('\0');
-
-
 
 	/*if (check < reqcpy.length() && check >= 0)
 	{
@@ -106,27 +107,29 @@ void	PostReq::setFileContent(std::string request)
 			reqcpy.erase(pos2, this->postType.length());
 		}
 	}*/
-	//this->content = aux2;
+	// this->content = aux2;
 }
 
-std::string	PostReq::getFileContent()
+std::string PostReq::getFileContent()
 {
 	return this->content;
 }
 
-void	PostReq::setPostType(std::string type){
+void PostReq::setPostType(std::string type)
+{
 	this->postType = type;
 }
 
-std::string	PostReq::getPostType()
+std::string PostReq::getPostType()
 {
 	return this->postType;
 }
 
-void	PostReq::setBoundary(std::string request)
+void PostReq::setBoundary(std::string request)
 {
 	int pos = request.find("boundary=") + 9;
-	if (pos >= static_cast<int>(request.length()) || pos < 9){
+	if (pos >= static_cast<int>(request.length()) || pos < 9)
+	{
 		this->boundary = "";
 		return;
 	}
@@ -134,7 +137,7 @@ void	PostReq::setBoundary(std::string request)
 	this->boundary = request.substr(pos, d - pos);
 }
 
-std::string	PostReq::getBoundary()
+std::string PostReq::getBoundary()
 {
 	return this->boundary;
 }

@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 09:21:44 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:59:04 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -40,23 +40,23 @@ Request::~Request() {}
 
 // setters and getters
 
-std::string	Request::getMethod()
+std::string Request::getMethod()
 {
 	return this->method;
 }
 
-void	Request::setMethod(std::string method)
+void Request::setMethod(std::string method)
 {
 	this->method = method;
 }
 
-void	Request::setExtension()
+void Request::setExtension()
 {
 	this->extension = this->uri.substr(this->uri.rfind(".") + 1, this->uri.length() - this->uri.rfind("."));
 	return;
 }
 
-std::string	Request::getExtension()
+std::string Request::getExtension()
 {
 	return this->extension;
 }
@@ -71,41 +71,43 @@ void Request::setContentType(std::string type)
 	this->contentType = type;
 }
 
-std::string	Request::getUri()
+std::string Request::getUri()
 {
 	return this->uri;
 }
 
-void	Request::setUri(std::string uri)
+void Request::setUri(std::string uri)
 {
 	this->uri = uri;
 }
 
-std::string	Request::getVersion()
+std::string Request::getVersion()
 {
 	return this->version;
 }
 
-void	Request::setVersion(std::string version)
+void Request::setVersion(std::string version)
 {
 	this->version = version;
 }
 
-std::string	Request::getHost()
+std::string Request::getHost()
 {
 	return this->host;
 }
 
-void	Request::setHost()
+void Request::setHost()
 {
 	size_t pos = this->reqBuffer.find("Host:") + 5;
 	std::string temp;
 	if (pos < 5 || pos > this->reqBuffer.length() + 5)
 		this->host = "localhost";
-	else{
+	else
+	{
 		while (isspace(this->reqBuffer[pos]))
 			pos++;
-		while (this->reqBuffer[pos] != '\n' && this->reqBuffer[pos] != ':' && this->reqBuffer[pos] != '\r'){
+		while (this->reqBuffer[pos] != '\n' && this->reqBuffer[pos] != ':' && this->reqBuffer[pos] != '\r')
+		{
 			temp.push_back(this->reqBuffer[pos]);
 			pos++;
 		}
@@ -113,42 +115,43 @@ void	Request::setHost()
 	this->host = temp;
 }
 
-std::string	Request::getUser_agent()
+std::string Request::getUser_agent()
 {
 	return this->user_agent;
 }
 
-void	Request::setUser_agent(std::string user_agent)
+void Request::setUser_agent(std::string user_agent)
 {
 	this->user_agent = user_agent;
 }
 
-std::string	Request::getAccept()
+std::string Request::getAccept()
 {
 	return this->accept;
 }
 
-void	Request::setAccept(std::string accept)
+void Request::setAccept(std::string accept)
 {
 	this->accept = accept;
 }
 
-std::string	Request::getConnection()
+std::string Request::getConnection()
 {
 	return this->connection;
 }
 
-void	Request::setConnection(std::string connection)
+void Request::setConnection(std::string connection)
 {
 	this->connection = connection;
 }
 
-void	Request::setAbsPath(Server& server)
+void Request::setAbsPath(Server &server)
 {
 	this->absPath = server.getRoot();
 	if (this->uri[0] == '/' && absPath[absPath.length() - 1] == '/')
 		this->absPath.pop_back();
-	if (this->uri.find("?") < this->uri.length() && this->uri.find("?") >= 0){
+	if (this->uri.find("?") < this->uri.length() && this->uri.find("?") >= 0)
+	{
 		this->absPath += this->uri.substr(0, this->uri.find("?"));
 		this->getArgs = this->uri.substr(this->uri.find("?"), this->uri.length() - this->uri.find("?"));
 		return;
@@ -156,12 +159,12 @@ void	Request::setAbsPath(Server& server)
 	this->absPath += this->uri;
 }
 
-std::string	Request::getterGetArgs()
+std::string Request::getterGetArgs()
 {
 	return this->getArgs;
 }
 
-std::string	Request::getAbsPath()
+std::string Request::getAbsPath()
 {
 	return std::string(this->absPath);
 }
@@ -169,7 +172,7 @@ std::string	Request::getAbsPath()
 
 /**
  * Parses the request and stores the information in the Request object.
-*/
+ */
 Request Request::parseReq(std::string passedReq)
 {
 	std::istringstream iss(passedReq);
@@ -201,12 +204,12 @@ Request Request::parseReq(std::string passedReq)
 	return req;
 }
 
-
-void	Request::setContentLength()
+void Request::setContentLength()
 {
 	int pos = this->reqBuffer.find("Content-Length:") + 15;
-	if (pos >= static_cast<int>(this->reqBuffer.length()) || pos < 15){
-		this->contentLength  = 0;
+	if (pos >= static_cast<int>(this->reqBuffer.length()) || pos < 15)
+	{
+		this->contentLength = 0;
 		return;
 	}
 	std::istringstream temp(this->reqBuffer.substr(pos, this->reqBuffer.length() - pos));
@@ -214,46 +217,48 @@ void	Request::setContentLength()
 	std::getline(temp, num);
 	this->contentLength = std::atoi(num.c_str());
 }
-int	Request::getContentLength()
+int Request::getContentLength()
 {
 	return this->contentLength;
 }
 
-void	Request::setReqBuffer(std::string buffer)
+void Request::setReqBuffer(std::string buffer)
 {
 	this->reqBuffer = buffer;
 }
 
-std::string	Request::getReqBuffer()
+std::string Request::getReqBuffer()
 {
 	return this->reqBuffer;
 }
 
-int	Request::getClientBodySize()
+int Request::getClientBodySize()
 {
 	return this->clientBodySize;
 }
 
-void	Request::setClientBodySize(int maxSize)
+void Request::setClientBodySize(int maxSize)
 {
 	this->clientBodySize = maxSize;
 }
 
-void	Request::handleSlash()
+void Request::handleSlash()
 {
 	this->absPath.pop_back();
 }
 
-void	Request::setPort()
+void Request::setPort()
 {
 	size_t pos = this->reqBuffer.find(this->host) + this->host.length();
-	if (pos < this->host.length() || pos > this->reqBuffer.length()){
+	if (pos < this->host.length() || pos > this->reqBuffer.length())
+	{
 		raiseError("Unexpected error");
 	}
 	std::string num;
 	while (this->reqBuffer[pos] == ':')
 		pos++;
-	while (pos < this->reqBuffer.length()){
+	while (pos < this->reqBuffer.length())
+	{
 		if (isdigit(this->reqBuffer[pos]))
 			num.push_back(this->reqBuffer[pos]);
 		else
@@ -263,12 +268,12 @@ void	Request::setPort()
 	this->port = std::atoi(num.c_str());
 }
 
-int	Request::getPort()
+int Request::getPort()
 {
 	return this->port;
 }
 
-void	Request::newSetPort(unsigned int nport)
+void Request::newSetPort(unsigned int nport)
 {
 	this->port = nport;
 }

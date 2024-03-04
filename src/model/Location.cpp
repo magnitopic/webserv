@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 20:33:32 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:58:56 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -55,12 +55,10 @@ void Location::setDirectory(std::string directory)
 	return;
 }
 
-
 std::string Location::getDirectory(void)
 {
 	return this->directory;
 }
-
 
 void Location::setActions(std::string text)
 {
@@ -72,7 +70,7 @@ void Location::setActions(std::string text)
 	int i = methods.find("limit_except") + 12;
 	while (i < static_cast<int>(methods.length()) || i < 12)
 	{
-		//server.emptyActions();
+		// server.emptyActions();
 		if (isupper(methods[i]))
 			word.push_back(methods[i]);
 		else if (islower(methods[i]))
@@ -85,12 +83,13 @@ void Location::setActions(std::string text)
 		}
 		i++;
 	}
-	if (this->actions.size() > 0){
+	if (this->actions.size() > 0)
+	{
 		if (find(this->actions.begin(), this->actions.end(), "GET") == this->actions.end())
 			this->forbidden.push_back("GET");
 		if (find(this->actions.begin(), this->actions.end(), "POST") == this->actions.end())
 			this->forbidden.push_back("POST");
-			if (find(this->actions.begin(), this->actions.end(), "DELETE") == this->actions.end())
+		if (find(this->actions.begin(), this->actions.end(), "DELETE") == this->actions.end())
 			this->forbidden.push_back("DELETE");
 	}
 	i = methods.find("allow") + 5;
@@ -152,7 +151,7 @@ void Location::setAutoIndex(bool autoIndex)
 	this->autoIndex = autoIndex;
 }
 
-std::list<std::string>	Location::getForbidden(void)
+std::list<std::string> Location::getForbidden(void)
 {
 	return this->forbidden;
 }
@@ -174,7 +173,7 @@ bool isAutoindex(Location &location)
 	return false;
 }
 
-static void servePages(std::string route, dirent *entry, DIR* dirContents, Response& response)
+static void servePages(std::string route, dirent *entry, DIR *dirContents, Response &response)
 {
 	std::string page = "<head><title>Index of " + route + "</title><link rel=\"shortcut icon\" href=\"images/favicon.ico\" type=\"image/x-icon\"></head>";
 	page += "<body><h1>Index of " + route + "</h1>";
@@ -223,15 +222,16 @@ std::ostream &operator<<(std::ostream &os, std::list<std::string> list)
 	return os;
 }
 
-void	Location::emptyActions(void)
+void Location::emptyActions(void)
 {
 	this->actions.clear();
 }
 
-void	Location::setBuffer(std::string configFile)
+void Location::setBuffer(std::string configFile)
 {
 	std::string aux = "location " + directory + " ";
-	if (configFile.find(aux) >= configFile.length()){
+	if (configFile.find(aux) >= configFile.length())
+	{
 		this->buffer = "";
 		return;
 	}
@@ -240,12 +240,12 @@ void	Location::setBuffer(std::string configFile)
 	this->buffer = temp.substr(0, temp.find("}"));
 }
 
-std::string	Location::getBuffer(void)
+std::string Location::getBuffer(void)
 {
 	return this->buffer;
 }
 
-void	Location::setIndex()
+void Location::setIndex()
 {
 	this->index = "index.html";
 	if (buffer.length() < 1)
@@ -263,12 +263,12 @@ void	Location::setIndex()
 		this->index = word;
 }
 
-std::string	Location::getIndex()
+std::string Location::getIndex()
 {
 	return this->index;
 }
 
-void	Location::setValues(std::string str)
+void Location::setValues(std::string str)
 {
 	setBuffer(str);
 	setActions(str);
@@ -276,11 +276,11 @@ void	Location::setValues(std::string str)
 	setForbidden();
 }
 
-int	Location::setRedirection()
+int Location::setRedirection()
 {
 	std::size_t found = buffer.find("return ") + 7;
 	std::string num;
-	std::string	str;
+	std::string str;
 	if (found > buffer.length() || found < 7)
 		return 0;
 	while (found < buffer.length() && buffer[found] != ';' && buffer[found] != '\n' && buffer[found] != '\r')
@@ -291,7 +291,8 @@ int	Location::setRedirection()
 		{
 			while (buffer[found] != ';')
 			{
-				if (isspace(buffer[found]) || buffer[found] == '\n' || buffer[found] == '\r'){
+				if (isspace(buffer[found]) || buffer[found] == '\n' || buffer[found] == '\r')
+				{
 					this->redirection.insert(std::pair<int, std::string>(atoi(num.c_str()), str));
 					return 1;
 				}
@@ -305,17 +306,16 @@ int	Location::setRedirection()
 	return 1;
 }
 
-std::map<int, std::string>	Location::getRedirection()
+std::map<int, std::string> Location::getRedirection()
 {
 	return this->redirection;
 }
 
-std::ostream	&operator<<(std::ostream &os, std::map<int, std::string> map)
+std::ostream &operator<<(std::ostream &os, std::map<int, std::string> map)
 {
-	for (std::map<int, std::string>::iterator it = map.begin(); it != map.end(); it++){
+	for (std::map<int, std::string>::iterator it = map.begin(); it != map.end(); it++)
+	{
 		os << "First: " << it->first << ", Second: " << it->second << endl;
 	}
 	return os;
 }
-
-

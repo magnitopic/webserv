@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/03 18:09:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:57:04 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -76,11 +76,13 @@ bool cgiForGetReq(Request &req, Response &resp, Server &server)
 	std::string absPath = req.getAbsPath();
 	if (absPath.substr(absPath.length() - 3, 3) != ".py")
 		absPath = server.getRoot() + "/cgi-bin/text_user.py";
-	if (access(absPath.c_str(), F_OK)){
+	if (access(absPath.c_str(), F_OK))
+	{
 		generateCGIerror(resp, server, 404);
 		return false;
 	}
-	if (access(absPath.c_str(), R_OK)){
+	if (access(absPath.c_str(), R_OK))
+	{
 		generateCGIerror(resp, server, 403);
 		return false;
 	}
@@ -136,7 +138,7 @@ bool cgiForGetReq(Request &req, Response &resp, Server &server)
 	return true;
 }
 
-bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
+bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 {
 	int fds[2];
 	pid_t id;
@@ -147,11 +149,13 @@ bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
 	std::string absPath = req.getAbsPath();
 	if (absPath.substr(absPath.length() - 3, 3) != ".py")
 		absPath = server.getRoot() + "/cgi-bin/text_user.py";
-	if (access(absPath.c_str(), F_OK)){
+	if (access(absPath.c_str(), F_OK))
+	{
 		generateCGIerror(resp, server, 404);
 		return false;
 	}
-	if (access(absPath.c_str(), R_OK)){
+	if (access(absPath.c_str(), R_OK))
+	{
 		generateCGIerror(resp, server, 403);
 		return false;
 	}
@@ -201,7 +205,8 @@ bool cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server)
 
 	char buf;
 	std::string cgiResponse = "";
-	while (read(fds[0], &buf, 1) > 0){
+	while (read(fds[0], &buf, 1) > 0)
+	{
 		if (buf == '\n')
 			cgiResponse += '\n';
 		else

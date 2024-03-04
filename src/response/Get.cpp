@@ -1,18 +1,18 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Get.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 15:23:58 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 07:57:24 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
-void	getMethod(Location &location, Server &server, Request &req, Response &resp)
+void getMethod(Location &location, Server &server, Request &req, Response &resp)
 {
 	location.setAutoIndex(isAutoindex(location));
 	/*
@@ -29,7 +29,8 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 		req.handleSlash();
 	if (req.getAbsPath().substr(req.getAbsPath().length() - 3, 3) == ".py")
 		cgiForGetReq(req, resp, server);
-	else if (req.getUri() == "/teapot"){
+	else if (req.getUri() == "/teapot")
+	{
 		resp.setErrorCode(418);
 		resp.generateTeapotResponse(418, server);
 		resp.setContentLength(resp.getResponse());
@@ -37,13 +38,15 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 	}
 	else if (stat(req.getAbsPath().c_str(), &s) == 0 && s.st_mode & S_IFREG) // This is a file
 	{
-		if (access(req.getAbsPath().c_str(), R_OK) != 0){
+		if (access(req.getAbsPath().c_str(), R_OK) != 0)
+		{
 			resp.setErrorCode(403);
 			resp.generateResponse(403, resp.getErrorMsg(403), server);
 			resp.setContentLength(resp.getResponse());
 			resp.generateHeader(403, server);
 		}
-		else{
+		else
+		{
 			resp.setErrorCode(200);
 			resp.setResponse(getFile(req.getAbsPath()));
 			resp.setContentLength(resp.getResponse());
@@ -77,4 +80,3 @@ void	getMethod(Location &location, Server &server, Request &req, Response &resp)
 		resp.generateHeader(404, server);
 	}
 }
-
