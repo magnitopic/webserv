@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   splitDirectives.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:39:08 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 15:30:42 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:42:35 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -64,7 +64,7 @@ std::vector<std::string> splitServerDirectives(std::string configFile)
 			processLine(line, serverDirective);
 	}
 	if (servers.size() == 0)
-		raiseError("No server directives found in the config fileeeee");
+		raiseError("No server directives found in the config file");
 	return servers;
 }
 

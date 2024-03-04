@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 18:23:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 19:04:02 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -29,34 +29,25 @@ Server::Server(std::string str)
 
 Server::Server(const Server &copy)
 {
-	this->ports = copy.ports;
-	this->name = copy.name;
-	this->root = copy.root;
-	this->index = copy.index;
-	this->host = copy.host;
-	this->errorPages = copy.errorPages;
-	this->maxClientBodySize = copy.maxClientBodySize;
-	// this->locations = copy.locations;
-	return;
+	*this = copy;
 }
 
 Server &Server::operator=(const Server &assign)
 {
-	this->ports = assign.ports;
-	this->name = assign.name;
-	this->root = assign.root;
-	this->index = assign.index;
-	this->host = assign.host;
-	this->errorPages = assign.errorPages;
-	this->maxClientBodySize = assign.maxClientBodySize;
-	// this->locations = assign.locations;
+	if (this != &assign)
+	{
+		this->ports = assign.ports;
+		this->name = assign.name;
+		this->root = assign.root;
+		this->index = assign.index;
+		this->host = assign.host;
+		this->errorPages = assign.errorPages;
+		this->maxClientBodySize = assign.maxClientBodySize;
+	}
 	return *this;
 }
 
-Server::~Server(void)
-{
-	return;
-}
+Server::~Server(void) {}
 
 void Server::setPort(std::string str)
 {
@@ -244,7 +235,7 @@ unsigned long Server::getMaxClientSize()
 	return this->maxClientBodySize;
 }
 
-std::vector<Location>	Server::getLocations()
+std::vector<Location> Server::getLocations()
 {
 	return this->locations;
 }

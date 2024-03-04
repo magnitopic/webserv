@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 18:43:01 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 19:03:49 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -53,19 +53,28 @@ Location::Location(std::string directory)
 	cout << this->root.length() << endl;
 }
 
-Location::Location(const Location &location)
+Location::Location(const Location &copy)
 {
-	this->directory = location.directory;
-	this->actions = location.actions;
-	this->index = location.index;
-	return;
+	*this = copy;
 }
 
-Location &Location::operator=(const Location &location)
+Location &Location::operator=(const Location &assign)
 {
-	this->directory = location.directory;
-	this->actions = location.actions;
-	this->index = location.index;
+	if (this != &assign)
+	{
+		this->directory = assign.directory;
+		this->buffer = assign.buffer;
+		this->actions = assign.actions;
+		this->forbidden = assign.forbidden;
+		this->header = assign.header;
+		this->contentType = assign.contentType;
+		this->actionsArr = assign.actionsArr;
+		this->root = assign.root;
+		this->contentLength = assign.contentLength;
+		this->index = assign.index;
+		this->redirection = assign.redirection;
+		this->autoIndex = assign.autoIndex;
+	}
 	return *this;
 }
 
