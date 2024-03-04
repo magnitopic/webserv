@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/25 17:40:47 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 17:11:05 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,11 @@ unsigned long Server::getMaxClientSize()
 	return this->maxClientBodySize;
 }
 
+std::vector<Location>	Server::getLocations()
+{
+	return this->locations;
+}
+
 void Server::setErrorPages(std::string str)
 {
 	std::size_t found = str.find("error_page ") + 11;
@@ -300,7 +305,10 @@ void Server::addSocket(const Socket &socket)
 	this->sockets.push_back(socket);
 }
 
-void Server::setLocations(std::vector<Location> locations)
+void Server::setLocations(std::vector<Location> &locations)
 {
-	this->locations = locations;
+	std::vector<Location> newLocations;
+	for (std::vector<Location>::iterator it = locations.begin(); it < locations.end(); it++)
+		newLocations.push_back(*it);
+	this->locations = newLocations;
 }

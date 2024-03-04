@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:59:04 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:25:16 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -276,4 +276,34 @@ int Request::getPort()
 void Request::newSetPort(unsigned int nport)
 {
 	this->port = nport;
+}
+
+void	Request::fixURI(Server& server)
+{
+	std::string str = this->uri;
+	std::string	newUri = "/";
+	char *pch;
+	pch = strtok (const_cast<char *>(str.c_str()), "/");
+	while (pch != NULL)
+	{
+		cout << server.getLocations().size() << endl;
+		for (std::vector<Location>::iterator it = server.getLocations().begin(); it != server.getLocations().end(); it++){
+			if (!strncmp(pch, (*it).getDirectory().c_str(), (*it).getDirectory().length())){
+				if ((*it).getRoot().length() > 0){
+					newUri += (*it).getRoot();
+					newUri += "/";
+				}
+				else{
+					newUri += pch;
+					newUri += "/";
+				}
+			}
+		}
+		pch = strtok (NULL, "/");
+	}
+	if (newUri.back() == '/')
+		newUri.pop_back();
+	if (newUri.length() > 0)
+		this->uri = newUri;
+	cout << this->uri << endl;
 }

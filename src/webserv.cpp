@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:58:10 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:11:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -164,6 +164,7 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		req.newSetPort(servers[0].getPorts()[0]);
 	if (i >= static_cast<int>(servers.size()))
 		i = 0;
+	req.fixURI(servers[i]);
 	servers[i].setActions(str);
 	std::string aux = clients.finalbuffer;
 	req.setContentLength();

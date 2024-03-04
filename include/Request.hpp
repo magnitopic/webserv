@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/28 15:45:45 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:06:36 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ public:
 	// methods
 
 	Request		parseReq(std::string passedReq);
+	void		fixURI(Server& server);
 };
 
 #endif

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:58:56 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/04 16:53:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -20,10 +20,33 @@ Location::Location(void)
 	return;
 }
 
-Location::Location(std::string directory) : directory(directory)
+
+Location::Location(std::string directory)
 {
+	int i = 0;
+	while (isspace(directory[i]))
+		i++;
+	while (directory[i] == '/')
+		i++;
+	this->directory = "/";
+	while (i < static_cast<int>(directory.length()) && directory[i]){
+		if (isspace(directory[i]) || directory[i] == ';')
+			break;
+		else
+			this->directory.push_back(directory[i]);
+		i++;
+	}
 	this->index = "index.html";
-	return;
+	i = directory.find("root ") + 5;
+	if (i > 4 && i < static_cast<int>(directory.length())){
+		while (i < static_cast<int>(directory.length()) && directory[i]){
+			if (isspace(directory[i]) || directory[i] == ';')
+				break;
+			else
+				this->root.push_back(directory[i]);
+			i++;
+		}
+	}
 }
 
 Location::Location(const Location &location)
