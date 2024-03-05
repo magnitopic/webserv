@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Post.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/04 07:57:08 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:32:30 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -41,14 +41,15 @@ static void handleMultipartFormData(PostReq &post, Request &req, Response &respo
 	{
 		post.setFileName(req.getReqBuffer());
 		post.setFileContent(req.getReqBuffer());
-		if (access("/uploads", W_OK))
+		std::string up = server.getTheRoot() + "/uploads";
+		if (access(up.c_str(), W_OK))
 		{
 			response.setErrorCode(403);
 			response.generateResponse(403, response.getErrorMsg(403), server);
 			response.setContentLength(response.getResponse());
 			response.generateHeader(403, server);
 		}
-		else if (access("/uploads", F_OK))
+		else if (access(up.c_str(), F_OK))
 		{
 			response.setErrorCode(404);
 			response.generateResponse(404, response.getErrorMsg(404), server);

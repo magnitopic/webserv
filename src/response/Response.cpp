@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/04 07:57:37 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:45:59 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -65,7 +65,7 @@ void Response::generateResponse(int code, std::string def, Server &server)
 		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
 		if (it != server.getErrorPages().end())
 		{
-			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
+			this->response = getFile(server.getTheRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)
 				return;
 		}
@@ -146,7 +146,7 @@ void Response::generateTeapotResponse(int code, Server &server)
 		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
 		if (it != server.getErrorPages().end())
 		{
-			this->response = getFile(server.getRoot() + "/" + server.getErrorPages().find(code)->second);
+			this->response = getFile(server.getTheRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)
 				return;
 		}
@@ -200,7 +200,7 @@ void showData(Request &req, Response &response)
 	int minute = localTime->tm_min;
 	int second = localTime->tm_sec;
 
-	std::string uri = req.getUri();
+	std::string uri = req.getOriginalUri();
 	if (uri.find("?") >= 0 && uri.find("?") < uri.length())
 		uri = uri.substr(0, uri.find("?"));
 

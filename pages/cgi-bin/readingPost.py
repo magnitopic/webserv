@@ -1,4 +1,5 @@
 import sys
+import os
 
 data = ""
 while True:
@@ -7,4 +8,11 @@ while True:
         break
     data += char
 
-print(data)
+pos = data.find("name=") + 5
+pos2 = data.find("&content=")
+temp = data[pos:pos2]
+f = open(temp, "w")
+pos2 = pos2 + 9
+temp = data[pos2:]
+f.write(temp)
+f.close()

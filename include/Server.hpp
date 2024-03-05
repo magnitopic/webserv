@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/04 17:07:59 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:02:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ public:
 	void						setLocations(std::vector<Location> &locations);
 	std::vector<Location>		getLocations();
 	std::vector<unsigned int>	getPorts(void);
-	std::string					getRoot(void);
+	std::string					getTheRoot(void);
 	std::string					getName(void);
 	std::list<std::string>		getActions(void);
 	void						setMaxClientSize(std::string str);

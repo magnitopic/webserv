@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 11:20:07 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:07:13 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -165,6 +165,7 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	req.fixURI(servers[i]);
 	servers[i].setActions(str);
 	std::string aux = clients.finalbuffer;
+	aux.replace(0, aux.find(req.getOriginalUri().c_str()) + req.getOriginalUri().length(),req.getUri());
 	req.setContentLength();
 	servers[i].setMaxClientSize(str);
 	Response response;

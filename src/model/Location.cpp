@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 10:08:02 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:21:02 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -48,8 +48,6 @@ Location::Location(std::string directory)
 			i++;
 		}
 	}
-	if (this->root.length() > 0)
-		cout << this->directory << ": " << this->root << endl;
 }
 
 Location::Location(const Location &copy)
@@ -229,10 +227,10 @@ static void servePages(std::string route, dirent *entry, DIR *dirContents, Respo
 void Location::generateAutoIndex(Server &server, std::string route, Location &location, Response &response)
 {
 	std::string finalRoute;
-	if (location.getDirectory()[0] != '/' || server.getRoot()[server.getRoot().length() - 1] != '/')
-		finalRoute = server.getRoot() + location.getDirectory();
+	if (location.getDirectory()[0] != '/' || server.getTheRoot()[server.getTheRoot().length() - 1] != '/')
+		finalRoute = server.getTheRoot() + location.getDirectory();
 	else
-		finalRoute = server.getRoot() + location.getDirectory().substr(1, location.getDirectory().length() - 1);
+		finalRoute = server.getTheRoot() + location.getDirectory().substr(1, location.getDirectory().length() - 1);
 	if (finalRoute[finalRoute.length() - 1] == '/')
 		finalRoute.pop_back();
 	if (access(finalRoute.c_str(), R_OK) != 0)

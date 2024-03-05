@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 09:59:11 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:20:47 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -147,7 +147,7 @@ void Request::setConnection(std::string connection)
 
 void Request::setAbsPath(Server &server)
 {
-	this->absPath = server.getRoot();
+	this->absPath = server.getTheRoot();
 	if (this->uri[0] == '/' && absPath[absPath.length() - 1] == '/')
 		this->absPath.pop_back();
 	if (this->uri.find("?") < this->uri.length() && this->uri.find("?") >= 0)
@@ -280,6 +280,7 @@ void Request::newSetPort(unsigned int nport)
 
 void Request::fixURI(Server &server)
 {
+	this->originalUri = this->uri;
 	std::string str = this->uri;
 	std::string newUri = "/";
 	char *pch;
@@ -293,10 +294,14 @@ void Request::fixURI(Server &server)
 			aux += pch;
 			if ((*it).getRoot().length() > 0 && !strncmp(aux.c_str(), (*it).getDirectory().c_str(), (*it).getDirectory().length()))
 			{
-				cout << "directory: " << (*it).getDirectory() << endl;
 				if ((*it).getRoot().length() > 0)
 				{
-					cout << "root: " << (*it).getRoot() << endl;
+					if (!strncmp((*it).getRoot().c_str(), "./", (*it).getRoot().length()))
+						break;
+					else if (!strncmp((*it).getRoot().c_str(), "../", (*it).getRoot().length())){
+						if (aux.back() == '/')
+							aux.pop_back();
+					}
 					newUri += (*it).getRoot();
 					newUri += "/";
 				}
@@ -311,7 +316,13 @@ void Request::fixURI(Server &server)
 	}
 	if (newUri.back() == '/')
 		newUri.pop_back();
+	if (newUri[0] == '/' && newUri[1] == '/')
+		newUri = deleteFirstElement(newUri);
 	if (newUri.length() > 0)
 		this->uri = newUri;
-	cout << "uri: " << this->uri << endl;
+}
+
+
+std::string	Request::getOriginalUri(){
+	return this->originalUri;
 }

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:42:33 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 11:36:58 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:36:42 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -26,7 +26,7 @@ void parseConfigFile(std::string file_name, std::vector<Server> &serverList)
 		for (std::vector<std::string>::iterator it2 = directivesLocations.begin(); it2 != directivesLocations.end(); it2++)
 		{
 			locationsList.push_back(Location(*it2));
-			locationsList.back().setTheRoot(serverList.back().getRoot());
+			locationsList.back().setTheRoot(locationsList.back().getRoot());
 		}
 		serverList.back().setLocations(locationsList);
 	}

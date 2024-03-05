@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 11:35:39 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:21:12 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -216,7 +216,7 @@ void Server::setRoot(std::string str)
 	this->root = aux;
 }
 
-std::string Server::getRoot(void)
+std::string Server::getTheRoot(void)
 {
 	return this->root;
 }
@@ -304,5 +304,4 @@ void Server::setLocations(std::vector<Location> &locations)
 	{
 		this->locations.push_back(Location(*it));
 	}
-	cout << "locations size: " << this->locations.size() << endl;
 }

@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:57:04 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:58:37 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -75,7 +75,7 @@ bool cgiForGetReq(Request &req, Response &resp, Server &server)
 
 	std::string absPath = req.getAbsPath();
 	if (absPath.substr(absPath.length() - 3, 3) != ".py")
-		absPath = server.getRoot() + "/cgi-bin/text_user.py";
+		absPath = server.getTheRoot() + "/cgi-bin/text_user.py";
 	if (access(absPath.c_str(), F_OK))
 	{
 		generateCGIerror(resp, server, 404);
@@ -142,13 +142,13 @@ bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 {
 	int fds[2];
 	pid_t id;
-	std::string content = "name=../uploads/" + post.getFileName() + "&content=" + post.getFileContent() + "\0";
+	std::string content = "name=" + server.getTheRoot() + "/uploads/" + post.getFileName() + "&content=" + post.getFileContent() + "\0";
 
 	char pyPath[] = "usr/bin/python3";
 
 	std::string absPath = req.getAbsPath();
 	if (absPath.substr(absPath.length() - 3, 3) != ".py")
-		absPath = server.getRoot() + "/cgi-bin/text_user.py";
+		absPath = server.getTheRoot() + "/cgi-bin/text_user.py";
 	if (access(absPath.c_str(), F_OK))
 	{
 		generateCGIerror(resp, server, 404);
