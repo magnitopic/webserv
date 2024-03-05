@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 15:07:13 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:29:53 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,10 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 	memset(buffer, 0, sizeof(buffer));
 	while (end_server == false)
 	{
-		rc = poll(fds, nfds, TIMEOUT);
+		rc = poll(fds, nfds, -1);
 		if (rc < 0)
 		{
 			perror("poll() failed");
-			break;
-		}
-		else if (rc == 0)
-		{
-			cerr << "Timeout. End program" << endl;
 			break;
 		}
 		int current_size = nfds;
@@ -222,6 +217,12 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.generateResponse(501, response.getErrorMsg(501), servers[i]);
 		response.setContentLength(response.getResponse());
 		response.generateHeader(501, servers[i]);
+	}
+	if (response.getContentLength() == 0){
+		response.setErrorCode(204);
+		response.generateResponse(204, response.getErrorMsg(204), servers[i]);
+		response.setContentLength(response.getResponse());
+		response.generateHeader(204, servers[i]);
 	}
 	std::string resp = response.generateHttpResponse();
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);

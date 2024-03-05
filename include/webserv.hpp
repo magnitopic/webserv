@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 17:52:57 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:24:16 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@
 using namespace std;
 
 #define MAX_SERVERS 1024
-#define TIMEOUT 180000
 #define MAX_CGI_TIME 5
 // colours
 
