@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 15:20:47 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 18:50:40 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ std::string Request::getUri()
 
 void Request::setUri(std::string uri)
 {
+	if (uri.back() == '/')
+		uri.pop_back();
 	this->uri = uri;
 }
 

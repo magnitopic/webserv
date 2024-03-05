@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 17:29:53 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 18:51:53 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,8 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	}
 	else
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
+	if (temp.back() == '/')
+		temp.pop_back();
 	Location location(temp);
 	location.setValues(str);
 	if (location.setRedirection())
