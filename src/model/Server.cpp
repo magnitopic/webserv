@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 19:04:02 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:35:39 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -43,6 +43,7 @@ Server &Server::operator=(const Server &assign)
 		this->host = assign.host;
 		this->errorPages = assign.errorPages;
 		this->maxClientBodySize = assign.maxClientBodySize;
+		this->locations = assign.locations;
 	}
 	return *this;
 }
@@ -298,8 +299,10 @@ void Server::addSocket(const Socket &socket)
 
 void Server::setLocations(std::vector<Location> &locations)
 {
-	std::vector<Location> newLocations;
-	for (std::vector<Location>::iterator it = locations.begin(); it < locations.end(); it++)
-		newLocations.push_back(*it);
-	this->locations = newLocations;
+	this->locations.clear();
+	for (std::vector<Location>::iterator it = locations.begin(); it != locations.end(); it++)
+	{
+		this->locations.push_back(Location(*it));
+	}
+	cout << "locations size: " << this->locations.size() << endl;
 }

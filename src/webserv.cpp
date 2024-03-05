@@ -1,18 +1,16 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 18:33:54 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:20:07 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
-
-// TODO: check for conflicting ports when parsing the config file
 
 /*
 	steps for creating connections:
@@ -247,23 +245,16 @@ int main(int argc, char **argv)
 	{
 		char *temp = strdup("webserv.conf");
 		parseConfigFile(temp, servers);
-		cout << servers[0].getLocations().size() << endl;
-		for (std::vector<Location>::iterator it = servers[0].getLocations().begin(); it != servers[0].getLocations().end(); it++)
-			cout <<"|" << (*it).getRoot() << "|" <<endl;
-		exit(0);
 		file = configToString(temp);
 		free(temp);
 	}
-	for (std::vector<Location>::iterator it = servers[0].getLocations().begin(); it != servers[0].getLocations().end(); it++)
-		cout << (*it).getRoot() << endl;
-	exit(0);
 	struct pollfd fds[200];
 	memset(fds, 0, sizeof(fds));
 	std::vector<Socket> sockets;
 	int i = 0;
 	std::vector<int> openPorts;
 	std::cout << BLUE << "==> " << CYAN << "Webserv running ✅\n"
-			  << BLUE << "==>" << CYAN << "And listening on these addresses:"
+			  << BLUE << "==> " << CYAN << "And listening on these addresses:"
 			  << YELLOW << std::endl;
 	for (std::vector<Server>::iterator it = servers.begin(); it != servers.end(); it++)
 	{

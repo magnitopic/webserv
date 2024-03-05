@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 18:16:02 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 09:59:11 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -278,33 +278,36 @@ void Request::newSetPort(unsigned int nport)
 	this->port = nport;
 }
 
-void	Request::fixURI(Server& server)
+void Request::fixURI(Server &server)
 {
 	std::string str = this->uri;
-	std::string	newUri = "/";
+	std::string newUri = "/";
 	char *pch;
-	pch = strtok (const_cast<char *>(str.c_str()), "/");
+	pch = strtok(const_cast<char *>(str.c_str()), "/");
 	while (pch != NULL)
 	{
-		for (std::vector<Location>::iterator it = server.getLocations().begin(); it != server.getLocations().end(); it++){
-			cout << it->getDirectory() << endl;
+		std::vector<Location> aux = server.getLocations();
+		for (std::vector<Location>::iterator it = aux.begin(); it != aux.end(); it++)
+		{
 			std::string aux = "/";
 			aux += pch;
-			if ((*it).getRoot().length() > 0 && !strncmp(aux.c_str(), (*it).getDirectory().c_str(), (*it).getDirectory().length())){
-				cout << (*it).getDirectory() << endl;
-				//cout << (*it).getRoot() << endl;
-				if ((*it).getRoot().length() > 0){
+			if ((*it).getRoot().length() > 0 && !strncmp(aux.c_str(), (*it).getDirectory().c_str(), (*it).getDirectory().length()))
+			{
+				cout << "directory: " << (*it).getDirectory() << endl;
+				if ((*it).getRoot().length() > 0)
+				{
 					cout << "root: " << (*it).getRoot() << endl;
 					newUri += (*it).getRoot();
 					newUri += "/";
 				}
-				else{
+				else
+				{
 					newUri += pch;
 					newUri += "/";
 				}
 			}
 		}
-		pch = strtok (NULL, "/");
+		pch = strtok(NULL, "/");
 	}
 	if (newUri.back() == '/')
 		newUri.pop_back();

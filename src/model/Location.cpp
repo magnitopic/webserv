@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 19:03:49 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:08:02 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -50,7 +50,6 @@ Location::Location(std::string directory)
 	}
 	if (this->root.length() > 0)
 		cout << this->directory << ": " << this->root << endl;
-	cout << this->root.length() << endl;
 }
 
 Location::Location(const Location &copy)
