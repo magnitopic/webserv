@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 17:37:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 18:21:56 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ bool cgiForGetReq(Request &req, Response &resp, Server &server)
 		cgiResponse += buf;
 
 	generateCGIresponse(req, resp, server, cgiResponse);
-	if (resp.getContentLength() == 0)
+	if (cgiResponse.length() < 1)
 		generateCGIerror(resp, server, 500);
 	close(fds[0]);
 	return true;
@@ -159,8 +159,8 @@ bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 		generateCGIerror(resp, server, 403);
 		return false;
 	}
-	if (!access((server.getTheRoot() + "/uploads/" + post.getFileName()).c_str(), F_OK)){
-		generateCGIerror(resp, server, 200);
+	if (access((server.getTheRoot() + "/uploads/" + post.getFileName()).c_str(), F_OK)){
+		generateCGIerror(resp, server, 201);
 	}
 	char *absPathCStr = new char[absPath.length() + 1];
 	std::strcpy(absPathCStr, absPath.c_str());
@@ -218,9 +218,12 @@ bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 
 	if (cgiResponse.back() == '\n')
 		cgiResponse.pop_back();
-	generateCGIresponse(req, resp, server, cgiResponse);
-	if (resp.getContentLength() == 0)
+	if (resp.getErrorCode() < 90)
+		generateCGIresponse(req, resp, server, cgiResponse);
+	if (cgiResponse.length() < 1){
+
 		generateCGIerror(resp, server, 500);
+	}
 	close(fds[0]);
 	return true;
 }

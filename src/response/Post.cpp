@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/05 15:32:30 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/05 17:48:56 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,12 @@ static void handleMultipartFormData(PostReq &post, Request &req, Response &respo
 		else
 		{
 			cgiForPostReq(post, req, response, server);
-			response.setErrorCode(201);
-			response.generateResponse(201, response.getErrorMsg(201), server);
-			response.setContentLength(response.getResponse());
-			response.generateHeader(201, server);
+			if (response.getErrorCode() < 90){
+				response.setErrorCode(201);
+				response.generateResponse(201, response.getErrorMsg(201), server);
+				response.setContentLength(response.getResponse());
+				response.generateHeader(201, server);
+			}
 		}
 	}
 }
