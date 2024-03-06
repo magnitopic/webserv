@@ -1,20 +1,22 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   contentType.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:03:09 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:57:45 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:09:23 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
 std::string parseContentType(std::string extension)
 {
 	std::map<std::string, std::string> contentTypes;
+	if (extension.back() == '/')
+		extension.pop_back();
 	contentTypes.insert(std::pair<std::string, std::string>("txt", "text/plain"));
 	contentTypes.insert(std::pair<std::string, std::string>("html", "text/html"));
 	contentTypes.insert(std::pair<std::string, std::string>("css", "text/css"));
