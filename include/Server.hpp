@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/06 16:09:27 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:55:16 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ private:
 	std::map<int, std::string>	errorPages; // error_page
 	unsigned long				maxClientBodySize; // client_max_body_size
 	std::vector<Location>		locations;	// vector of Location objects
+	std::string					configBuf;
 
 
 public:
@@ -61,6 +62,7 @@ public:
 	unsigned long				getMaxClientSize();
 	void						setErrorPages(std::string str);
 	std::map<int, std::string>	getErrorPages();
+	std::string					getConfigBuf();
 	// methods
 
 	void						emptyActions(void);

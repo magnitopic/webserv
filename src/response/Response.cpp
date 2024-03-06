@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/06 16:16:10 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:35:41 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ void Response::generateTeapotResponse(int code, Server &server)
 		if (server.codeInErrorPages(code))
 		{
 			this->response = getFile(server.getTheRoot() + "/" + server.getErrorPages().find(code)->second);
-			cout << "adios" << endl;
 			if (this->response.length() > 0)
 				return;
 		}

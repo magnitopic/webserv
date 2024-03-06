@@ -1,21 +1,19 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   splitDirectives.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 15:39:08 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 17:42:35 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:56:07 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
 static void processLine(std::string &line, std::string &directive)
 {
-	if (line.find("//") != std::string::npos)
-		line = line.substr(0, line.find("//"));
 	if (line.size() > 0)
 		directive += line + "\n";
 }

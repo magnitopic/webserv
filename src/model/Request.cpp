@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 18:50:40 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:37:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ std::string Request::getUri()
 
 void Request::setUri(std::string uri)
 {
-	if (uri.back() == '/')
-		uri.pop_back();
 	this->uri = uri;
 }
 
@@ -158,7 +156,11 @@ void Request::setAbsPath(Server &server)
 		this->getArgs = this->uri.substr(this->uri.find("?"), this->uri.length() - this->uri.find("?"));
 		return;
 	}
+	if (this->uri[0] == '/' && this->absPath.back() == '/')
+		this->absPath.pop_back();
 	this->absPath += this->uri;
+	if (this->absPath.back() == '/')
+		this->absPath.pop_back();
 }
 
 std::string Request::getterGetArgs()
@@ -246,7 +248,10 @@ void Request::setClientBodySize(int maxSize)
 
 void Request::handleSlash()
 {
-	this->absPath.pop_back();
+	if (this->absPath.back() == '/')
+		this->absPath.pop_back();
+	if (this->uri.back() == '/')
+		this->uri.pop_back();
 }
 
 void Request::setPort()
@@ -304,20 +309,26 @@ void Request::fixURI(Server &server)
 						if (aux.back() == '/')
 							aux.pop_back();
 					}
+					if (newUri.back() ==  '/' && (*it).getRoot()[0] == '/')
+						newUri.pop_back();
 					newUri += (*it).getRoot();
 					newUri += "/";
 				}
 				else
 				{
+					if (newUri.back() ==  '/' && pch[0] == '/')
+						newUri.pop_back();
 					newUri += pch;
 					newUri += "/";
 				}
 			}
 		}
+		if (newUri.back() ==  '/' && pch[0] == '/')
+				newUri.pop_back();
+		newUri += pch;
+		newUri += "/";
 		pch = strtok(NULL, "/");
 	}
-	if (newUri.back() == '/')
-		newUri.pop_back();
 	if (newUri[0] == '/' && newUri[1] == '/')
 		newUri = deleteFirstElement(newUri);
 	if (newUri.length() > 0)

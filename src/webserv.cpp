@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 18:51:53 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:52:47 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	req.fixURI(servers[i]);
 	servers[i].setActions(str);
 	std::string aux = clients.finalbuffer;
-	aux.replace(0, aux.find(req.getOriginalUri().c_str()) + req.getOriginalUri().length(),req.getUri());
+	aux.replace(0, aux.find(req.getOriginalUri().c_str()) + req.getOriginalUri().length(), req.getUri());
 	req.setContentLength();
 	servers[i].setMaxClientSize(str);
 	Response response;
@@ -175,17 +175,15 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	if (req.getMethod() == "DELETE")
 	{
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
-		if (temp.rfind("/") == 0)
-			temp = temp.substr(0, temp.rfind("/") + 1);
-		else
-			temp = temp.substr(0, temp.rfind("/"));
+		// if (temp.rfind("/") == 0)
+		// 	temp = temp.substr(0, temp.rfind("/") + 1);
+		// else
+		// 	temp = temp.substr(0, temp.rfind("/"));
 	}
 	else
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
-	if (temp.back() == '/')
-		temp.pop_back();
 	Location location(temp);
-	location.setValues(str);
+	location.setValues(servers[i].getConfigBuf());
 	if (location.setRedirection())
 	{
 		response.setErrorCode(location.getRedirection().begin()->first);
@@ -194,6 +192,10 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.generateRedirectHeader(location, servers[i]);
 	}
 	req.setAbsPath(servers[i]);
+	req.setExtension();
+	req.setAbsPath(servers[i]);
+	if (req.getAbsPath().back() == '/' || req.getUri().back() == '/')
+		req.handleSlash();
 	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() < 90)
 	{
 		if (!isAllowed(servers[i], req, location))

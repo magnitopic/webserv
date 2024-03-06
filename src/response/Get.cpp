@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:33:01 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 15:26:31 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:57:39 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@ void getMethod(Location &location, Server &server, Request &req, Response &resp)
 		- if the petition does not exist, return a 404 error
 	 */
 	struct stat s;
-	req.setAbsPath(server);
-	req.setExtension();
-	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/')
-		req.handleSlash();
 	if (req.getAbsPath().substr(req.getAbsPath().length() - 3, 3) == ".py")
 		cgiForGetReq(req, resp, server);
 	else if (req.getUri() == "/teapot")

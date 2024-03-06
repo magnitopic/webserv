@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 16:10:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:56:28 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Server::Server()
 	return;
 }
 
-Server::Server(std::string str)
+Server::Server(std::string str) : configBuf(str)
 {
 	setPort(str);
 	setName(str);
@@ -44,6 +44,7 @@ Server &Server::operator=(const Server &assign)
 		this->errorPages = assign.errorPages;
 		this->maxClientBodySize = assign.maxClientBodySize;
 		this->locations = assign.locations;
+		this->configBuf = assign.configBuf;
 	}
 	return *this;
 }
@@ -197,7 +198,7 @@ void Server::setRoot(std::string str)
 {
 	std::size_t found = str.find("root") + 4;
 	std::string aux;
-	if (found > str.length() || found < 11)
+	if (found > str.length() || found < 4)
 	{
 		this->root = "pages/";
 		return;
@@ -211,8 +212,6 @@ void Server::setRoot(std::string str)
 		else if (str[found] == '/')
 		{
 			aux.push_back(str[found]);
-			this->root = aux;
-			return;
 		}
 		else if (isspace(str[found]) || str[found] == ';')
 		{
@@ -295,6 +294,11 @@ void Server::setErrorPages(std::string str)
 		aux.clear();
 		strcpy = strcpy.substr(i, temp.length() - i);
 	}
+}
+
+std::string	Server::getConfigBuf()
+{
+	return this->configBuf;
 }
 
 std::map<int, std::string> Server::getErrorPages()

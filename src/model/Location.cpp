@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 17:44:21 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:58:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,13 +266,15 @@ void Location::emptyActions(void)
 
 void Location::setBuffer(std::string configFile)
 {
+	if (directory.back()  == '/')
+		directory.pop_back();
 	std::string aux = "location " + directory + " ";
 	if (configFile.find(aux) >= configFile.length())
 	{
 		this->buffer = "";
 		return;
 	}
-	int len = aux.size() + 1;
+	int len = aux.length() + 1;
 	std::string temp = configFile.substr(configFile.find(aux) + len, configFile.length() - configFile.find(aux));
 	this->buffer = temp.substr(0, temp.find("}"));
 }
