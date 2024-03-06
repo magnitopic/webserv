@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/05 13:02:27 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:09:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ public:
 	void						emptyActions(void);
 	void						addSocket(const Socket &socket);
 	Server						findServer(int fd);
+	int							codeInErrorPages(int code);
 };
 
 #endif

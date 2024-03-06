@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 15:21:12 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:10:11 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,16 @@ void Server::setMaxClientSize(std::string str)
 		found++;
 	}
 	this->maxClientBodySize = atoi(aux.c_str());
+}
+
+int	Server::codeInErrorPages(int code)
+{
+	for (std::map<int, std::string>::iterator it = this->errorPages.begin(); it != this->errorPages.end(); it++)
+	{
+		if (it->first == code)
+			return 1;
+	}
+	return 0;
 }
 
 void Server::setRoot(std::string str)

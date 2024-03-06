@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:21:49 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/05 17:44:28 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:16:10 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void Response::generateResponse(int code, std::string def, Server &server)
 		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
 		if (it != server.getErrorPages().end())
 		{
-			this->response = getFile(server.getTheRoot() + "/" + server.getErrorPages().find(code)->second);
+			if (server.codeInErrorPages(code))
+				this->response = getFile(server.getTheRoot() + "/" + server.getErrorPages().find(code)->second);
 			if (this->response.length() > 0)
 				return;
 		}
@@ -143,10 +144,10 @@ void Response::generateTeapotResponse(int code, Server &server)
 {
 	if (server.getErrorPages().size() > 0)
 	{
-		std::map<int, std::string>::const_iterator it = getMapIterator(server.getErrorPages(), code);
-		if (it != server.getErrorPages().end())
+		if (server.codeInErrorPages(code))
 		{
 			this->response = getFile(server.getTheRoot() + "/" + server.getErrorPages().find(code)->second);
+			cout << "adios" << endl;
 			if (this->response.length() > 0)
 				return;
 		}
