@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 17:58:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 18:34:04 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,8 +242,6 @@ void Location::generateAutoIndex(Server &server, std::string route, Location &lo
 	struct dirent *entry = readdir(dirContents);
 	if (route[route.length() - 1] == '/')
 		route.pop_back();
-
-	// TODO: this should be separated into different functions
 	servePages(route, entry, dirContents, response);
 }
 
@@ -266,7 +264,7 @@ void Location::emptyActions(void)
 
 void Location::setBuffer(std::string configFile)
 {
-	if (directory.back()  == '/')
+	if (directory.back()  == '/' && directory.length() > 1)
 		directory.pop_back();
 	std::string aux = "location " + directory + " ";
 	if (configFile.find(aux) >= configFile.length())

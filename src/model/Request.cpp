@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 17:37:18 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/06 18:58:46 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,38 +295,41 @@ void Request::fixURI(Server &server)
 	while (pch != NULL)
 	{
 		std::vector<Location> aux = server.getLocations();
+		std::string aux2 = "/";
+		aux2 += pch;
+		int i = 0;
 		for (std::vector<Location>::iterator it = aux.begin(); it != aux.end(); it++)
 		{
-			std::string aux = "/";
-			aux += pch;
-			if ((*it).getRoot().length() > 0 && !strncmp(aux.c_str(), (*it).getDirectory().c_str(), (*it).getDirectory().length()))
+			if ((*it).getRoot().length() > 0 && !strncmp(aux2.c_str(), (*it).getDirectory().c_str(), (*it).getDirectory().length()))
 			{
+				i = 1;
 				if ((*it).getRoot().length() > 0)
 				{
 					if (!strncmp((*it).getRoot().c_str(), "./", (*it).getRoot().length()))
 						break;
 					else if (!strncmp((*it).getRoot().c_str(), "../", (*it).getRoot().length())){
-						if (aux.back() == '/')
-							aux.pop_back();
+						if (aux2.back() == '/')
+							aux2.pop_back();
 					}
 					if (newUri.back() ==  '/' && (*it).getRoot()[0] == '/')
 						newUri.pop_back();
 					newUri += (*it).getRoot();
-					newUri += "/";
 				}
 				else
 				{
 					if (newUri.back() ==  '/' && pch[0] == '/')
 						newUri.pop_back();
 					newUri += pch;
-					newUri += "/";
 				}
 			}
+			//memset(pch, 0, strlen(pch));
+		}
+		if (i == 0){
+			newUri += pch;
+			newUri += "/";
 		}
 		if (newUri.back() ==  '/' && pch[0] == '/')
 				newUri.pop_back();
-		newUri += pch;
-		newUri += "/";
 		pch = strtok(NULL, "/");
 	}
 	if (newUri[0] == '/' && newUri[1] == '/')
