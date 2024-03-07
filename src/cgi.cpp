@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 18:21:56 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:55:56 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -159,7 +159,8 @@ bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 		generateCGIerror(resp, server, 403);
 		return false;
 	}
-	if (access((server.getTheRoot() + "/uploads/" + post.getFileName()).c_str(), F_OK)){
+	if (access((server.getTheRoot() + "/uploads/" + post.getFileName()).c_str(), F_OK))
+	{
 		generateCGIerror(resp, server, 201);
 	}
 	char *absPathCStr = new char[absPath.length() + 1];
@@ -220,7 +221,8 @@ bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 		cgiResponse.pop_back();
 	if (resp.getErrorCode() < 90)
 		generateCGIresponse(req, resp, server, cgiResponse);
-	if (cgiResponse.length() < 1){
+	if (cgiResponse.length() < 1)
+	{
 
 		generateCGIerror(resp, server, 500);
 	}

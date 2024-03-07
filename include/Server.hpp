@@ -1,15 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 12:10:40 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/06 16:55:16 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:59:53 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
-
+/******************************************************************************/
 
 #ifndef SERVER_HPP_
 #define SERVER_HPP_
@@ -21,7 +20,7 @@
  * directive of the configuration file provides. This information will be used
  * to create the server and the socket, and to check what type of responses will
  * be given.
-*/
+ */
 class Server
 {
 private:
@@ -36,7 +35,6 @@ private:
 	unsigned long				maxClientBodySize; // client_max_body_size
 	std::vector<Location>		locations;	// vector of Location objects
 	std::string					configBuf;
-
 
 public:
 	// orthodox canonical form

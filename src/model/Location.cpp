@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 18:34:04 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:53:31 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -20,7 +20,6 @@ Location::Location(void)
 	return;
 }
 
-
 Location::Location(std::string directory)
 {
 	int i = 0;
@@ -29,7 +28,8 @@ Location::Location(std::string directory)
 	while (directory[i] == '/')
 		i++;
 	this->directory = "/";
-	while (i < static_cast<int>(directory.length()) && directory[i]){
+	while (i < static_cast<int>(directory.length()) && directory[i])
+	{
 		if (isspace(directory[i]) || directory[i] == ';')
 			break;
 		else
@@ -39,8 +39,10 @@ Location::Location(std::string directory)
 	this->index = "index.html";
 	this->root = "";
 	i = directory.find("root ") + 5;
-	if (i > 4 && i < static_cast<int>(directory.length())){
-		while (i < static_cast<int>(directory.length()) && directory[i]){
+	if (i > 4 && i < static_cast<int>(directory.length()))
+	{
+		while (i < static_cast<int>(directory.length()) && directory[i])
+		{
 			if (isspace(directory[i]) || directory[i] == ';')
 				break;
 			else
@@ -142,7 +144,8 @@ void Location::setActions(std::string text)
 	}
 }
 
-void	Location::setTheRoot(std::string str){
+void Location::setTheRoot(std::string str)
+{
 	this->root = str;
 }
 
@@ -264,7 +267,7 @@ void Location::emptyActions(void)
 
 void Location::setBuffer(std::string configFile)
 {
-	if (directory.back()  == '/' && directory.length() > 1)
+	if (directory.back() == '/' && directory.length() > 1)
 		directory.pop_back();
 	std::string aux = "location " + directory + " ";
 	if (configFile.find(aux) >= configFile.length())

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:17:21 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 18:43:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:01:53 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef LOCATION_HPP_
 #define LOCATION_HPP_
@@ -45,7 +45,6 @@ public:
 	Location(const Location &copy);
 	Location &operator=(const Location &assign);
 	~Location();
-
 	// setters and getters
 
 	void						setBuffer(std::string configFile);
@@ -63,7 +62,6 @@ public:
 	void						setContentType(std::string type);
 	std::string					getContentType(void);
 	std::list<std::string>		getForbidden(void);
-	void						emptyActions(void);
 	std::string					getIndex();
 	void						setIndex();
 	void						setValues(std::string str);
@@ -72,6 +70,7 @@ public:
 	void						setTheRoot(std::string str);
 	// methods
 
+	void		emptyActions(void);
 	std::string	generateHttpResponse(void);
 	void		generateAutoIndex(Server &server, std::string route, Location &location, Response &response);
 };

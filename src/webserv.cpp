@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 13:01:24 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:53:04 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -31,7 +31,7 @@ static void closeConnections(struct pollfd fds[200], int nfds)
 	}
 }
 
-static void justWaiting(std::vector<Server> &servers, std::vector<Socket> sockets, struct pollfd fds[200], std::string configFile)
+static void handlingConnections(std::vector<Server> &servers, std::vector<Socket> sockets, struct pollfd fds[200], std::string configFile)
 {
 	bool end_server = false;
 	bool close_conn = false;
@@ -101,7 +101,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 					cl.fd = fds[i].fd;
 					cl.finalbuffer = finalBuf;
 					if (finalBuf.length() > 0)
-					handleRequests(servers, cl, configFile);
+						handleRequests(servers, cl, configFile);
 					close_conn = true;
 				}
 				memset(buffer, 0, sizeof(buffer));
@@ -223,7 +223,8 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.setContentLength(response.getResponse());
 		response.generateHeader(501, servers[i]);
 	}
-	if (response.getContentLength() == 0){
+	if (response.getContentLength() == 0)
+	{
 		response.setErrorCode(204);
 		response.generateResponse(204, response.getErrorMsg(204), servers[i]);
 		response.setContentLength(response.getResponse());
@@ -281,6 +282,6 @@ int main(int argc, char **argv)
 		}
 	}
 	std::cout << RESET << "----------------------------------" << std::endl;
-	justWaiting(servers, sockets, fds, file);
+	handlingConnections(servers, sockets, fds, file);
 	return 0;
 }

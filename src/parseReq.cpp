@@ -6,11 +6,11 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 20:21:43 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:58:19 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:54:41 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-#include "../../include/webserv.hpp"
+#include "../include/webserv.hpp"
 
 Request parseReq(std::string passedReq)
 {

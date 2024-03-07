@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:58:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 18:01:13 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:00:07 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -21,8 +21,8 @@
 
 class Server;
 /**
- *
-*/
+ * This class initilizes a socket when it is created and it stores it's values.
+ */
 class Socket
 {
 private:
@@ -33,7 +33,6 @@ private:
 	int					timeout;
 	int					new_sd;
 	struct sockaddr_in6	addr;
-
 
 public:
 	// orthodox canonical form
@@ -55,14 +54,12 @@ public:
 	int		getNew_sd();
 	void	increaseNfds();
 	void	decrementNfds();
-
 	// methods
 
 	void	createSocket();
 	void	bindSocket(unsigned int port);
 	void	listenSocket();
 	void	justWaiting();
-
 };
 
 

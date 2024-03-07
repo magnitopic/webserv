@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 18:58:46 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:53:40 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -307,29 +307,31 @@ void Request::fixURI(Server &server)
 				{
 					if (!strncmp((*it).getRoot().c_str(), "./", (*it).getRoot().length()))
 						break;
-					else if (!strncmp((*it).getRoot().c_str(), "../", (*it).getRoot().length())){
+					else if (!strncmp((*it).getRoot().c_str(), "../", (*it).getRoot().length()))
+					{
 						if (aux2.back() == '/')
 							aux2.pop_back();
 					}
-					if (newUri.back() ==  '/' && (*it).getRoot()[0] == '/')
+					if (newUri.back() == '/' && (*it).getRoot()[0] == '/')
 						newUri.pop_back();
 					newUri += (*it).getRoot();
 				}
 				else
 				{
-					if (newUri.back() ==  '/' && pch[0] == '/')
+					if (newUri.back() == '/' && pch[0] == '/')
 						newUri.pop_back();
 					newUri += pch;
 				}
 			}
-			//memset(pch, 0, strlen(pch));
+			// memset(pch, 0, strlen(pch));
 		}
-		if (i == 0){
+		if (i == 0)
+		{
 			newUri += pch;
 			newUri += "/";
 		}
-		if (newUri.back() ==  '/' && pch[0] == '/')
-				newUri.pop_back();
+		if (newUri.back() == '/' && pch[0] == '/')
+			newUri.pop_back();
 		pch = strtok(NULL, "/");
 	}
 	if (newUri[0] == '/' && newUri[1] == '/')
@@ -338,7 +340,7 @@ void Request::fixURI(Server &server)
 		this->uri = newUri;
 }
 
-
-std::string	Request::getOriginalUri(){
+std::string Request::getOriginalUri()
+{
 	return this->originalUri;
 }

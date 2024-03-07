@@ -1,11 +1,12 @@
 # Webserv
 NAME			=	webserv
 
-WEB_SRC			=	src/utils.cpp \
+WEB_SRC			=	src/cgi.cpp \
+					src/utils.cpp \
 					src/webserv.cpp \
 					src/getFile.cpp \
+					src/parseReq.cpp \
 					src/contentType.cpp \
-					src/cgi.cpp \
 					src/model/Server.cpp \
 					src/model/Socket.cpp \
 					src/model/Request.cpp \
@@ -13,7 +14,6 @@ WEB_SRC			=	src/utils.cpp \
 					src/model/Location.cpp \
 					src/configFile/parse.cpp \
 					src/configFile/splitDirectives.cpp \
-					src/parsing/parseReq.cpp \
 					src/response/Get.cpp \
 					src/response/Post.cpp \
 					src/response/Delete.cpp \
@@ -26,7 +26,7 @@ OBJS			=	$(WEB_SRC:.cpp=.o)
 # Compiler
 CXX				=	c++
 RM				=	rm -f
-CXXFLAGS		=	-Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+CXXFLAGS		=	-Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
 
 # Colours
 RED				=	\033[0;31m

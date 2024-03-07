@@ -1,18 +1,17 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:12:16 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/28 17:39:11 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:58:09 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef RESPONSE_HPP_
 #define RESPONSE_HPP_
-
 
 #include "webserv.hpp"
 #include <string>
@@ -20,7 +19,7 @@
 /**
  * The aim of this class is to store the information that will eventually make
  * up the response given to the client.
-*/
+ */
 
 class Location;
 

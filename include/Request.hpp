@@ -1,18 +1,17 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 19:47:30 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 14:45:04 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 15:57:51 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef REQUEST_HPP_
 #define REQUEST_HPP_
-
 
 #include "webserv.hpp"
 
@@ -21,7 +20,7 @@
  * client made. This information will be used to check wether the request can be
  * fulfilled or not, and serve to see what type of response will be given to the
  * client.
-*/
+ */
 class Request
 {
 private:

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/05 17:24:16 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:00:59 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -40,6 +40,7 @@
 #include "Server.hpp"
 #include "Request.hpp"
 #include "PostReq.hpp"
+
 using namespace std;
 
 #define MAX_SERVERS 1024
@@ -54,11 +55,11 @@ using namespace std;
 #define CYAN	"\033[0;36m"
 #define RESET	"\033[0m"
 
-struct	client{
-	unsigned int	fd;
-	std::string		finalbuffer;
+struct	client
+{
+	unsigned int fd;
+	std::string finalbuffer;
 };
-
 
 int											setAction(std::string);
 Request										parseReq(std::string passedReq);
