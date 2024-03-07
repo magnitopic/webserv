@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Socket.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/02/22 18:01:00 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:44:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 #include "../../include/Socket.hpp"
@@ -123,6 +123,7 @@ void Socket::bindSocket(unsigned int port)
 	this->addr.sin6_family = AF_INET6;
 	memcpy(&this->addr.sin6_addr, &in6addr_any, sizeof(in6addr_any));
 	this->addr.sin6_port = htons(port);
+	//address.sin_addr.s_addr = inet_addr(ips[0].c_str()); // TODO: read the config file to read ips
 	bind(this->listen_sd, reinterpret_cast<struct sockaddr *>(&this->addr), sizeof(this->addr));
 }
 

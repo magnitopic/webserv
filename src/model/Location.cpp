@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 16:22:55 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 18:14:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ void Location::setActions(std::string text)
 	std::string aux = "location " + directory + " ";
 	if (text.find(aux) >= text.length())
 		return;
-	std::string methods = text.substr(text.find(aux), text.find("}") - text.find(aux));
+	std::string methods = text.substr(text.find(aux), text.length() - text.find(aux));
+	methods = methods.substr(0, methods.find("}"));
 	std::string word;
 	int i = methods.find("limit_except") + 12;
 	while (i < static_cast<int>(methods.length()) || i < 12)

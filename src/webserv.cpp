@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 17:00:33 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:54:19 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,10 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	if (req.getMethod() == "DELETE")
 	{
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
-		// if (temp.rfind("/") == 0)
-		// 	temp = temp.substr(0, temp.rfind("/") + 1);
-		// else
-		// 	temp = temp.substr(0, temp.rfind("/"));
+		if (temp.rfind("/") == 0)
+			temp = temp.substr(0, temp.rfind("/") + 1);
+		else
+			temp = temp.substr(0, temp.rfind("/"));
 	}
 	else
 		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
