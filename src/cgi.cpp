@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 16:24:32 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:59:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,7 @@ bool cgiForPostReq(PostReq &post, Request &req, Response &resp, Server &server)
 			cgiResponse += buf;
 	}
 
-	if (cgiResponse.back() == '\n')
+	if (cgiResponse[cgiResponse.length() - 1] == '\n')
 		cgiResponse.erase(cgiResponse.size() - 1);
 	if (resp.getErrorCode() < 90)
 		generateCGIresponse(req, resp, server, cgiResponse);
