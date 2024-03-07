@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Location.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 15:53:31 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:22:55 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -235,7 +235,7 @@ void Location::generateAutoIndex(Server &server, std::string route, Location &lo
 	else
 		finalRoute = server.getTheRoot() + location.getDirectory().substr(1, location.getDirectory().length() - 1);
 	if (finalRoute[finalRoute.length() - 1] == '/')
-		finalRoute.pop_back();
+		finalRoute.erase(finalRoute.size() - 1);
 	if (access(finalRoute.c_str(), R_OK) != 0)
 		return;
 	DIR *dirContents;
@@ -244,7 +244,7 @@ void Location::generateAutoIndex(Server &server, std::string route, Location &lo
 		raiseError("openDir failed");
 	struct dirent *entry = readdir(dirContents);
 	if (route[route.length() - 1] == '/')
-		route.pop_back();
+		route.erase(route.size() - 1);
 	servePages(route, entry, dirContents, response);
 }
 
@@ -268,7 +268,7 @@ void Location::emptyActions(void)
 void Location::setBuffer(std::string configFile)
 {
 	if (directory.back() == '/' && directory.length() > 1)
-		directory.pop_back();
+		directory.erase(directory.size() - 1);
 	std::string aux = "location " + directory + " ";
 	if (configFile.find(aux) >= configFile.length())
 	{

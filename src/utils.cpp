@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/02/29 07:55:29 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:22:38 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -102,7 +102,7 @@ int isAllowed(Server &server, Request &req, Location &location)
 std::string deleteFirstElement(std::string str)
 {
 	reverse(str.begin(), str.end());
-	str.pop_back();
+	str.erase(str.size() - 1);
 	reverse(str.begin(), str.end());
 	return str;
 }

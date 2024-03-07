@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/02 20:09:02 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 15:53:40 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:24:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -149,7 +149,7 @@ void Request::setAbsPath(Server &server)
 {
 	this->absPath = server.getTheRoot();
 	if (this->uri[0] == '/' && absPath[absPath.length() - 1] == '/')
-		this->absPath.pop_back();
+		this->absPath.erase(this->absPath.size() - 1);
 	if (this->uri.find("?") < this->uri.length() && this->uri.find("?") >= 0)
 	{
 		this->absPath += this->uri.substr(0, this->uri.find("?"));
@@ -157,10 +157,10 @@ void Request::setAbsPath(Server &server)
 		return;
 	}
 	if (this->uri[0] == '/' && this->absPath.back() == '/')
-		this->absPath.pop_back();
+		this->absPath.erase(this->absPath.size() - 1);
 	this->absPath += this->uri;
 	if (this->absPath.back() == '/')
-		this->absPath.pop_back();
+		this->absPath.erase(this->absPath.size() - 1);
 }
 
 std::string Request::getterGetArgs()
@@ -249,9 +249,9 @@ void Request::setClientBodySize(int maxSize)
 void Request::handleSlash()
 {
 	if (this->absPath.back() == '/')
-		this->absPath.pop_back();
+		this->absPath.erase(this->absPath.size() - 1);
 	if (this->uri.back() == '/')
-		this->uri.pop_back();
+		this->uri.erase(this->uri.size() - 1);
 }
 
 void Request::setPort()
@@ -310,16 +310,16 @@ void Request::fixURI(Server &server)
 					else if (!strncmp((*it).getRoot().c_str(), "../", (*it).getRoot().length()))
 					{
 						if (aux2.back() == '/')
-							aux2.pop_back();
+							aux2.erase(aux2.size() - 1);
 					}
 					if (newUri.back() == '/' && (*it).getRoot()[0] == '/')
-						newUri.pop_back();
+						newUri.erase(newUri.size() - 1);
 					newUri += (*it).getRoot();
 				}
 				else
 				{
 					if (newUri.back() == '/' && pch[0] == '/')
-						newUri.pop_back();
+						newUri.erase(newUri.size() - 1);
 					newUri += pch;
 				}
 			}
@@ -331,7 +331,7 @@ void Request::fixURI(Server &server)
 			newUri += "/";
 		}
 		if (newUri.back() == '/' && pch[0] == '/')
-			newUri.pop_back();
+			newUri.erase(newUri.size() - 1);
 		pch = strtok(NULL, "/");
 	}
 	if (newUri[0] == '/' && newUri[1] == '/')

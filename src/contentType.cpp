@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 08:03:09 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 19:09:23 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:22:07 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ std::string parseContentType(std::string extension)
 {
 	std::map<std::string, std::string> contentTypes;
 	if (extension.back() == '/')
-		extension.pop_back();
+		extension.erase(extension.size() - 1);
 	contentTypes.insert(std::pair<std::string, std::string>("txt", "text/plain"));
 	contentTypes.insert(std::pair<std::string, std::string>("html", "text/html"));
 	contentTypes.insert(std::pair<std::string, std::string>("css", "text/css"));
