@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 19:00:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:01:24 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ static void justWaiting(std::vector<Server> &servers, std::vector<Socket> socket
 					client cl;
 					cl.fd = fds[i].fd;
 					cl.finalbuffer = finalBuf;
+					if (finalBuf.length() > 0)
 					handleRequests(servers, cl, configFile);
 					close_conn = true;
 				}
