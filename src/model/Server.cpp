@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/06 17:56:28 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:00:44 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../../include/webserv.hpp"
 
@@ -184,7 +184,7 @@ void Server::setMaxClientSize(std::string str)
 	this->maxClientBodySize = atoi(aux.c_str());
 }
 
-int	Server::codeInErrorPages(int code)
+int Server::codeInErrorPages(int code)
 {
 	for (std::map<int, std::string>::iterator it = this->errorPages.begin(); it != this->errorPages.end(); it++)
 	{
@@ -252,51 +252,51 @@ std::vector<Location> Server::getLocations()
 
 void Server::setErrorPages(std::string str)
 {
-	std::size_t found = str.find("error_page ") + 11;
-	std::string aux;
-	std::string num;
-	std::list<int> lst;
-	if (found > str.length() || found < 11)
-		return;
+	std::size_t found = str.find("error_page ");
 	std::string strcpy = str;
-	while (found < strcpy.length() && found > 11)
+	while (found != std::string::npos)
 	{
-		std::size_t found = strcpy.find("error_page ") + 11;
-		std::string temp = strcpy.substr(found, strcpy.length() - found);
-		int i = 0;
-		while (temp[i] != ';' && temp[i] != '\n')
+		std::size_t start = found + 11;
+		std::size_t end = str.find(";", start);
+		if (end == std::string::npos)
+			break;
+		std::string line = str.substr(start, end - start);
+		std::istringstream iss(line);
+
+		std::string aux;
+		std::istringstream tokens(line);
+		std::vector<std::string> values;
+		while (tokens >> aux)
+			values.push_back(aux);
+
+		if (values.size() < 2)
+			raiseError("error_page directive is missing values");
+
+		// we save each element as int, except the last element that is the value of each key
+		std::vector<int> numKeys;
+		for (std::vector<std::string>::iterator it = values.begin(); it != values.end() - 1; it++)
 		{
-			if (isdigit(temp[i]))
-				num.push_back(temp[i]);
-			else if (isspace(temp[i]) && num.length() > 0)
-			{
-				lst.push_back(atoi(num.c_str()));
-				num.clear();
-			}
-			else
-			{
-				while (temp[i] != ';')
-				{
-					if (isspace(temp[i]) || temp[i] == '\n')
-						break;
-					aux.push_back(temp[i]);
-					i++;
-				}
-			}
-			if (temp[i] != ';')
-				i++;
+			int val = 0;
+			std::stringstream convert(*it);
+			convert >> val;
+			if (convert.fail())
+				raiseError("Wrong formatting in error_page directive");
+			numKeys.push_back(val);
 		}
-		if (temp[i] == ';' || temp[i] == '\n')
+
+		for (std::vector<int>::iterator it = numKeys.begin(); it != numKeys.end(); it++)
 		{
-			for (std::list<int>::iterator it = lst.begin(); it != lst.end(); it++)
-				this->errorPages.insert(std::pair<int, std::string>(*it, aux));
+			if (this->errorPages.find(*it) != this->errorPages.end())
+				raiseError("error_page directive is duplicated");
+			this->errorPages.insert(std::pair<int, std::string>(*it, values.back()));
 		}
-		aux.clear();
-		strcpy = strcpy.substr(i, temp.length() - i);
+		//  check if there are any `more error_page` directives left
+		str = str.substr(end, str.length() - 1);
+		found = str.find("error_page ");
 	}
 }
 
-std::string	Server::getConfigBuf()
+std::string Server::getConfigBuf()
 {
 	return this->configBuf;
 }
