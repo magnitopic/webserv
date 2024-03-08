@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 18:55:25 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 17:08:54 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:36:20 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ bool cgiForGetReq(Request &req, Response &resp, Server &server)
 	int fds[2];
 	pid_t id;
 	std::string pathInfoStr = "PATH_INFO=" + req.getterGetArgs();
+	if (req.getterGetArgs()[req.getterGetArgs().length() - 1] == '/')
+		pathInfoStr.erase(pathInfoStr.length() - 1);
 	std::vector<char> pathInfo(pathInfoStr.begin(), pathInfoStr.end());
 	pathInfo.push_back('\0'); // don't forget the null terminator
 
