@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 17:54:19 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:43:45 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,8 +232,10 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	}
 	std::string resp = response.generateHttpResponse();
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
-	if (writeVal < 1)
-		raiseError("send() failed");
+	if (writeVal < 1){
+		perror("send() failed");
+		return;
+	}
 	showData(req, response);
 }
 
