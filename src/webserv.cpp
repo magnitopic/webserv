@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/08 14:43:45 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:51:51 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,11 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 				rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
 				if (rc < 0)
 				{
-					if (errno != EWOULDBLOCK)
-					{
-						perror("recv() failed");
-						close_conn = true;
-					}
+					perror("recv() failed");
+					close_conn = true;
 				}
 				finalBuf += buffer;
-				if ((static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0) || parsedContentLength(finalBuf) == -1)
+				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0) || parsedContentLength(finalBuf) == -1)
 				{
 					client cl;
 					cl.fd = fds[i].fd;
