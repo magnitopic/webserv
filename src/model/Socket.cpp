@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 18:49:32 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/07 17:44:09 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:57:27 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void Socket::createSocket()
 
 	// Setting socket as non-blocking
 
-	this->rc = ioctl(listen_sd, FIONBIO, reinterpret_cast<char *>(&on));
+	this->rc = fcntl(this->listen_sd, F_SETFL, O_NONBLOCK);
 	if (this->rc < 0)
 	{
 		close(listen_sd);
