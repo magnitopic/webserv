@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/08 14:51:51 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:50:38 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -76,7 +76,6 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 					}
 
 					// Adding incoming connection to the pollfd structure
-
 					fds[nfds].fd = new_sd;
 					fds[nfds].events = POLLIN;
 					nfds++;
@@ -192,7 +191,7 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	req.setAbsPath(servers[i]);
 	req.setExtension();
 	req.setAbsPath(servers[i]);
-	if (req.getAbsPath()[req.getAbsPath().length() -1] == '/' || req.getUri()[req.getUri().length() - 1] == '/')
+	if (req.getAbsPath()[req.getAbsPath().length() - 1] == '/' || req.getUri()[req.getUri().length() - 1] == '/')
 		req.handleSlash();
 	if ((req.getMethod() == "GET" || req.getMethod() == "POST" || req.getMethod() == "DELETE") && response.getErrorCode() < 90)
 	{
@@ -229,13 +228,13 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	}
 	std::string resp = response.generateHttpResponse();
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
-	if (writeVal < 1){
+	if (writeVal < 1)
+	{
 		perror("send() failed");
 		return;
 	}
 	showData(req, response);
 }
-
 
 int main(int argc, char **argv)
 {
