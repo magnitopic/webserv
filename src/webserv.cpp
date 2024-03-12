@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/08 16:50:38 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/12 18:46:52 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,8 +36,8 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 	bool end_server = false;
 	bool close_conn = false;
 	bool compress_array = false;
-	char buffer[1024];
-	std::string finalBuf;
+	char buffer[1];
+	std::vector<char> finalBuf;
 	int rc = 0;
 	int new_sd = 0;
 	int nfds = sockets.size();
@@ -84,13 +84,19 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 			else
 			{
 				close_conn = false;
-				rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
+				char *temp = strdup(buffer);
+				rc = recv(fds[i].fd, buffer, 1, 0);
 				if (rc < 0)
 				{
 					perror("recv() failed");
 					close_conn = true;
 				}
-				finalBuf += buffer;
+				if (strncmp(temp, buffer, strlen(buffer)))
+					finalBuf.push_back(buffer[0]);
+				else
+					rc = 0;
+				free(temp);
+				std::cout << buffer << std::endl;
 				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0) || parsedContentLength(finalBuf) == -1)
 				{
 					client cl;
@@ -163,6 +169,8 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	Response response;
 	if (req.getContentLength() > static_cast<int>(servers[i].getMaxClientSize()))
 	{
+		cout << servers[i].getMaxClientSize() << endl;
+		exit(0);
 		response.setErrorCode(413);
 		response.generateResponse(413, response.getErrorMsg(413), servers[i]);
 		response.setContentLength(response.getResponse());

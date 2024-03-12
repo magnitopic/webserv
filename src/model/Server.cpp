@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 14:00:44 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/12 18:27:41 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -165,7 +165,7 @@ void Server::setMaxClientSize(std::string str)
 	std::string aux;
 	if (found > str.length() || found < 21)
 	{
-		this->maxClientBodySize = 8000;
+		this->maxClientBodySize = 2147483647;
 		return;
 	}
 	while (isspace(str[found]))
