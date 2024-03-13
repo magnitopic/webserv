@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/13 11:53:59 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:43:02 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -36,8 +36,8 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 	bool end_server = false;
 	bool close_conn = false;
 	bool compress_array = false;
-	char buffer[1];
-	std::vector<char> finalBuf;
+	char buffer[1024];
+	std::string finalBuf;
 	int rc = 0;
 	int new_sd = 0;
 	int nfds = sockets.size();
@@ -84,28 +84,21 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 			else
 			{
 				close_conn = false;
-				rc = recv(fds[i].fd, buffer, 1, 0);
+				rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
 				if (rc < 0)
 				{
 					perror("recv() failed");
 					close_conn = true;
 				}
-				finalBuf.push_back(buffer[0]);
-				std::string finalBufStr = vectorToStr(finalBuf);
-				std::cout << finalBufStr.find("\r\n\r\n") << std::endl;
-				std::cout << finalBufStr << std::endl;
-				if (finalBufStr.find("\r\n\r\n") < finalBufStr.length() && finalBufStr.find("\r\n\r\n") > 0)
+				finalBuf += buffer;
+				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0) || parsedContentLength(finalBuf) == -1)
 				{
-					if (rc == 0 || (static_cast<int>(bodyReq(finalBufStr).length()) >= parsedContentLength(finalBufStr) && parsedContentLength(finalBufStr) > 0) || (strncmp(finalBufStr.substr(0, 4).c_str(), "POST", 4) && finalBufStr.find("\r\n\r\n") < finalBufStr.length() && finalBufStr.find("\r\n\r\n") > 0) || parsedContentLength(finalBufStr) == -1)
-					{
-						std::cout << "buff: |" << finalBufStr << "|" << std::endl;
-						client cl;
-						cl.fd = fds[i].fd;
-						cl.finalbuffer = finalBufStr;
-						if (finalBufStr.length() > 0)
-							handleRequests(servers, cl, configFile);
-						close_conn = true;
-					}
+					client cl;
+					cl.fd = fds[i].fd;
+					cl.finalbuffer = finalBuf;
+					if (finalBuf.length() > 0)
+						handleRequests(servers, cl, configFile);
+					close_conn = true;
 				}
 				memset(buffer, 0, sizeof(buffer));
 				if (close_conn)
