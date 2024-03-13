@@ -4,9 +4,13 @@ This project is about writing your own HTTP server.
 
 Being able to understand how the HTTP protocol works is a fundamental skill for web developers. This project will help you understand what happens when you type an address into your browser and press enter.
 
+<div align="center">
+	<img width="324" alt="Screenshot 2024-03-13 at 07 57 47" src="https://github.com/magnitopic/webserv/assets/21156058/38603f9a-7fd1-4635-b4aa-1b6f14dcfc5b">
+</div>
+
 # Team work 💪
 
-This project was done alongside `Javier Sarabia`(JaviBurn).
+This project was done alongside `Javier Sarabia`(JaviBurn).ﬁ
 Check him and his work out at these links:
 
 -   [LinkedIn](https://www.linkedin.com/in/javier-sarabia-224580195)
