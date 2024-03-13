@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/13 16:43:02 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/13 17:03:23 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -163,8 +163,6 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	Response response;
 	if (req.getContentLength() > static_cast<int>(servers[i].getMaxClientSize()))
 	{
-		cout << servers[i].getMaxClientSize() << endl;
-		exit(0);
 		response.setErrorCode(413);
 		response.generateResponse(413, response.getErrorMsg(413), servers[i]);
 		response.setContentLength(response.getResponse());
