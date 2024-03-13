@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 16:59:38 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:29:36 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef WEBSERV_HPP_
 #define WEBSERV_HPP_
@@ -93,5 +93,6 @@ int											myOwnFindVector(std::vector<unsigned int> vector, unsigned int num
 bool										cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server);
 bool										cgiForGetReq(Request &req, Response &resp, Server &server);
 int											fixingMapOperator(std::map<int, std::string> map, int code);
+std::string									vectorToStr(std::vector<char> &vec);
 
 #endif

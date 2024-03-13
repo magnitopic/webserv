@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 18:14:35 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/13 10:29:30 by alaparic         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "../include/webserv.hpp"
 
@@ -162,4 +162,12 @@ int fixingCPPAgain(std::vector<Server> &servers, Request &req)
 			break;
 	}
 	return i;
+}
+
+std::string vectorToStr(std::vector<char> &vec)
+{
+	std::string str = "";
+	for (std::vector<char>::iterator it = vec.begin(); it < vec.end(); it++)
+		str += *it;
+	return str;
 }
