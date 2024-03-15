@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:42:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/12 18:27:41 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:47:09 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -176,12 +176,18 @@ void Server::setMaxClientSize(std::string str)
 			aux.push_back(str[found]);
 		else if (isspace(str[found]) || str[found] == ';')
 		{
-			this->maxClientBodySize = atoi(aux.c_str());
+			if (atoi(aux.c_str()) >= 0 && atoi(aux.c_str()) < 2147483647)
+				this->maxClientBodySize = atoi(aux.c_str());
+			else
+				this->maxClientBodySize = 2147483647;
 			return;
 		}
 		found++;
 	}
-	this->maxClientBodySize = atoi(aux.c_str());
+	if (atoi(aux.c_str()) >= 0 && atoi(aux.c_str()) < 2147483647)
+		this->maxClientBodySize = atoi(aux.c_str());
+	else
+		this->maxClientBodySize = 2147483647;
 }
 
 int Server::codeInErrorPages(int code)
