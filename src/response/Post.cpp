@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/15 17:04:04 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/15 17:28:08 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,23 @@ static void handleMultipartFormData(PostReq &post, Request &req, Response &respo
 	if (post.getBoundary().find("WebKitFormBoundary") > post.getBoundary().length() || post.getBoundary().find("WebKitFormBoundary") < 0)
 	{
 		std::string name = req.getAbsPath() + "/" + post.getFileName();
+		int check = access(name.c_str(), F_OK);
 		ofstream newfile(name);
 		open(name.c_str(), O_RDWR | O_CREAT, 0666);
 		newfile << post.getFileContent();
 		newfile.close();
-		response.setErrorCode(201);
-		response.generateResponse(201, response.getErrorMsg(201), server);
-		response.setContentLength(response.getResponse());
-		response.generateHeader(201, server);
+		if (check == 0){	
+			response.setErrorCode(200);
+			response.generateResponse(200, response.getErrorMsg(200), server);
+			response.setContentLength(response.getResponse());
+			response.generateHeader(200, server);
+		}
+		else{
+			response.setErrorCode(201);
+			response.generateResponse(201, response.getErrorMsg(201), server);
+			response.setContentLength(response.getResponse());
+			response.generateHeader(201, server);
+		}
 		return;
 	}
 	else
