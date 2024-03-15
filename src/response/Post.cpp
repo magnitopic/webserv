@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Post.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:18:14 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/07 15:56:48 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 17:04:04 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -39,8 +39,6 @@ static void handleMultipartFormData(PostReq &post, Request &req, Response &respo
 	}
 	else
 	{
-		post.setFileName(req.getReqBuffer());
-		post.setFileContent(req.getReqBuffer());
 		std::string up = server.getTheRoot() + "/uploads";
 		if (access(up.c_str(), W_OK))
 		{
@@ -104,7 +102,7 @@ void handlePost(Server &server, Request &req, Response &response)
 	post.setPostType(num);
 	post.setBoundary(num);
 	std::string absPath = req.getAbsPath();
-	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19))
+	if (!strncmp("multipart/form-data", post.getPostType().c_str(), 19) || (!strncmp("application/octet-stream", post.getPostType().c_str(), 24) && post.getBoundary().length() > 0))
 	{
 		handleMultipartFormData(post, req, response, server);
 		return;

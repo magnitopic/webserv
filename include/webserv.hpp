@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:39 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/15 15:12:36 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:35:45 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,6 @@ int											myOwnFindVector(std::vector<unsigned int> vector, unsigned int num
 bool										cgiForPostReq(PostReq& post, Request &req, Response &resp, Server &server);
 bool										cgiForGetReq(Request &req, Response &resp, Server &server);
 int											fixingMapOperator(std::map<int, std::string> map, int code);
+std::string									vectorToString(std::vector<char> vector);
 
 #endif

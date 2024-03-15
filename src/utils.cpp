@@ -1,16 +1,24 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 11:46:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/13 16:43:18 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:34:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
+
+std::string	vectorToString(std::vector<char> vector)
+{
+	std::string	str;
+	for (std::vector<char>::iterator it = vector.begin(); it != vector.end(); it++)
+		str.push_back(*it);
+	return str;
+}
 
 std::string bodyReq(std::string str)
 {

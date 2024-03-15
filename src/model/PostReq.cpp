@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   PostReq.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 19:22:53 by jsarabia          #+#    #+#             */
-/*   Updated: 2024/03/04 07:59:02 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 17:02:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../../include/webserv.hpp"
 
@@ -84,30 +84,16 @@ void PostReq::setFileContent(std::string request)
 	else
 		this->content = reqcpy.substr(0, pos2 - 2);
 	this->content.push_back('\0');
-
-	/*if (check < reqcpy.length() && check >= 0)
-	{
-		while (pos2 < reqcpy.length())
-		{
-			pos2 = reqcpy.find(boundary);
-			if (pos2 >= reqcpy.length() || pos2 < 0)
-				break;
-			reqcpy.erase(pos2, boundary.length());
-		}
+	unsigned int i = 0;
+	while (i < this->content.length()){
+		if (isspace(this->content[i]))
+			this->content = this->content.substr(1, this->content.length() - 1);
+		else
+			break;
+		i++;
 	}
-	pos2 = 0;
-	check = reqcpy.find(this->postType);
-	if (check < reqcpy.length() && check >= 0)
-	{
-		while (pos2 < reqcpy.length())
-		{
-			pos2 = reqcpy.find(this->postType);
-			if (pos2 >= reqcpy.length())
-				break;
-			reqcpy.erase(pos2, this->postType.length());
-		}
-	}*/
-	// this->content = aux2;
+	while (isspace(this->content.back()))
+		this->content.pop_back();
 }
 
 std::string PostReq::getFileContent()

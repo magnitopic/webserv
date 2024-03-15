@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/15 15:45:12 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/15 16:49:06 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 	bool end_server = false;
 	bool close_conn = false;
 	bool compress_array = false;
-	char buffer[1024];
-	std::string finalBuf;
+	char buffer[1];
+	std::vector<char> finalBuf;
 	int rc = 0;
 	int new_sd = 0;
 	int nfds = sockets.size();
@@ -84,19 +84,19 @@ static void handlingConnections(std::vector<Server> &servers, std::vector<Socket
 			else
 			{
 				close_conn = false;
-				rc = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
+				rc = recv(fds[i].fd, buffer, 1, 0);
 				if (rc < 0)
 				{
 					perror("recv() failed");
 					close_conn = true;
 				}
-				finalBuf += buffer;
-				if (rc == 0 || (static_cast<int>(bodyReq(finalBuf).length()) >= parsedContentLength(finalBuf) && parsedContentLength(finalBuf) > 0) || (strncmp(finalBuf.substr(0, 4).c_str(), "POST", 4) && finalBuf.find("\r\n\r\n") < finalBuf.length() && finalBuf.find("\r\n\r\n") > 0) || parsedContentLength(finalBuf) == -1)
+				finalBuf.push_back(buffer[0]);
+				if (rc == 0 || (static_cast<int>(bodyReq(vectorToString(finalBuf)).length()) >= parsedContentLength(vectorToString(finalBuf)) && parsedContentLength(vectorToString(finalBuf)) > 0) || (strncmp(vectorToString(finalBuf).substr(0, 4).c_str(), "POST", 4) && vectorToString(finalBuf).find("\r\n\r\n") < vectorToString(finalBuf).length() && vectorToString(finalBuf).find("\r\n\r\n") > 0))
 				{
 					client cl;
 					cl.fd = fds[i].fd;
-					cl.finalbuffer = finalBuf;
-					if (finalBuf.length() > 0)
+					cl.finalbuffer = vectorToString(finalBuf);
+					if (vectorToString(finalBuf).size() > 0)
 						handleRequests(servers, cl, configFile);
 					close_conn = true;
 				}
