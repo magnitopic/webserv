@@ -6,7 +6,7 @@
 /*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/13 17:03:23 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 10:26:55 by alaparic         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -250,7 +250,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		char *temp = strdup("webserv.conf");
+		char *temp = strdup("config/webserv.conf");
 		parseConfigFile(temp, servers);
 		file = configToString(temp);
 		free(temp);
