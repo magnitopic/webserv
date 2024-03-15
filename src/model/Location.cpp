@@ -6,7 +6,7 @@
 /*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 11:58:52 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/07 18:14:06 by jsarabia         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:13:43 by jsarabia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ Location::Location(void)
 
 Location::Location(std::string directory)
 {
+	if (!access(directory.c_str(), F_OK)){
+		this->directory = directory;
+		return;
+	}
 	int i = 0;
 	while (isspace(directory[i]))
 		i++;

@@ -1,16 +1,16 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Delete.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 18:22:38 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/04 07:57:28 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:14:23 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
-#include "../../include/webserv.hpp"
+ #include "../../include/webserv.hpp"
 
 /**
  * Manages the behabour that the server will have with DELETE requests
@@ -19,6 +19,15 @@ void deleteMethod(Server &server, Request &req, Response &resp)
 {
 	if (access(req.getAbsPath().c_str(), F_OK) == 0)
 	{
+		DIR *dir;
+		if ((dir = opendir(req.getAbsPath().c_str())) != NULL){
+			resp.setErrorCode(403);
+			resp.setResponseHTML(403);
+			resp.setContentLength(resp.getResponse());
+			req.setContentType(parseContentType("html"));
+			resp.generateHeader(403, server);
+			return;
+		}
 		const int result = remove(req.getAbsPath().c_str());
 		if (result == 0)
 		{

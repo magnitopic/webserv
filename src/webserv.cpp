@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   webserv.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alaparic <alaparic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jsarabia <jsarabia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 10:42:26 by alaparic          #+#    #+#             */
-/*   Updated: 2024/03/15 10:26:55 by alaparic         ###   ########.fr       */
+/*   Updated: 2024/03/15 15:13:18 by jsarabia         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "../include/webserv.hpp"
 
@@ -171,14 +171,16 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 	std::string temp;
 	if (req.getMethod() == "DELETE")
 	{
-		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
+		temp = aux.substr(aux.find("/"), aux.find(" HTTP"));
+		if (temp.back() == '/')
+			temp.pop_back();
 		if (temp.rfind("/") == 0)
 			temp = temp.substr(0, temp.rfind("/") + 1);
 		else
 			temp = temp.substr(0, temp.rfind("/"));
 	}
 	else
-		temp = aux.substr(aux.find("/"), aux.find(" HTTP") - aux.find(" ") - 1);
+		temp = aux.substr(aux.find("/"), aux.find(" HTTP"));
 	Location location(temp);
 	location.setValues(servers[i].getConfigBuf());
 	if (location.setRedirection())
@@ -218,13 +220,6 @@ void handleRequests(std::vector<Server> &servers, client &clients, std::string s
 		response.generateResponse(501, response.getErrorMsg(501), servers[i]);
 		response.setContentLength(response.getResponse());
 		response.generateHeader(501, servers[i]);
-	}
-	if (response.getContentLength() == 0)
-	{
-		response.setErrorCode(204);
-		response.generateResponse(204, response.getErrorMsg(204), servers[i]);
-		response.setContentLength(response.getResponse());
-		response.generateHeader(204, servers[i]);
 	}
 	std::string resp = response.generateHttpResponse();
 	int writeVal = send(clients.fd, resp.c_str(), resp.length(), 0);
